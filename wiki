@@ -1,0 +1,595 @@
+#!/system/bin/sh
+hos="/sdcard/ba"
+if [ -e "${hos}/" ]
+then
+echo 'Welecome to use MaWiki&BBS'
+else
+echo Installing...
+mkdir "${hos}/"
+mkdir -p "${hos}/tip" "${hos}/main" "${hos}/wiki" "${hos}/vote"
+touch "${hos}/acc"
+touch "${hos}/ai"
+echo Master name:SYSOP
+echo New password:
+read mnp
+echo "SYSOP $mnp">>"${hos}/acc"
+fi
+wblg(){
+while true
+do
+clear
+echo Login:
+read na
+echo Password:
+read pa
+if [ "$na $pa" = " " ]
+then
+np="0"
+else
+np="`cat ${hos}/acc | grep "$na" `" 
+fi
+if [ "$na $pa" == "$np" ]
+then
+break
+else
+echo Error!
+echo Join us?[Y/N]:
+read ju
+case $ju in
+Y|y)
+echo Please input your name:
+read nep
+echo Please input new password:
+read npd
+chk="`cat ${hos}/acc | grep "$nep" | awk '{printf("%s\n",$1)} `" 
+if [ "$chk" == "$nep" ]
+then
+echo Error!
+sleep 1
+elif [ "$nep $npd" == " " ]
+then
+echo Error!
+sleep 1
+else
+echo Please input verifcation code:
+vv="`cat /proc/sys/kernel/random/uuid | awk -F- '{printf("%s ",$1)}'`"
+echo $vv
+read vc
+if [ "$vc" == "$vv" ]
+then
+echo $nep $npd>>${hos}/acc
+else
+echo Error
+sleep 1
+fi
+fi
+;;
+esac
+fi
+done
+} 
+fid(){
+while true
+do
+clear
+cat ${hos}/wiki/$tkw 
+echo Press enter to back
+if [ "$na" == "guest" ] 
+then
+read nul
+break 1
+else
+echo Input e to insert a new paragraph
+echo Input c to continue write
+read pd
+case $pd in
+e)
+clear
+echo Input title:
+read tt
+echo Word:
+read nwd
+echo >>${hos}/wiki/$mt 
+echo $tt >>${hos}/wiki/$tkw 
+echo -------- >>${hos}/wiki/$tkw 
+echo $nwd >>${hos}/wiki/$tkw 
+;;
+c)
+echo Word:
+read nw 
+echo $nw >>${hos}/wiki/$tkw
+;;
+*)
+break 1
+;;
+esac
+fi
+done
+} 
+pxcx(){
+while read nr
+do
+co=$(($co+1))
+if [ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]
+then
+echo $co.$nr
+fi
+done
+}
+na="guest"
+sleep 1
+while true
+do
+clear
+echo MaWiki  User:$na
+echo Total entry:`ls ${hos}/wiki/ | wc -l`
+echo ================
+echo 1.Search
+echo 2.Exit
+echo 3.Go to MaBBS
+if [ "$na" == "guest" ]
+then
+echo 4.Login
+else
+echo 4.Make a new entry
+fi
+echo Input command:
+read cmd
+case $cmd in
+1)
+clear
+echo Input Keyword:
+read kw
+if [ "$kw" == "" ]
+then
+echo Error!
+sleep 1
+else
+clear
+echo Result
+echo =========
+ls ${hos}/wiki/ | grep "$kw"
+echo Which one:
+read tkw
+if [ "$tkw" == "" ]
+then
+echo Error!
+sleep 1
+else 
+if [ -e "${hos}/wiki/$tkw" ]
+then
+fid
+else
+echo Error!
+fi
+fi
+fi
+;;
+2)
+echo Bye
+break
+;;
+3)
+if [ "$na" == "guest" ]
+then
+wblg
+fi
+while true
+do
+clear
+echo Welecome,$na
+date
+if [ -e ${hos}/bul ]
+then
+echo Bulletin:`cat ${hos}/bul`
+fi
+echo =============
+co=0
+ls ${hos}/main | while read bm
+do
+co=$(($co+1))
+echo $co.$bm \(`ls "${hos}/main/$bm/" | wc -l `\)
+done
+echo v.Vote\(beta\) \(`ls "${hos}/vote/" | wc -l `\) 
+echo t.Tools
+echo =============
+echo a.Send massage
+echo b.Open massage box 
+echo c.Back to MaWiki
+if [ "$na" == "SYSOP" ]
+then
+echo d.Make a part
+echo e.Delete a part
+echo f.Release bulletin
+fi
+echo Input nunber or command: 
+read pac
+if [ "$pac" == "" ]
+then
+pac="#"
+fi
+case $pac in
+a)
+clear
+echo Which a user
+echo ==============
+cat ${hos}/acc | awk '{printf("%s\n",$1)}'
+echo AI
+echo Send to:
+read st
+echo Word:
+read swd
+if [ "${st}" == "AI" ]
+then
+if [ "$swd" == "study" ]
+then
+echo You say:
+read ys
+echo AI say:
+read as
+echo ${ys}-$as >>${hos}/ai
+fi
+ais="`cat ${hos}/ai|grep "$swd"|awk -F- '{printf("%s\n",$2)}'`"
+if [ "$ais" == "" ]
+then
+ais="Sorry,I don't know what do you say."
+fi
+echo Talk AI say to you:$ais >>${hos}/tip/$na
+else
+if [ "`cat ${hos}/acc | awk '{printf("%s\n",$1)}' | grep "$st"`" == "" ]
+then
+echo Error
+sleep 1
+else
+echo $na say to you:$swd >>${hos}/tip/$st
+fi
+fi
+;;
+b)
+clear
+cat ${hos}/tip/$na
+echo Press enter to back
+read m
+;;
+c)
+break
+;;
+d)
+clear
+if [ "$na" == "SYSOP" ]
+then
+echo New part name:
+read npn
+mkdir "${hos}/main/$npn"
+fi
+;;
+e)
+if [ "$na" == "SYSOP" ]
+then 
+echo Which part to delete:
+read dpw
+rm -rf "${hos}/main/$dpw"
+fi
+;;
+f)
+if [ "$na" == "SYSOP" ]
+then
+clear
+echo Input bulletin:
+read bul
+echo "$bul" > ${hos}/bul
+fi
+;;
+v)
+sel="0"
+while true
+do
+clear
+echo Welecome,$na   Part:Vote
+echo =============
+co="0"
+ls ${hos}/vote/ | pxcx
+echo =============
+echo a.Make a new vote
+echo b.Back
+if [ `ls "${hos}/vote/" | wc -l ` -ge 10 ]
+then
+echo c.Next page
+fi
+if [ "$na" == "SYSOP" ]
+then 
+echo d.Delete a vote
+fi
+echo Input number or command:
+read voi
+case $voi in
+a)
+clear
+echo Input the title:
+read tit
+if [ "`ls ${hos}/vote | grep "$tit"`" == "" ]
+then
+echo Main word:
+read wod
+echo "Option(4):"
+read opt
+tsm="${hos}/vote/$tit"
+mkdir "${tsm}"
+echo $tit >>${tsm}/main
+echo ============= >>${tsm}/main
+echo Vote master:$na  `date` >>${tsm}/main
+echo $wod >>${tsm}/main
+echo $opt>>${tsm}/data
+touch "${tsm}/a"
+touch "${tsm}/b" 
+touch "${tsm}/c" 
+touch "${tsm}/d"
+fi
+;; 
+b)
+break 1
+;;
+c)
+if [ `ls "${hos}/vote/" | wc -l ` -ge 10 ]
+then
+sel="$(($sel+10))"
+fi
+;;
+d)
+if [ "$na" == "SYSOP" ]
+then 
+echo Which vote delete:
+read tdw
+rm -rf "${hos}/vote/$tdw/"
+fi
+;;
+*)
+wbn=""
+co="0" 
+ls ${hos}/vote > ${hos}/tmp
+while read nr
+do
+co=$(($co+1))
+if [ "$voi" == "$co" ]
+then
+wbn="$nr"
+fi
+done < ${hos}/tmp 
+rm -f ${hos}/tmp 
+if [ "$wbn" == "" ]
+then
+echo Error!
+else
+chse(){
+vck="`cat "${ifw}$1" | grep "$na"`"
+if [ "$na" == "$vck" ]
+then
+echo Error!
+sleep 1
+else
+echo $na >> "${ifw}$1"
+clear
+cat "${ifw}$1" 
+echo selected it.
+sleep 3
+fi 
+}
+ifw="${hos}/vote/$wbn/"
+clear
+cat "${ifw}main"
+echo ==========
+echo "A.` cat "${ifw}data" | awk '{printf("%s\n",$1)}' `(` cat "${ifw}a" | wc -l `) "
+echo "B.` cat "${ifw}data" | awk '{printf("%s\n",$2)}' `(` cat "${ifw}b" | wc -l `) "
+echo "C.` cat "${ifw}data" | awk '{printf("%s\n",$3)}' `(` cat "${ifw}c" | wc -l `) "
+echo "D.` cat "${ifw}data" | awk '{printf("%s\n",$4)}' `(` cat "${ifw}d" | wc -l `) "
+echo 'Choose one:'
+read ry
+case $ry in
+a)
+chse a
+;;
+b)
+chse b
+;; 
+c)
+chse c
+;; 
+d)
+chse d
+;; 
+esac
+fi
+;;
+esac
+done
+;;
+t)
+while true
+do
+clear 
+echo Tool box
+echo =========
+echo 1.Calculator 
+echo 2.Ping
+echo 3.Calender
+echo 4.Back
+echo Which one:
+read too
+case $too in
+1)
+clear 
+echo "Write your equation:"
+read ss
+if [ "$ss" == "" ]
+then
+echo Error
+sleep 1
+else
+echo "${ss}=$((${ss})) "
+sleep 5
+fi
+;;
+2)
+clear
+echo Input IP or address:
+read ipa
+ping -c 4 $ipa
+sleep 5
+;;
+3)
+clear
+cal
+echo Input enter to back
+read nul
+;;
+4)
+break 1
+;;
+esac
+done
+;;
+*)
+wbn=""
+co="0" 
+ls ${hos}/main/ > ${hos}/tmp
+while read nr
+do
+co=$(($co+1))
+if [ "$pac" == "$co" ]
+then
+wbn="$nr"
+fi
+done < ${hos}/tmp 
+rm -f ${hos}/tmp 
+if [ "$wbn" == "" ]
+then
+echo Error! 
+else
+pac="$wbn"
+sel="0"
+while true
+do
+clear
+echo Welecome,$na   Part:$pac
+echo =============
+co="0"
+ls ${hos}/main/${pac}/ | pxcx
+echo =============
+echo a.Make a new tower
+echo b.Back
+if [ `ls "${hos}/main/$pac/" | wc -l ` -ge 10 ]
+then
+echo c.Next page
+fi
+if [ "$na" == "SYSOP" ]
+then 
+echo d.Delete a tower
+fi
+echo Input number or command:
+read int
+case $int in
+a)
+clear
+echo Input the title:
+read tit
+if [ "`ls ${hos}/main/${pac} | grep "$tit"`" == "" ] 
+then
+echo Word:
+read wod
+stt="${hos}/main/${pac}/$tit"
+echo $tit >>$stt
+echo ============= >>$stt
+echo Tower master:$na  `date` >>$stt
+echo $wod >>$stt
+echo >>$stt
+fi
+;;
+b)
+break 1
+;;
+c)
+if [ `ls "${hos}/main/$pac/" | wc -l ` -ge 10 ] 
+then
+sel="$(($sel+10))"
+fi
+;;
+d)
+if [ "$na" == "SYSOP" ]
+then 
+echo Which tower delete:
+read tdw
+rm "${hos}/main/${pac}/$tdw"
+fi
+;; 
+*)
+wbn=""
+co="0" 
+ls ${hos}/main/${pac}/ > ${hos}/tmp
+while read nr
+do
+co=$(($co+1))
+if [ "$int" == "$co" ]
+then
+wbn="$nr"
+fi
+done < ${hos}/tmp 
+rm -f ${hos}/tmp 
+if [ "$wbn" == "" ]
+then
+echo Error!
+else
+while true
+do
+clear
+wbb="${hos}/main/${pac}/$wbn" 
+cat "$wbb"
+echo 'Input reply(Input e go back):'
+read ry
+if [ "$ry" == "e" ]
+then
+break 1
+elif [ "$ry" == "" ]
+then
+echo refreshing... 
+else
+echo $na  `date` >>$wbb
+echo $ry >>$wbb
+echo >>$wbb
+fi 
+done
+fi
+;;
+esac
+done
+fi
+;;
+esac
+done 
+;;
+4)
+if [ "$na" == "guest" ] 
+then
+wblg
+else
+clear
+echo Input Main title:
+read mt
+if [ "`ls ${hos}/wiki | grep "$mt"`" == "" ]
+then
+echo Word:
+read wd
+echo $mt>>${hos}/wiki/$mt
+echo Made by:$na `date`>>${hos}/wiki/$mt 
+echo ========= >>${hos}/wiki/$mt 
+echo $wd >>${hos}/wiki/$mt 
+tkw="$mt"
+fid
+fi
+fi
+;;
+*)
+echo Error!
+sleep 1
+;;
+esac
+done
