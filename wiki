@@ -15,22 +15,20 @@ read mnp
 echo "SYSOP $mnp">>"${hos}/acc"
 fi
 wblg(){
-while true
-do
 clear
 echo Login:
-read na
+read ua
 echo Password:
 read pa
-if [ "$na $pa" = " " ]
+if [ "$ua $pa" = " " ]
 then
 np="0"
 else
-np="`cat ${hos}/acc | grep "$na" `" 
+np="`cat ${hos}/acc | grep "$ua" `" 
 fi
-if [ "$na $pa" == "$np" ]
+if [ "$ua $pa" == "$np" ]
 then
-break
+na="$ua"
 else
 echo Error!
 echo Join us?[Y/N]:
@@ -66,7 +64,6 @@ fi
 ;;
 esac
 fi
-done
 } 
 fid(){
 while true
