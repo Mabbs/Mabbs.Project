@@ -72,9 +72,9 @@ fid(){
 while true
 do
 clear
-cat ${hos}/wiki/$tkw 
+cat "${hos}/wiki/$tkw"
 echo Press enter to back
-if [ "$na" == "guest" ] 
+if [ "$na" == "guest" ]
 then
 read nul
 break 1
@@ -89,8 +89,8 @@ echo Input title:
 read tt
 echo Word:
 read nwd
-echo >>${hos}/wiki/$mt 
-echo $tt >>${hos}/wiki/$tkw 
+echo >>${hos}/wiki/$tkw
+echo $tt >>${hos}/wiki/$tkw
 echo -------- >>${hos}/wiki/$tkw 
 echo $nwd >>${hos}/wiki/$tkw 
 ;;
@@ -105,7 +105,7 @@ break 1
 esac
 fi
 done
-} 
+}
 pxcx(){
 while read nr
 do
@@ -293,7 +293,7 @@ then
 echo c.Next page
 fi
 if [ "$na" == "SYSOP" ]
-then 
+then
 echo d.Delete a vote
 fi
 echo Input number or command:
@@ -321,8 +321,8 @@ echo Vote master:$na  `date` >>${tsm}/main
 echo $wod >>${tsm}/main
 echo $opt>>${tsm}/data
 touch "${tsm}/a"
-touch "${tsm}/b" 
-touch "${tsm}/c" 
+touch "${tsm}/b"
+touch "${tsm}/c"
 touch "${tsm}/d"
 fi
 fi
@@ -465,11 +465,11 @@ if [ "$pac" == "$co" ]
 then
 wbn="$nr"
 fi
-done < ${hos}/tmp 
-rm -f ${hos}/tmp 
+done < ${hos}/tmp
+rm -f ${hos}/tmp
 if [ "$wbn" == "" ]
 then
-echo Error! 
+echo Error!
 else
 pac="$wbn"
 sel="0"
@@ -594,10 +594,11 @@ if [ "`ls ${hos}/wiki | grep "$mt"`" == "" ]
 then
 echo Word:
 read wd
-echo $mt>>${hos}/wiki/$mt
-echo Made by:$na `date`>>${hos}/wiki/$mt 
-echo ========= >>${hos}/wiki/$mt 
-echo $wd >>${hos}/wiki/$mt 
+mwt="${hos}/wiki/$mt"
+echo $mt>>$mwt
+echo Made by:$na `date`>>$mwt
+echo ========= >>$mwt
+echo $wd >>$mwt
 tkw="$mt"
 fid
 fi
