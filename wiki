@@ -381,10 +381,7 @@ ifw="${hos}/vote/$wbn/"
 clear
 cat "${ifw}main"
 echo ==========
-echo "A.` cat "${ifw}data" | awk '{printf("%s\n",$1)}' `(` cat "${ifw}a" | wc -l `) "
-echo "B.` cat "${ifw}data" | awk '{printf("%s\n",$2)}' `(` cat "${ifw}b" | wc -l `) "
-echo "C.` cat "${ifw}data" | awk '{printf("%s\n",$3)}' `(` cat "${ifw}c" | wc -l `) "
-echo "D.` cat "${ifw}data" | awk '{printf("%s\n",$4)}' `(` cat "${ifw}d" | wc -l `) "
+cat "${ifw}data" | awk '{printf("A.%s \(%s\)\nB.%s \(%s\)\nC.%s \(%s\)\nD.%s \(%s\)\n",$1,aw,$2,bw,$3,cw,$4,dw)}' aw="`cat "${ifw}a" | wc -l`" bw="`cat "${ifw}b" | wc -l`" cw="`cat "${ifw}c" | wc -l`" dw="`cat "${ifw}d" | wc -l`"
 echo 'Choose one:'
 read ry
 case $ry in
