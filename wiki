@@ -371,15 +371,15 @@ if [ "$na" == "guest" ]
 then
 wblg
 else
-vck="`cat "${ifw}/opt/$1" | grep "$na"`"
+vck="`cat "${ifw}opt/$1" | grep "$na"`"
 if [ "$na" == "$vck" ]
 then
 echo Error!
 sleep 1
 else
-echo $na >> "${ifw}/opt/$1"
+echo $na >> "${ifw}opt/$1"
 clear
-cat "${ifw}/opt/$1" 
+cat "${ifw}opt/$1"
 echo selected it.
 sleep 3
 fi
@@ -392,18 +392,18 @@ echo ==========
 cc(){
 for lop in `ls "${ifw}opt/"`
 do
-echo $lop.$1 \(`cat "${ifw}/opt/$lop" | wc -l`\)
+echo $lop.$1 \(`cat "${ifw}opt/$lop" | wc -l`\)
 shift
 done
 }
-cc `cat "${ifw}/data"`
+cc `cat "${ifw}data"`
 echo 'Choose one:'
 read ry
 if [ "$ry" == "" ]
 then
 echo Error...
 else
-if [ -e "${ifw}/opt/$ry" ]
+if [ -e "${ifw}opt/$ry" ]
 then
 chse $ry
 fi
