@@ -240,9 +240,14 @@ fi
 ;;
 b)
 clear
-cat ${hos}/tip/$na
+if [ -e "${hos}/tip/$na" ]
+then
+cat "${hos}/tip/$na"
+else
+echo Not found...
+fi
 echo Press enter to back
-read m
+read nul
 ;;
 c)
 break
@@ -258,7 +263,7 @@ fi
 ;;
 e)
 if [ "$na" == "SYSOP" ]
-then 
+then
 echo Which part to delete:
 read dpw
 rm -rf "${hos}/main/$dpw"
@@ -308,7 +313,9 @@ if [ "`ls ${hos}/vote | grep "$tit"`" == "" ]
 then
 echo Main word:
 read wod
-echo "Option(4):"
+echo "Option head:"
+read oph
+echo "Option:"
 read opt
 tsm="${hos}/vote/$tit"
 mkdir "${tsm}"
@@ -317,13 +324,14 @@ echo ============= >>${tsm}/main
 echo Vote master:$na  `date` >>${tsm}/main
 echo $wod >>${tsm}/main
 echo $opt>>${tsm}/data
-touch "${tsm}/a"
-touch "${tsm}/b"
-touch "${tsm}/c"
-touch "${tsm}/d"
+mkdir "${tsm}/opt" 
+for sle in $oph
+do
+touch "${tsm}/opt/$sle"
+done
 fi
 fi
-;; 
+;;
 b)
 break 1
 ;;
@@ -343,7 +351,7 @@ fi
 ;;
 *)
 wbn=""
-co="0" 
+co="0"
 ls ${hos}/vote > ${hos}/tmp
 while read nr
 do
@@ -352,8 +360,8 @@ if [ "$voi" == "$co" ]
 then
 wbn="$nr"
 fi
-done < ${hos}/tmp 
-rm -f ${hos}/tmp 
+done < ${hos}/tmp
+rm -f ${hos}/tmp
 if [ "$wbn" == "" ]
 then
 echo Error!
@@ -363,15 +371,15 @@ if [ "$na" == "guest" ]
 then
 wblg
 else
-vck="`cat "${ifw}$1" | grep "$na"`"
+vck="`cat "${ifw}/opt/$1" | grep "$na"`"
 if [ "$na" == "$vck" ]
 then
 echo Error!
 sleep 1
 else
-echo $na >> "${ifw}$1"
+echo $na >> "${ifw}/opt/$1"
 clear
-cat "${ifw}$1" 
+cat "${ifw}/opt/$1" 
 echo selected it.
 sleep 3
 fi
@@ -381,23 +389,25 @@ ifw="${hos}/vote/$wbn/"
 clear
 cat "${ifw}main"
 echo ==========
-cat "${ifw}data" | awk '{printf("A.%s \(%s\)\nB.%s \(%s\)\nC.%s \(%s\)\nD.%s \(%s\)\n",$1,aw,$2,bw,$3,cw,$4,dw)}' aw="`cat "${ifw}a" | wc -l`" bw="`cat "${ifw}b" | wc -l`" cw="`cat "${ifw}c" | wc -l`" dw="`cat "${ifw}d" | wc -l`"
+cc(){
+for lop in `ls "${ifw}opt/"`
+do
+echo $lop.$1 \(`cat "${ifw}/opt/$lop" | wc -l`\)
+shift
+done
+}
+cc `cat "${ifw}/data"`
 echo 'Choose one:'
 read ry
-case $ry in
-a)
-chse a
-;;
-b)
-chse b
-;; 
-c)
-chse c
-;; 
-d)
-chse d
-;; 
-esac
+if [ "$ry" == "" ]
+then
+echo Error...
+else
+if [ -e "${ifw}/opt/$ry" ]
+then
+chse $ry
+fi
+fi
 fi
 ;;
 esac
