@@ -147,12 +147,13 @@ echo Result
 echo =========
 ls ${hos}/wiki/ | grep "$kw"
 echo Which one:
-read tkw
+read mtt
+tkw=`ls ${hos}/wiki/ | grep "$mtt"` 
 if [ "$tkw" == "" ]
 then
 echo Error!
 sleep 1
-else 
+else
 if [ -e "${hos}/wiki/$tkw" ]
 then
 fid
