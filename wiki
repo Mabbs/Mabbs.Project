@@ -2,14 +2,14 @@
 hos="/sdcard/ba"
 whk="$hos/wiki"
 err="echo Error!"
+fgx="========="
 if [ -e "$hos/" ]
 then
 echo 'Welecome to use MaWiki&BBS'
 else
 echo Installing...
 mkdir "$hos/"
-mkdir -p "$hos/main" "$hos/user" "$whk"
-touch "$hos/ai"
+mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room"
 echo Master name:SYSOP
 echo New password:
 read mnp
@@ -66,6 +66,7 @@ if [ "$vc" == "$vv" ]
 then
 mkdir "$hos/user/$nep"
 mkdir "$hos/user/$nep/diary"
+mkdir "$hos/user/$nep/friend" 
 echo $npd>>$hos/user/$nep/pwd
 else
 $err
@@ -149,6 +150,45 @@ echo $co.$nr
 fi
 done
 }
+chse(){
+if [ "$na" == "guest" ]
+then
+wblg
+else
+vck="`cat "${ifw}opt/$1" | grep "$na"`"
+if [ "$na" == "$vck" ]
+then
+$err
+sleep 1
+else
+echo $na >> "${ifw}opt/$1"
+clear
+cat "${ifw}opt/$1"
+echo selected it.
+sleep 3
+fi
+fi
+}
+pdg(){
+wbn=""
+co="0" 
+ls "$1">$mpw
+while read nr
+do
+co=$(($co+1))
+if [ "$int" == "$co" ]
+then
+wbn="$nr"
+fi
+done < $mpw
+}
+cc(){
+for lop in `ls "${ifw}opt/"`
+do
+echo $lop.$1 \(`cat "${ifw}opt/$lop" | wc -l`\)
+shift
+done
+}
 na="guest"
 mpw="$hos/tmp"
 sleep 1
@@ -157,7 +197,7 @@ do
 clear
 echo MaWiki  User:$na
 echo Total entry:`ls "$whk" | wc -l`
-echo ================
+echo $fgx$fgx
 echo 1.Search
 echo 2.Exit
 echo 3.Go to MaBBS
@@ -169,6 +209,7 @@ else
 echo 5.Make a new entry
 echo 6.Diary 
 echo 7.Reset your password
+echo 8.Wechat
 fi
 echo Input command:
 read cmd
@@ -184,7 +225,7 @@ sleep 1
 else
 clear
 echo Result
-echo =========
+echo $fgx
 ls "$whk" | grep "$kw" | awk -F+ '{printf("%s\n",$1)}'
 echo Which one:
 read mtt
@@ -218,22 +259,20 @@ if [ -e "$hos/bul" ]
 then
 echo Bulletin:`cat "$hos/bul"`
 fi
-echo =============
+echo $fgx
 co=0
 ls "$hos/main" | while read bm
 do
 co=$(($co+1))
 echo $co.$bm \(`ls "$hos/main/$bm/" | wc -l `\)
 done
-echo =============
-echo a.Send massage
-echo b.Open massage box 
-echo c.Back to MaWiki
+echo $fgx
+echo a.Back to MaWiki
 if [ "$na" == "SYSOP" ]
 then
-echo d.Make a part
-echo e.Delete a part
-echo f.Release bulletin
+echo b.Make a part
+echo c.Delete a part
+echo d.Release bulletin
 fi
 echo Input number or command: 
 read pac
@@ -243,63 +282,9 @@ pac="#"
 fi
 case $pac in
 a)
-clear
-echo Which a user
-echo ==============
-ls "$hos/user"
-echo AI
-echo Send to:
-read st
-if [ "$st" == "" ]
-then
-$err
-sleep 1
-else
-echo Word:
-read swd
-if [ "$st" == "AI" ]
-then
-if [ "$swd" == "study" ]
-then
-echo You say:
-read ys
-echo AI say:
-read as
-echo $ys-$as >>${hos}/ai
-fi
-ais="`cat "$hos/ai"|grep "$swd"|awk -F- '{printf("%s\n",$2)}'`"
-if [ "$ais" == "" ]
-then
-ais="Sorry,I don't know what do you say."
-fi
-echo Talk AI say to you:$ais >>$hos/user/$na/tip
-else
-if [ -e "$hos/user/$st" ]
-then
-echo $na say to you:$swd >>$hos/user/$st/tip
-echo OK!
-else
-$err
-fi
-sleep 1
-fi
-fi
-;;
-b)
-clear
-if [ -e "$usv/tip" ]
-then
-cat "$usv/tip"
-else
-echo Not found...
-fi
-echo Press enter to back
-read nul
-;;
-c)
 break
 ;;
-d)
+b)
 clear
 if [ "$na" == "SYSOP" ]
 then
@@ -308,7 +293,7 @@ read npn
 mkdir "$hos/main/$npn"
 fi
 ;;
-e)
+c)
 if [ "$na" == "SYSOP" ]
 then
 echo Which part to delete:
@@ -316,7 +301,7 @@ read dpw
 rm -rf "$hos/main/$dpw"
 fi
 ;;
-f)
+d)
 if [ "$na" == "SYSOP" ]
 then
 clear
@@ -326,17 +311,8 @@ echo "$bul" > $hos/bul
 fi
 ;;
 *)
-wbn=""
-co="0" 
-ls "$hos/main">$mpw
-while read nr
-do
-co=$(($co+1))
-if [ "$pac" == "$co" ]
-then
-wbn="$nr"
-fi
-done < $mpw
+int="$pac"
+pdg "$hos/main"
 if [ "$wbn" == "" ]
 then
 $err
@@ -348,10 +324,10 @@ do
 pcz="$hos/main/$pac"
 clear
 echo Welecome,$na   Part:$pac
-echo =============
+echo $fgx
 co="0"
 ls "$pcz" | pxcx
-echo =============
+echo $fgx
 echo a.Make a new post
 echo b.Back
 if [ `ls "$pcz" | wc -l ` -ge 10 ]
@@ -384,7 +360,7 @@ echo Word:
 read wod
 stt="$pcz/$tit"
 echo $tit >>$stt
-echo ============= >>$stt
+echo $fgx >>$stt
 echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
@@ -407,7 +383,7 @@ read utk
 tsm="$pcz/$tit"
 mkdir "$tsm"
 echo $tit >>$tsm/main
-echo ============= >>$tsm/main
+echo $fgx >>$tsm/main
 echo Vote master:$na  `date` >>$tsm/main
 echo $wod >>$tsm/main
 echo $opt>>$tsm/data
@@ -419,7 +395,7 @@ done
 if [ "$utk" == "y" ]
 then
 echo Talk>>"$tsm/talk"
-echo ========= >>"$tsm/talk"
+echo $fgx >>"$tsm/talk"
 fi
 fi
 ;; 
@@ -444,17 +420,7 @@ rm -rf "$pcz/$tdw"
 fi
 ;; 
 *)
-wbn=""
-co="0"
-ls "$pcz" > $mpw
-while read nr
-do
-co=$(($co+1))
-if [ "$int" == "$co" ]
-then
-wbn="$nr"
-fi
-done < $mpw
+pdg "$pcz"
 if [ "$wbn" == "" ]
 then
 $err
@@ -464,36 +430,10 @@ if [ -f "$wbb" ]
 then
 zxth
 else
-chse(){
-if [ "$na" == "guest" ]
-then
-wblg
-else
-vck="`cat "${ifw}opt/$1" | grep "$na"`"
-if [ "$na" == "$vck" ]
-then
-$err
-sleep 1
-else
-echo $na >> "${ifw}opt/$1"
-clear
-cat "${ifw}opt/$1"
-echo selected it.
-sleep 3
-fi
-fi
-}
 ifw="${wbb}/"
 clear
 cat "${ifw}main"
-echo ==========
-cc(){
-for lop in `ls "${ifw}opt/"`
-do
-echo $lop.$1 \(`cat "${ifw}opt/$lop" | wc -l`\)
-shift
-done
-}
+echo $fgx
 cc `cat "${ifw}data"`
 if [ -e "${ifw}talk" ]
 then
@@ -547,7 +487,7 @@ mwt="$whk/$mt+$tgs"
 echo $mt>>$mwt
 echo Made by:$na `date`>>$mwt
 echo Tags:$tgs>>$mwt
-echo ========= >>$mwt
+echo $fgx >>$mwt
 echo $wd >>$mwt
 rmk="$whk/$mt+$tgs"
 fid
@@ -587,10 +527,10 @@ while true
 do
 clear
 echo Welecome,$na
-echo =============
+echo $fgx
 co="0"
 ls "$cfd" | pxcx
-echo =============
+echo $fgx
 echo a.Write diary
 echo b.Back
 if [ `ls "$cfd" | wc -l ` -ge 10 ]
@@ -624,19 +564,12 @@ sel="$(($sel+10))"
 fi 
 ;;
 *)
-rmk=""
-co="0"
-ls "$cfd" > $mpw
-while read nr
-do
-co="$(($co+1))"
-if [ "$co" == "$int" ]
+pdg "$cfd"
+if [ "$wbn" == "" ]
 then
-rmk="$cfd/$nr"
-fi
-done < $mpw
-if [ -e "$rmk" ]
-then
+$err
+else
+rmk="$cfd/$wbn"
 fid
 fi
 ;;
@@ -648,7 +581,7 @@ fi
 if [ "$na" == "guest" ] 
 then
 wblg
-else 
+else
 clear
 echo Input your new password:
 read nrd
@@ -659,6 +592,94 @@ sleep 1
 else
 echo $nrd>$usv/pwd
 fi
+fi
+;;
+8)
+if [ "$na" == "guest" ] 
+then
+wblg
+else
+sel="0"
+while true
+do
+clear
+echo Wechat User:$na
+echo $fgx
+co=0
+ls "$hos/room" | grep "$na" | pxcx
+echo $fgx
+echo a.Add a room
+echo b.Back
+echo c.Add friend
+if [ `ls "$hos/room" | wc -l ` -ge 10 ]
+then 
+echo d.Next page
+fi
+echo Input number or command:
+read cum
+case $cum in
+a)
+clear
+echo Contacts
+echo $fgx
+ls "$usv/friend" | pxcx
+echo Chat With:
+read cwt
+if [ "$cwt" == "" ]
+then
+$err
+else
+int="$cwt"
+pdg "$usv/friend"
+rmk="$wbn"
+if [ -e "$usv/friend/$rmk" ]
+then
+mra="$hos/room/$rmk,$na"
+echo Chat Room>"$mra"
+echo User:$rmk,$na>>"$mra"
+echo $fgx>>"$mra"
+fi
+fi
+;;
+b)
+break 1
+;;
+c)
+clear
+echo Your friend name:
+read yfn
+if [ -e "$hos/user/$yfn" ]
+then
+touch "$usv/friend/$yfn"
+fi
+;;
+c)
+if [ `ls "$hos/room" | wc -l ` -ge 10 ]
+then
+sel="$(($sel+10))"
+fi 
+;;
+*)
+rmk=""
+co="0"
+ls "$hos/room" | grep "$na"> $mpw
+while read nr
+do
+co="$(($co+1))"
+if [ "$co" == "$cum" ]
+then
+wbb="$hos/room/$nr"
+fi
+done < $mpw
+if [ "$wbb" == "" ]
+then
+$err
+else
+zxth
+fi
+;;
+esac
+done
 fi
 ;;
 *)
