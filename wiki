@@ -2,7 +2,7 @@
 hos="/sdcard/ba"
 whk="$hos/wiki"
 err="echo Error!"
-fgx="========="
+fgx="============"
 if [ -e "$hos/" ]
 then
 echo 'Welecome to use MaWiki&BBS'
@@ -197,7 +197,7 @@ do
 clear
 echo MaWiki  User:$na
 echo Total entry:`ls "$whk" | wc -l`
-echo $fgx$fgx
+echo $fgx
 echo 1.Search
 echo 2.Exit
 echo 3.Go to MaBBS
