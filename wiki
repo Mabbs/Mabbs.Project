@@ -3,19 +3,18 @@ hos="/sdcard/ba"
 whk="$hos/wiki"
 err="echo Error!"
 fgx="============"
+inc="echo Input number or command:"
 if [ -e "$hos/" ]
 then
 echo 'Welecome to use MaWiki&BBS'
 else
 echo Installing...
-mkdir "$hos/"
-mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room"
+mkdir -p "$hos/main" "$hos/user" "$whk"
 echo Master name:SYSOP
 echo New password:
 read mnp
 smk="$hos/user/SYSOP"
-mkdir "$smk"
-mkdir "$smk/diary"
+mkdir -p "$smk/diary" "$smk/mail"
 echo "$mnp">>$smk/pwd
 fi
 wblg(){
@@ -49,7 +48,7 @@ read nep
 echo Please input new password:
 read npd
 chk="`ls "$hos/user" | grep "$nep"`"
-if [ "$chk" == "$nep" ]
+if [ "$chk" == "$nep" -o "$nep" = "" ]
 then
 $err
 sleep 1
@@ -64,10 +63,10 @@ echo $vv
 read vc
 if [ "$vc" == "$vv" ]
 then
-mkdir "$hos/user/$nep"
-mkdir "$hos/user/$nep/diary"
-mkdir "$hos/user/$nep/friend" 
-echo $npd>>$hos/user/$nep/pwd
+usk="$hos/user/$nep"
+mkdir -p "$usk/diary" "$usk/mail"
+echo $npd>>$usk/pwd
+na="$nep"
 else
 $err
 sleep 1
@@ -209,7 +208,6 @@ else
 echo 5.Make a new entry
 echo 6.Diary 
 echo 7.Reset your password
-echo 8.Wechat
 fi
 echo Input command:
 read cmd
@@ -267,14 +265,15 @@ co=$(($co+1))
 echo $co.$bm \(`ls "$hos/main/$bm/" | wc -l `\)
 done
 echo $fgx
-echo a.Back to MaWiki
+echo a.Mail box
+echo b.Back to MaWiki
 if [ "$na" == "SYSOP" ]
 then
-echo b.Make a part
-echo c.Delete a part
-echo d.Release bulletin
+echo c.Make a part
+echo d.Delete a part
+echo e.Release bulletin
 fi
-echo Input number or command: 
+$inc
 read pac
 if [ "$pac" == "" ]
 then
@@ -282,9 +281,91 @@ pac="#"
 fi
 case $pac in
 a)
-break
+if [ "$na" == "guest" ]
+then
+wblg
+else 
+sel=0
+while true
+do
+clear
+echo Mail box
+echo $fgx
+co="0"
+ls "$usv/mail" | pxcx
+echo $fgx
+echo a.Send mail
+echo b.Back
+if [ `ls "$usv/mail" | wc -l ` -ge 10 ]
+then
+echo c.Next page
+fi
+$inc
+read int
+case $int in
+a)
+clear
+echo From:$na
+echo To:
+read st
+if [ "$st" == "" ]
+then
+$err
+else
+if [ -e "$hos/user/$st" ]
+then 
+echo $fgx
+echo Title:
+read swd
+isw="$hos/user/$st/mail/$swd"
+if [ "$swd" == "" -o -e "$isw" ]
+then
+$err
+else
+echo Word:
+read iwd
+echo From:$na>>$isw
+echo To:$st>>$isw
+date>>$isw
+echo $fgx>>$isw
+echo $iwd >>$isw
+echo OK!
+fi
+else
+$err
+fi
+fi
+sleep 1
 ;;
 b)
+break 1
+;;
+c)
+if [ `ls "$usv/mail" | wc -l ` -ge 10 ] 
+then
+sel="$(($sel+10))"
+fi
+;;
+*)
+clear
+pdg "$usv/mail"
+if [ "$wbn" == "" ]
+then
+$err
+else
+cat "$usv/mail/$wbn"
+echo Press enter to back
+read nul
+fi
+;;
+esac
+done
+fi
+;; 
+b)
+break
+;;
+c)
 clear
 if [ "$na" == "SYSOP" ]
 then
@@ -293,7 +374,7 @@ read npn
 mkdir "$hos/main/$npn"
 fi
 ;;
-c)
+d)
 if [ "$na" == "SYSOP" ]
 then
 echo Which part to delete:
@@ -301,7 +382,7 @@ read dpw
 rm -rf "$hos/main/$dpw"
 fi
 ;;
-d)
+e)
 if [ "$na" == "SYSOP" ]
 then
 clear
@@ -338,7 +419,7 @@ if [ "$na" == "SYSOP" ]
 then 
 echo d.Delete a post
 fi
-echo Input number or command:
+$inc
 read int
 case $int in
 a)
@@ -537,7 +618,7 @@ if [ `ls "$cfd" | wc -l ` -ge 10 ]
 then
 echo c.Next page
 fi
-echo Input number or command:
+$inc
 read int
 case $int in
 a)
@@ -592,94 +673,6 @@ sleep 1
 else
 echo $nrd>$usv/pwd
 fi
-fi
-;;
-8)
-if [ "$na" == "guest" ] 
-then
-wblg
-else
-sel="0"
-while true
-do
-clear
-echo Wechat User:$na
-echo $fgx
-co=0
-ls "$hos/room" | grep "$na" | pxcx
-echo $fgx
-echo a.Add a room
-echo b.Back
-echo c.Add friend
-if [ `ls "$hos/room" | wc -l ` -ge 10 ]
-then 
-echo d.Next page
-fi
-echo Input number or command:
-read cum
-case $cum in
-a)
-clear
-echo Contacts
-echo $fgx
-ls "$usv/friend" | pxcx
-echo Chat With:
-read cwt
-if [ "$cwt" == "" ]
-then
-$err
-else
-int="$cwt"
-pdg "$usv/friend"
-rmk="$wbn"
-if [ -e "$usv/friend/$rmk" ]
-then
-mra="$hos/room/$rmk,$na"
-echo Chat Room>"$mra"
-echo User:$rmk,$na>>"$mra"
-echo $fgx>>"$mra"
-fi
-fi
-;;
-b)
-break 1
-;;
-c)
-clear
-echo Your friend name:
-read yfn
-if [ -e "$hos/user/$yfn" ]
-then
-touch "$usv/friend/$yfn"
-fi
-;;
-c)
-if [ `ls "$hos/room" | wc -l ` -ge 10 ]
-then
-sel="$(($sel+10))"
-fi 
-;;
-*)
-rmk=""
-co="0"
-ls "$hos/room" | grep "$na"> $mpw
-while read nr
-do
-co="$(($co+1))"
-if [ "$co" == "$cum" ]
-then
-wbb="$hos/room/$nr"
-fi
-done < $mpw
-if [ "$wbb" == "" ]
-then
-$err
-else
-zxth
-fi
-;;
-esac
-done
 fi
 ;;
 *)
