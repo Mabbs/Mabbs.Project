@@ -4,40 +4,30 @@ whk="$hos/wiki"
 err="echo Error!"
 fgx="============"
 inc="echo Input number or command:"
-if [ -e "$hos/" ]
-then
-echo 'Welecome to use MaWiki&BBS'
-else
+[ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk"
+touch "$hos/ai"
 echo Master name:SYSOP
 echo New password:
 read mnp
 smk="$hos/user/SYSOP"
 mkdir -p "$smk/diary" "$smk/mail"
 echo "$mnp">>$smk/pwd
-fi
+}
 wblg(){
 clear
 echo Login:
 read ua
 echo Password:
 read pa
-if [ "$ua" = "" ]
-then
-np=0
-else
-if [ -e "$hos/user/$ua" ]
-then
-np="`cat "$hos/user/$ua/pwd"`ck"
-fi
-fi
-if [ "${pa}ck" == "$np" ]
-then
+[ "$ua" = "" ]&&np=0||{
+[ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
+}
+[ "${pa}ck" == "$np" ]&&{
 na="$ua"
 usv="$hos/user/$na"
-mpw="$usv/tmp"
-else
+}||{
 $err
 echo Join us?[Y/N]:
 read ju
@@ -48,33 +38,23 @@ read nep
 echo Please input new password:
 read npd
 chk="`ls "$hos/user" | grep "$nep"`"
-if [ "$chk" == "$nep" -o "$nep" = "" ]
-then
-$err
-sleep 1
-elif [ "$nep $npd" == " " ]
-then
-$err
-sleep 1
-else
+[ "$chk" == "$nep" -o "$nep" = "" ]||{
 echo Please input verifcation code:
-vv="`cat /proc/sys/kernel/random/uuid | awk -F- '{printf("%s",$1)}'`"
+vv="`cat /proc/sys/kernel/random/uuid`"
+vv="${vv%%-*}"
 echo $vv
 read vc
-if [ "$vc" == "$vv" ]
-then
+[ "$vc" == "$vv" ]&&{
 usk="$hos/user/$nep"
 mkdir -p "$usk/diary" "$usk/mail"
 echo $npd>>$usk/pwd
 na="$nep"
-else
-$err
-sleep 1
-fi
-fi
+usv="$hos/user/$na"
+}
+}
 ;;
 esac
-fi
+}
 }
 fid(){
 while true
@@ -82,11 +62,10 @@ do
 clear
 cat "$rmk"
 echo Press enter to back
-if [ "$na" == "guest" ]
-then
+[ "$na" == "guest" ]&&{
 read nul
 break 1
-else
+}||{
 echo Input e to insert a new paragraph
 echo Input c to continue write
 read pd
@@ -111,7 +90,7 @@ echo $nw >>$rmk
 break 1
 ;;
 esac
-fi
+}
 done
 }
 zxth(){
@@ -128,14 +107,11 @@ elif [ "$ry" == "" ]
 then
 echo refreshing... 
 else
-if [ "$na" == "guest" ]
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 echo $na  `date` >>$wbb
 echo $ry >>$wbb
 echo >>$wbb
-fi
+}
 fi
 done
 }
@@ -143,53 +119,38 @@ pxcx(){
 while read nr
 do
 co=$(($co+1))
-if [ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]
-then
-echo $co.$nr
-fi
+[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]&&echo $co.$nr
 done
 }
 chse(){
-if [ "$na" == "guest" ]
-then
-wblg
-else
-vck="`cat "${ifw}opt/$1" | grep "$na"`"
-if [ "$na" == "$vck" ]
-then
-$err
-sleep 1
-else
-echo $na >> "${ifw}opt/$1"
+[ "$na" == "guest" ]&&wblg||{
+vck="`cat "$wbb/opt/$1" | grep "$na"`"
+[ "$na" == "$vck" ]||{
+echo $na >> "$wbb/opt/$1"
 clear
-cat "${ifw}opt/$1"
+cat "$wbb/opt/$1"
 echo selected it.
 sleep 3
-fi
-fi
+}
+}
 }
 pdg(){
 wbn=""
 co="0" 
-ls "$1">$mpw
-while read nr
+ls "$1"|while read nr
 do
 co=$(($co+1))
-if [ "$int" == "$co" ]
-then
-wbn="$nr"
-fi
-done < $mpw
+[ "$int" == "$co" ]&&echo "$nr"
+done
 }
 cc(){
-for lop in `ls "${ifw}opt/"`
+for lop in `ls "$wbb/opt/"`
 do
-echo $lop.$1 \(`cat "${ifw}opt/$lop" | wc -l`\)
+echo $lop.$1 \(`cat "$wbb/opt/$lop" | wc -l`\)
 shift
 done
 }
 na="guest"
-mpw="$hos/tmp"
 sleep 1
 while true
 do
@@ -201,14 +162,11 @@ echo 1.Search
 echo 2.Exit
 echo 3.Go to MaBBS
 echo 4.Random
-if [ "$na" == "guest" ]
-then
-echo 5.Login
-else
+[ "$na" == "guest" ]&&echo 5.Login||{
 echo 5.Make a new entry
 echo 6.Diary 
 echo 7.Reset your password
-fi
+}
 echo Input command:
 read cmd
 case $cmd in
@@ -216,32 +174,26 @@ case $cmd in
 clear
 echo Input Keyword or tags:
 read kw
-if [ "$kw" == "" ]
-then
-$err
-sleep 1
-else
+[ "$kw" == "" ]||{
 clear
 echo Result
 echo $fgx
-ls "$whk" | grep "$kw" | awk -F+ '{printf("%s\n",$1)}'
+ls "$whk" | grep "$kw" | while read jg
+do
+echo ${jg%%+*}
+done
 echo Which one:
 read mtt
+[ "$mtt" == "" ]||{
 tkw=`ls "$whk" | grep "$mtt"`
-if [ "$tkw" == "" ]
-then
-$err
-sleep 1
-else
-if [ -e "$whk/$tkw" ]
-then
+[ "$tkw" == "" ]||{
+[ -e "$whk/$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
-else
-$err
-fi
-fi
-fi
+}
+}
+}
+}
 ;;
 2)
 echo Bye
@@ -253,10 +205,7 @@ do
 clear
 echo Welecome,$na
 date
-if [ -e "$hos/bul" ]
-then
-echo Bulletin:`cat "$hos/bul"`
-fi
+[ -e "$hos/bul" ]&&echo Bulletin:`cat "$hos/bul"`
 echo $fgx
 co=0
 ls "$hos/main" | while read bm
@@ -267,24 +216,17 @@ done
 echo $fgx
 echo a.Mail box
 echo b.Back to MaWiki
-if [ "$na" == "SYSOP" ]
-then
+[ "$na" == "SYSOP" ]&&{
 echo c.Make a part
 echo d.Delete a part
 echo e.Release bulletin
-fi
+}
 $inc
 read pac
-if [ "$pac" == "" ]
-then
-pac="#"
-fi
+[ "$pac" == "" ]&&pac="#"
 case $pac in
 a)
-if [ "$na" == "guest" ]
-then
-wblg
-else 
+[ "$na" == "guest" ]&&wblg||{
 sel=0
 while true
 do
@@ -296,10 +238,7 @@ ls "$usv/mail" | pxcx
 echo $fgx
 echo a.Send mail
 echo b.Back
-if [ `ls "$usv/mail" | wc -l ` -ge 10 ]
-then
-echo c.Next page
-fi
+[ `ls "$usv/mail" | wc -l ` -ge 10 ]&&echo c.Next page
 $inc
 read int
 case $int in
@@ -308,20 +247,32 @@ clear
 echo From:$na
 echo To:
 read st
-if [ "$st" == "" ]
-then
-$err
-else
-if [ -e "$hos/user/$st" ]
-then 
+[ "$st" == "" ]||{
+[ "$st" == "AI" ]&&
+{
+echo Word:
+read swd
+[ "$swd" == "study" ]&&{
+echo You say:
+read ys
+echo AI say:
+read as
+echo $ys-$as >>${hos}/ai
+}
+ais="`grep "$swd" "$hos/ai"`"
+ais=${ais#*-}
+[ "$swd" == "" -o "$ais" == "" ]&&ais="Sorry,I dont know what do you say"
+echo Talk AI >>$usv/mail/Talk_AI
+date >>$usv/mail/Talk_AI
+echo $ais >>$usv/mail/Talk_AI
+echo >>$usv/mail/Talk_AI
+}
+[ -e "$hos/user/$st" ]&&{
 echo $fgx
 echo Title:
 read swd
 isw="$hos/user/$st/mail/$swd"
-if [ "$swd" == "" -o -e "$isw" ]
-then
-$err
-else
+[ "$swd" == "" -o -e "$isw" ]||{
 echo Word:
 read iwd
 echo From:$na>>$isw
@@ -330,75 +281,62 @@ date>>$isw
 echo $fgx>>$isw
 echo $iwd >>$isw
 echo OK!
-fi
-else
-$err
-fi
-fi
+}
+}
+}
 sleep 1
 ;;
 b)
 break 1
 ;;
 c)
-if [ `ls "$usv/mail" | wc -l ` -ge 10 ] 
-then
-sel="$(($sel+10))"
-fi
+[ `ls "$usv/mail" | wc -l` -ge 10 ]&&sel="$(($sel+10))"
 ;;
 *)
 clear
-pdg "$usv/mail"
-if [ "$wbn" == "" ]
-then
-$err
-else
+wbn="`pdg "$usv/mail"`"
+[ "$wbn" == "" ]||{
 cat "$usv/mail/$wbn"
 echo Press enter to back
+echo Input d to delete
 read nul
-fi
+[ "$nul" == "d" ]&&rm -rf "$usv/mail/$wbn"
+}
 ;;
 esac
 done
-fi
+}
 ;; 
 b)
 break
 ;;
 c)
 clear
-if [ "$na" == "SYSOP" ]
-then
+[ "$na" == "SYSOP" ]&&{
 echo New part name:
 read npn
 mkdir "$hos/main/$npn"
-fi
+}
 ;;
 d)
-if [ "$na" == "SYSOP" ]
-then
+[ "$na" == "SYSOP" ]&&{
 echo Which part to delete:
 read dpw
 rm -rf "$hos/main/$dpw"
-fi
+}
 ;;
 e)
-if [ "$na" == "SYSOP" ]
-then
+[ "$na" == "SYSOP" ]&&{
 clear
 echo Input bulletin:
 read bul
 echo "$bul" > $hos/bul
-fi
+}
 ;;
 *)
 int="$pac"
-pdg "$hos/main"
-if [ "$wbn" == "" ]
-then
-$err
-else
-pac="$wbn"
+pac="`pdg "$hos/main"`"
+[ "$pac" == "" ]||{
 sel="0"
 while true
 do
@@ -411,22 +349,13 @@ ls "$pcz" | pxcx
 echo $fgx
 echo a.Make a new post
 echo b.Back
-if [ `ls "$pcz" | wc -l ` -ge 10 ]
-then
-echo c.Next page
-fi
-if [ "$na" == "SYSOP" ]
-then 
-echo d.Delete a post
-fi
+[ `ls "$pcz" | wc -l ` -ge 10 ]&&echo c.Next page
+[ "$na" == "SYSOP" ]&&echo d.Delete a post
 $inc
 read int
 case $int in
 a)
-if [ "$na" == "guest" ]
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 clear
 echo 'This is a [1.Post 2.Vote]:'
 read cht
@@ -435,8 +364,7 @@ case $cht in
 clear
 echo Input the title:
 read tit
-if [ "`ls "$pcz" | grep "$tit"`" == "" ]
-then
+[ "`ls "$pcz" | grep "$tit"`" == "" ]&&{
 echo Word:
 read wod
 stt="$pcz/$tit"
@@ -445,14 +373,13 @@ echo $fgx >>$stt
 echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
-fi
+}
 ;;
 2)
 clear
 echo Input the title:
 read tit
-if [ "`ls "$pcz" | grep "$tit"`" == "" ]
-then
+[ "`ls "$pcz" | grep "$tit"`" == "" ]&&{
 echo Main word:
 read wod
 echo "Option head:"
@@ -473,93 +400,66 @@ for sle in $oph
 do
 touch "$tsm/opt/$sle"
 done
-if [ "$utk" == "y" ]
-then
+[ "$utk" == "y" ]&&{
 echo Talk>>"$tsm/talk"
 echo $fgx >>"$tsm/talk"
-fi
-fi
+}
+}
 ;; 
 esac
-fi
+}
 ;;
 b)
 break 1
 ;;
 c)
-if [ `ls "$pcz" | wc -l ` -ge 10 ] 
-then
-sel="$(($sel+10))"
-fi
+[ `ls "$pcz" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
 ;;
 d)
-if [ "$na" == "SYSOP" ]
-then 
+[ "$na" == "SYSOP" ]&&{
 echo Which post delete:
 read tdw
 rm -rf "$pcz/$tdw"
-fi
-;; 
+}
+;;
 *)
-pdg "$pcz"
-if [ "$wbn" == "" ]
-then
-$err
-else
+wbn="`pdg "$pcz"`"
+[ "$wbn" == "" ]||{
 wbb="$pcz/$wbn"
-if [ -f "$wbb" ]
-then
-zxth
-else
-ifw="${wbb}/"
+[ -f "$wbb" ]&&zxth||{
 clear
-cat "${ifw}main"
+cat "$wbb/main"
 echo $fgx
-cc `cat "${ifw}data"`
-if [ -e "${ifw}talk" ]
-then
-echo Input t to talk,or
-fi
+cc `cat "$wbb/data"`
+[ -e "$wbb/talk" ]&&echo Input t to talk,or
 echo 'Choose one:'
 read ry
-if [ "$ry" == "" ]
-then
-$err
-else
-if [ "$ry" == "t" ]
-then
-if [ -e "${ifw}talk" ]
-then
-wbb="${ifw}talk"
+[ "$ry" == "" ]||{
+[ "$ry" == "t" ]&&{
+[ -e "$wbb/talk" ]&&{
+wbb="$wbb/talk"
 zxth
-fi
-else
-if [ -e "${ifw}opt/$ry" ]
-then
-chse $ry
-fi
-fi
-fi
-fi
-fi
+}
+}||{
+[ -e "$wbb/opt/$ry" ]&&chse $ry
+}
+}
+}
+}
 ;;
 esac
 done
-fi
+}
 ;;
 esac
-done 
+done
 ;;
 5)
-if [ "$na" == "guest" ]
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 clear
 echo Input Main title:
 read mt
-if [ "`ls "$whk" | grep "$mt"`" == "" ]
-then
+[ "`ls "$whk" | grep "$mt"`" == "" ]&&{
 echo Tags:
 read tgs
 echo Word:
@@ -572,36 +472,22 @@ echo $fgx >>$mwt
 echo $wd >>$mwt
 rmk="$whk/$mt+$tgs"
 fid
-fi
-fi
+}
+}
 ;;
 4)
 jld="`ls "$whk" | wc -l`"
-if [ "$jld" == "0" ]
-then
+[ "$jld" == "0" ]&&{
 echo Not found...
 sleep 1
-else
-num=`date +%s`
-ranm=$(($num%$jld+1))
-co="0"
-ls "$whk" > $mpw
-while read nr
-do
-co="$(($co+1))"
-if [ "$co" == "$ranm" ]
-then
-rmk="$whk/$nr"
-fi
-done < $mpw
+}||{
+int=$((`date +%s`%$jld+1))
+rmk="$whk/`pdg "$whk"`"
 fid
-fi
+}
 ;;
 6)
-if [ "$na" == "guest" ] 
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 cfd="$usv/diary"
 sel="0"
 while true
@@ -614,24 +500,20 @@ ls "$cfd" | pxcx
 echo $fgx
 echo a.Write diary
 echo b.Back
-if [ `ls "$cfd" | wc -l ` -ge 10 ]
-then
-echo c.Next page
-fi
+[ `ls "$cfd" | wc -l ` -ge 10 ]&&echo c.Next page
 $inc
 read int
 case $int in
 a)
 clear
 mt="`date +%y.%m.%d`"
-if [ "`ls "$cfd" | grep "$mt"`" == "" ]
-then
+[ "`ls "$cfd" | grep "$mt"`" == "" ]&&{
 echo Word:
 read wd
 mwt="$cfd/$mt"
 echo Diary:$mt>>$mwt
 echo $wd >>$mwt
-fi
+}
 rmk="$cfd/$mt"
 fid
 ;;
@@ -639,45 +521,26 @@ b)
 break 1
 ;;
 c)
-if [ `ls "$cfd" | wc -l ` -ge 10 ] 
-then
-sel="$(($sel+10))"
-fi 
+[ `ls "$cfd" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
 ;;
 *)
-pdg "$cfd"
-if [ "$wbn" == "" ]
-then
-$err
-else
+wbn="`pdg "$cfd"`"
+[ "$wbn" == "" ]||{
 rmk="$cfd/$wbn"
 fid
-fi
+}
 ;;
 esac
 done
-fi
+}
 ;;
 7)
-if [ "$na" == "guest" ] 
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 clear
 echo Input your new password:
 read nrd
-if [ "$nrd" == "" ]
-then
-$err
-sleep 1
-else
-echo $nrd>$usv/pwd
-fi
-fi
-;;
-*)
-$err
-sleep 1
+[ "$nrd" == "" ]||echo $nrd>$usv/pwd
+}
 ;;
 esac
 done
