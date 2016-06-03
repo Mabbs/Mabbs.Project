@@ -2,79 +2,59 @@
 hos="/sdcard/ba"
 whk="$hos/wiki"
 err="echo 错误!"
-if [ -e "$hos/" ]
-then
-echo '欢迎使用MaWiki&BBS'
-else
+fgx="============"
+inc="echo 输入数字或指令:"
+[ -e "$hos/" ]&&echo '欢迎使用MaBBS&WIKI'||{
 echo 安装中...
-mkdir "$hos/"
 mkdir -p "$hos/main" "$hos/user" "$whk"
 touch "$hos/ai"
 echo 管理员名称:SYSOP
 echo 密码:
 read mnp
 smk="$hos/user/SYSOP"
-mkdir "$smk"
-mkdir "$smk/diary"
+mkdir -p "$smk/diary" "$smk/mail"
 echo "$mnp">>$smk/pwd
-fi
+}
 wblg(){
 clear
-echo 用户名:
+echo 登录:
 read ua
 echo 密码:
 read pa
-if [ "$ua" = "" ]
-then
-np=0
-else
-if [ -e "$hos/user/$ua" ]
-then
-np="`cat "$hos/user/$ua/pwd"`ck"
-fi
-fi
-if [ "${pa}ck" == "$np" ]
-then
+[ "$ua" = "" ]&&np=0||{
+[ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
+}
+[ "${pa}ck" == "$np" ]&&{
 na="$ua"
 usv="$hos/user/$na"
-mpw="$usv/tmp"
-else
+}||{
 $err
 echo 加入我们?[Y/N]:
 read ju
 case $ju in
 Y|y)
-echo 请输入名字:
+echo 请输入用户名:
 read nep
 echo 密码:
 read npd
 chk="`ls "$hos/user" | grep "$nep"`"
-if [ "$chk" == "$nep" ]
-then
-$err
-sleep 1
-elif [ "$nep $npd" == " " ]
-then
-$err
-sleep 1
-else
-echo 请输入验证码:
-vv="`cat /proc/sys/kernel/random/uuid | awk -F- '{printf("%s",$1)}'`"
+[ "$chk" == "$nep" -o "$nep" = "" ]||{
+echo 验证码:
+vv="`cat /proc/sys/kernel/random/uuid`"
+vv="${vv%%-*}"
 echo $vv
 read vc
-if [ "$vc" == "$vv" ]
-then
-mkdir "$hos/user/$nep"
-mkdir "$hos/user/$nep/diary"
-echo $npd>>$hos/user/$nep/pwd
-else
-$err
-sleep 1
-fi
-fi
+[ "$vc" == "$vv" ]&&{
+usk="$hos/user/$nep"
+mkdir -p "$usk/diary" "$usk/mail"
+echo $npd>>$usk/pwd
+na="$nep"
+usv="$hos/user/$na"
+}
+}
 ;;
 esac
-fi
+}
 }
 fid(){
 while true
@@ -82,18 +62,17 @@ do
 clear
 cat "$rmk"
 echo 按回车返回
-if [ "$na" == "游客" ]
-then
+[ "$na" == "guest" ]&&{
 read nul
 break 1
-else
-echo 输入e插入新段落
-echo 输入c继续写
+}||{
+echo 输入 e 插入新段落
+echo 输入 c 继续写
 read pd
 case $pd in
 e)
 clear
-echo 段落名:
+echo 标题:
 read tt
 echo 内容:
 read nwd
@@ -103,7 +82,7 @@ echo -------- >>$rmk
 echo $nwd >>$rmk
 ;;
 c)
-echo 内容:
+echo 文字:
 read nw 
 echo $nw >>$rmk
 ;;
@@ -111,7 +90,7 @@ echo $nw >>$rmk
 break 1
 ;;
 esac
-fi
+}
 done
 }
 zxth(){
@@ -119,7 +98,7 @@ while true
 do
 clear
 cat "$wbb"
-echo '输入回复(输入e返回):'
+echo '输入回复(输入 e 返回):'
 read ry
 if [ "$ry" == "e" ]
 then
@@ -128,14 +107,11 @@ elif [ "$ry" == "" ]
 then
 echo 刷新... 
 else
-if [ "$na" == "guest" ]
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 echo $na  `date` >>$wbb
 echo $ry >>$wbb
 echo >>$wbb
-fi
+}
 fi
 done
 }
@@ -143,66 +119,81 @@ pxcx(){
 while read nr
 do
 co=$(($co+1))
-if [ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]
-then
-echo $co.$nr
-fi
+[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]&&echo $co.$nr
 done
 }
-na="游客"
-mpw="$hos/tmp"
+chse(){
+[ "$na" == "guest" ]&&wblg||{
+vck="`cat "$wbb/opt/$1" | grep "$na"`"
+[ "$na" == "$vck" ]||{
+echo $na >> "$wbb/opt/$1"
+clear
+cat "$wbb/opt/$1"
+echo 选择了这个.
+sleep 3
+}
+}
+}
+pdg(){
+wbn=""
+co="0" 
+ls "$1"|while read nr
+do
+co=$(($co+1))
+[ "$int" == "$co" ]&&echo "$nr"
+done
+}
+cc(){
+for lop in `ls "$wbb/opt/"`
+do
+echo $lop.$1 \(`cat "$wbb/opt/$lop" | wc -l`\)
+shift
+done
+}
+na="guest"
 sleep 1
 while true
 do
 clear
 echo MaWiki  用户:$na
 echo 总条目:`ls "$whk" | wc -l`
-echo ================
+echo $fgx
 echo 1.搜索
 echo 2.退出
 echo 3.前往MaBBS
 echo 4.随机
-if [ "$na" == "游客" ]
-then
-echo 5.登录
-else
+[ "$na" == "guest" ]&&echo 5.登录||{
 echo 5.创建新条目
 echo 6.日记
-echo 7.重设密码
-fi
-echo 输入指令:
+echo 7.重置密码
+}
+echo 请输入指令:
 read cmd
 case $cmd in
 1)
 clear
 echo 输入关键词或标签:
 read kw
-if [ "$kw" == "" ]
-then
-$err
-sleep 1
-else
+[ "$kw" == "" ]||{
 clear
 echo 结果
-echo =========
-ls "$whk" | grep "$kw" | awk -F+ '{printf("%s\n",$1)}'
+echo $fgx
+ls "$whk" | grep "$kw" | while read jg
+do
+echo ${jg%%+*}
+done
 echo 选择一个:
 read mtt
+[ "$mtt" == "" ]||{
 tkw=`ls "$whk" | grep "$mtt"`
-if [ "$tkw" == "" ]
-then
-$err
-sleep 1
-else
-if [ -e "$whk/$tkw" ]
-then
+[ "$tkw" == "" ]||{
+[ -e "$whk/$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
-else
-$err
-fi
-fi
-fi
+}
+}
+}
+}
 ;;
 2)
 echo 再见
@@ -214,189 +205,182 @@ do
 clear
 echo 欢迎,$na
 date
-if [ -e "$hos/bul" ]
-then
-echo 公告:`cat "$hos/bul"`
-fi
-echo =============
+[ -e "$hos/bul" ]&&echo 公告:`cat "$hos/bul"`
+echo $fgx
 co=0
 ls "$hos/main" | while read bm
 do
 co=$(($co+1))
 echo $co.$bm \(`ls "$hos/main/$bm/" | wc -l `\)
 done
-echo =============
-echo a.发信息
-echo b.收件箱
-echo c.返回MaWiki
-if [ "$na" == "SYSOP" ]
-then
-echo d.创建新板块
-echo e.删除板块
-echo f.发布公告
-fi
-echo 输入数字或指令: 
+echo $fgx
+echo a.邮箱
+echo b.返回到MaWiki
+[ "$na" == "SYSOP" ]&&{
+echo c.创建板块
+echo d.删除板块
+echo e.更新公告
+}
+$inc
 read pac
-if [ "$pac" == "" ]
-then
-pac="#"
-fi
+[ "$pac" == "" ]&&pac="#"
 case $pac in
 a)
+[ "$na" == "guest" ]&&wblg||{
+sel=0
+while true
+do
 clear
-echo 用户列表
-echo ==============
-ls "$hos/user"
-echo AI
-echo 发送给:
+echo 邮箱
+echo $fgx
+co="0"
+ls "$usv/mail" | pxcx
+echo $fgx
+echo a.发送邮件
+echo b.返回
+[ `ls "$usv/mail" | wc -l ` -ge 10 ]&&echo c.下一页
+$inc
+read int
+case $int in
+a)
+clear
+echo 来自:$na
+echo 到:
 read st
-if [ "$st" == "" ]
-then
-$err
-sleep 1
-else
-echo 内容:
+[ "$st" == "" ]||{
+[ "$st" == "AI" ]&&
+{
+echo 文字:
 read swd
-if [ "$st" == "AI" ]
-then
-if [ "$swd" == "study" ]
-then
+[ "$swd" == "学习" ]&&{
 echo 你说:
 read ys
-echo AI回答:
+echo AI 回答:
 read as
 echo $ys-$as >>${hos}/ai
-fi
-ais="`cat "$hos/ai"|grep "$swd"|awk -F- '{printf("%s\n",$2)}'`"
-if [ "$ais" == "" ]
-then
-ais="抱歉，我听不懂。"
-fi
-echo Talk AI对你说:$ais >>$hos/user/$na/tip
-else
-if [ -e "$hos/user/$st" ]
-then
-echo $na对你说:$swd >>$hos/user/$st/tip
+}
+ais="`grep "$swd" "$hos/ai"`"
+ais=${ais#*-}
+[ "$swd" == "" -o "$ais" == "" ]&&ais="抱歉，我不知道你说什么"
+echo Talk AI >>$usv/mail/Talk_AI
+date >>$usv/mail/Talk_AI
+echo $ais >>$usv/mail/Talk_AI
+echo >>$usv/mail/Talk_AI
+}
+[ -e "$hos/user/$st" ]&&{
+echo $fgx
+echo 主题:
+read swd
+isw="$hos/user/$st/mail/$swd"
+[ "$swd" == "" -o -e "$isw" ]||{
+echo 内容:
+read iwd
+echo 来自:$na>>$isw
+echo 到:$st>>$isw
+date>>$isw
+echo $fgx>>$isw
+echo $iwd >>$isw
 echo OK!
-else
-$err
-fi
+}
+}
+}
 sleep 1
-fi
-fi
 ;;
 b)
-clear
-if [ -e "$usv/tip" ]
-then
-cat "$usv/tip"
-else
-echo 找不到...
-fi
-echo 按回车返回...
-read nul
+break 1
 ;;
 c)
+[ `ls "$usv/mail" | wc -l` -ge 10 ]&&sel="$(($sel+10))"
+;;
+*)
+clear
+wbn="`pdg "$usv/mail"`"
+[ "$wbn" == "" ]||{
+cat "$usv/mail/$wbn"
+echo 按回车返回
+echo 输入 d 删除
+read nul
+[ "$nul" == "d" ]&&rm -rf "$usv/mail/$wbn"
+}
+;;
+esac
+done
+}
+;; 
+b)
 break
 ;;
-d)
+c)
 clear
-if [ "$na" == "SYSOP" ]
-then
+[ "$na" == "SYSOP" ]&&{
 echo 板块名:
 read npn
 mkdir "$hos/main/$npn"
-fi
+}
 ;;
-e)
-if [ "$na" == "SYSOP" ]
-then
+d)
+[ "$na" == "SYSOP" ]&&{
 echo 板块名:
 read dpw
 rm -rf "$hos/main/$dpw"
-fi
+}
 ;;
-f)
-if [ "$na" == "SYSOP" ]
-then
+e)
+[ "$na" == "SYSOP" ]&&{
 clear
-echo 公告:
+echo 输入公告:
 read bul
 echo "$bul" > $hos/bul
-fi
+}
 ;;
 *)
-wbn=""
-co="0" 
-ls "$hos/main">$mpw
-while read nr
-do
-co=$(($co+1))
-if [ "$pac" == "$co" ]
-then
-wbn="$nr"
-fi
-done < $mpw
-if [ "$wbn" == "" ]
-then
-$err
-else
-pac="$wbn"
+int="$pac"
+pac="`pdg "$hos/main"`"
+[ "$pac" == "" ]||{
 sel="0"
 while true
 do
 pcz="$hos/main/$pac"
 clear
 echo 欢迎,$na   板块:$pac
-echo =============
+echo $fgx
 co="0"
 ls "$pcz" | pxcx
-echo =============
+echo $fgx
 echo a.发帖
 echo b.返回
-if [ `ls "$pcz" | wc -l ` -ge 10 ]
-then
-echo c.下一页
-fi
-if [ "$na" == "SYSOP" ]
-then 
-echo d.删贴
-fi
-echo 输入数字或指令:
+[ `ls "$pcz" | wc -l ` -ge 10 ]&&echo c.下一页
+[ "$na" == "SYSOP" ]&&echo d.删帖
+$inc
 read int
 case $int in
 a)
-if [ "$na" == "游客" ]
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 clear
-echo '这是一个[1.帖子 2.投票]:'
+echo '这是一个 [1.帖子 2.投票]:'
 read cht
 case $cht in
 1)
 clear
 echo 输入标题:
 read tit
-if [ "`ls "$pcz" | grep "$tit"`" == "" ]
-then
+[ "`ls "$pcz" | grep "$tit"`" == "" ]&&{
 echo 内容:
 read wod
 stt="$pcz/$tit"
 echo $tit >>$stt
-echo ============= >>$stt
+echo $fgx >>$stt
 echo 楼主:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
-fi
+}
 ;;
 2)
 clear
 echo 输入标题:
 read tit
-if [ "`ls "$pcz" | grep "$tit"`" == "" ]
-then
-echo 文字:
+[ "`ls "$pcz" | grep "$tit"`" == "" ]&&{
+echo 信息:
 read wod
 echo "选项头:"
 read oph
@@ -407,7 +391,7 @@ read utk
 tsm="$pcz/$tit"
 mkdir "$tsm"
 echo $tit >>$tsm/main
-echo ============= >>$tsm/main
+echo $fgx >>$tsm/main
 echo 楼主:$na  `date` >>$tsm/main
 echo $wod >>$tsm/main
 echo $opt>>$tsm/data
@@ -416,129 +400,66 @@ for sle in $oph
 do
 touch "$tsm/opt/$sle"
 done
-if [ "$utk" == "y" ]
-then
+[ "$utk" == "y" ]&&{
 echo 讨论>>"$tsm/talk"
-echo ========= >>"$tsm/talk"
-fi
-fi
+echo $fgx >>"$tsm/talk"
+}
+}
 ;; 
 esac
-fi
+}
 ;;
 b)
 break 1
 ;;
 c)
-if [ `ls "$pcz" | wc -l ` -ge 10 ] 
-then
-sel="$(($sel+10))"
-fi
+[ `ls "$pcz" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
 ;;
 d)
-if [ "$na" == "SYSOP" ]
-then 
+[ "$na" == "SYSOP" ]&&{
 echo 帖子名:
 read tdw
 rm -rf "$pcz/$tdw"
-fi
-;; 
+}
+;;
 *)
-wbn=""
-co="0"
-ls "$pcz" > $mpw
-while read nr
-do
-co=$(($co+1))
-if [ "$int" == "$co" ]
-then
-wbn="$nr"
-fi
-done < $mpw
-if [ "$wbn" == "" ]
-then
-$err
-else
+wbn="`pdg "$pcz"`"
+[ "$wbn" == "" ]||{
 wbb="$pcz/$wbn"
-if [ -f "$wbb" ]
-then
-zxth
-else
-chse(){
-if [ "$na" == "游客" ]
-then
-wblg
-else
-vck="`cat "${ifw}opt/$1" | grep "$na"`"
-if [ "$na" == "$vck" ]
-then
-$err
-sleep 1
-else
-echo $na >> "${ifw}opt/$1"
+[ -f "$wbb" ]&&zxth||{
 clear
-cat "${ifw}opt/$1"
-echo 选择了.
-sleep 3
-fi
-fi
-}
-ifw="${wbb}/"
-clear
-cat "${ifw}main"
-echo ==========
-cc(){
-for lop in `ls "${ifw}opt/"`
-do
-echo $lop.$1 \(`cat "${ifw}opt/$lop" | wc -l`\)
-shift
-done
-}
-cc `cat "${ifw}data"`
-if [ -e "${ifw}talk" ]
-then
-echo 输入t讨论,或
-fi
+cat "$wbb/main"
+echo $fgx
+cc `cat "$wbb/data"`
+[ -e "$wbb/talk" ]&&echo 输入 t 讨论,或
 echo '选择一个:'
 read ry
-if [ "$ry" == "" ]
-then
-$err
-else
-if [ "$ry" == "t" ]
-then
-if [ -e "${ifw}talk" ]
-then
-wbb="${ifw}talk"
+[ "$ry" == "" ]||{
+[ "$ry" == "t" ]&&{
+[ -e "$wbb/talk" ]&&{
+wbb="$wbb/talk"
 zxth
-fi
-else
-if [ -e "${ifw}opt/$ry" ]
-then
-chse $ry
-fi
-fi
-fi
-fi
-fi
+}
+}||{
+[ -e "$wbb/opt/$ry" ]&&chse $ry
+}
+}
+}
+}
 ;;
 esac
 done
-fi
+}
 ;;
 esac
-done 
+done
 ;;
 5)
-if [ "$na" == "游客" ]
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 clear
-echo 输入条目名:
+echo 主标题:
 read mt
-if [ "`ls "$whk" | grep "$mt"`" == "" ]
-then
+[ "`ls "$whk" | grep "$mt"`" == "" ]&&{
 echo 标签:
 read tgs
 echo 内容:
@@ -547,70 +468,52 @@ mwt="$whk/$mt+$tgs"
 echo $mt>>$mwt
 echo 创建于:$na `date`>>$mwt
 echo 标签:$tgs>>$mwt
-echo ========= >>$mwt
+echo $fgx >>$mwt
 echo $wd >>$mwt
 rmk="$whk/$mt+$tgs"
 fid
-fi
-fi
+}
+}
 ;;
 4)
 jld="`ls "$whk" | wc -l`"
-if [ "$jld" == "0" ]
-then
-echo 没找到...
+[ "$jld" == "0" ]&&{
+echo 找不到...
 sleep 1
-else
-num=`date +%s`
-ranm=$(($num%$jld+1))
-co="0"
-ls "$whk" > $mpw
-while read nr
-do
-co="$(($co+1))"
-if [ "$co" == "$ranm" ]
-then
-rmk="$whk/$nr"
-fi
-done < $mpw
+}||{
+int=$((`date +%s`%$jld+1))
+rmk="$whk/`pdg "$whk"`"
 fid
-fi
+}
 ;;
 6)
-if [ "$na" == "游客" ] 
-then
-wblg
-else
+[ "$na" == "guest" ]&&wblg||{
 cfd="$usv/diary"
 sel="0"
 while true
 do
 clear
 echo 欢迎,$na
-echo =============
+echo $fgx
 co="0"
 ls "$cfd" | pxcx
-echo =============
+echo $fgx
 echo a.写日记
 echo b.返回
-if [ `ls "$cfd" | wc -l ` -ge 10 ]
-then
-echo c.下一页
-fi
-echo 输入数字或指令:
+[ `ls "$cfd" | wc -l ` -ge 10 ]&&echo c.下一页
+$inc
 read int
 case $int in
 a)
 clear
 mt="`date +%y.%m.%d`"
-if [ "`ls "$cfd" | grep "$mt"`" == "" ]
-then
+[ "`ls "$cfd" | grep "$mt"`" == "" ]&&{
 echo 内容:
 read wd
 mwt="$cfd/$mt"
 echo 日记:$mt>>$mwt
 echo $wd >>$mwt
-fi
+}
 rmk="$cfd/$mt"
 fid
 ;;
@@ -618,52 +521,26 @@ b)
 break 1
 ;;
 c)
-if [ `ls "$cfd" | wc -l ` -ge 10 ] 
-then
-sel="$(($sel+10))"
-fi 
+[ `ls "$cfd" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
 ;;
 *)
-rmk=""
-co="0"
-ls "$cfd" > $mpw
-while read nr
-do
-co="$(($co+1))"
-if [ "$co" == "$int" ]
-then
-rmk="$cfd/$nr"
-fi
-done < $mpw
-if [ -e "$rmk" ]
-then
+wbn="`pdg "$cfd"`"
+[ "$wbn" == "" ]||{
+rmk="$cfd/$wbn"
 fid
-fi
+}
 ;;
 esac
 done
-fi
+}
 ;;
 7)
-if [ "$na" == "游客" ] 
-then
-wblg
-else 
+[ "$na" == "guest" ]&&wblg||{
 clear
 echo 输入新密码:
 read nrd
-if [ "$nrd" == "" ]
-then
-$err
-sleep 1
-else
-echo $nrd>$usv/pwd
-fi
-fi
-;;
-*)
-$err
-sleep 1
+[ "$nrd" == "" ]||echo $nrd>$usv/pwd
+}
 ;;
 esac
 done
