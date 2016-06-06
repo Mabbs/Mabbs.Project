@@ -12,8 +12,15 @@ echo Master name:SYSOP
 echo New password:
 read mnp
 smk="$hos/user/SYSOP"
-mkdir -p "$smk/diary" "$smk/mail"
+mkdir -p "$smk/diary" "$smk/mail" "$smk/friend"
+touch "$smk/blog"
 echo "$mnp">>$smk/pwd
+}
+glp(){
+[ "$na" == "guest" ]
+}
+slp(){
+[ "$na" == "SYSOP" ]
 }
 wblg(){
 clear
@@ -21,7 +28,7 @@ echo Login:
 read ua
 echo Password:
 read pa
-[ "$ua" = "" ]&&np=0||{
+[ -n "$ua" ]||np=0&&{
 [ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
 }
 [ "${pa}ck" == "$np" ]&&{
@@ -46,7 +53,8 @@ echo $vv
 read vc
 [ "$vc" == "$vv" ]&&{
 usk="$hos/user/$nep"
-mkdir -p "$usk/diary" "$usk/mail"
+mkdir -p "$usk/diary" "$usk/mail" "$usk/friend"
+touch "$usk/blog"
 echo $npd>>$usk/pwd
 na="$nep"
 usv="$hos/user/$na"
@@ -62,7 +70,7 @@ do
 clear
 cat "$rmk"
 echo Press enter to back
-[ "$na" == "guest" ]&&{
+glp&&{
 read nul
 break 1
 }||{
@@ -107,7 +115,7 @@ elif [ "$ry" == "" ]
 then
 echo refreshing... 
 else
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 echo $na  `date` >>$wbb
 echo $ry >>$wbb
 echo >>$wbb
@@ -123,7 +131,7 @@ co=$(($co+1))
 done
 }
 chse(){
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 vck="`cat "$wbb/opt/$1" | grep "$na"`"
 [ "$na" == "$vck" ]||{
 echo $na >> "$wbb/opt/$1"
@@ -162,10 +170,11 @@ echo 1.Search
 echo 2.Exit
 echo 3.Go to MaBBS
 echo 4.Random
-[ "$na" == "guest" ]&&echo 5.Login||{
+glp&&echo 5.Login||{
 echo 5.Make a new entry
 echo 6.Diary 
 echo 7.Reset your password
+echo 8.Microblog
 }
 echo Input command:
 read cmd
@@ -174,7 +183,7 @@ case $cmd in
 clear
 echo Input Keyword or tags:
 read kw
-[ "$kw" == "" ]||{
+[ -n "$kw" ]&&{
 clear
 echo Result
 echo $fgx
@@ -184,13 +193,11 @@ echo ${jg%%+*}
 done
 echo Which one:
 read mtt
-[ "$mtt" == "" ]||{
+[ -n "$mtt" ]&&{
 tkw=`ls "$whk" | grep "$mtt"`
-[ "$tkw" == "" ]||{
-[ -e "$whk/$tkw" ]&&{
+[ -n "$tkw" -a -e "$whk/$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
-}
 }
 }
 }
@@ -216,17 +223,17 @@ done
 echo $fgx
 echo a.Mail box
 echo b.Back to MaWiki
-[ "$na" == "SYSOP" ]&&{
+slp&&{
 echo c.Make a part
 echo d.Delete a part
 echo e.Release bulletin
 }
 $inc
 read pac
-[ "$pac" == "" ]&&pac="#"
+[ -n "$pac" ]||pac="#"
 case $pac in
 a)
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 sel=0
 while true
 do
@@ -247,9 +254,7 @@ clear
 echo From:$na
 echo To:
 read st
-[ "$st" == "" ]||{
-[ "$st" == "AI" ]&&
-{
+[ -n "$st" -a "$st" == "AI" ]&&{
 echo Word:
 read swd
 [ "$swd" == "study" ]&&{
@@ -283,7 +288,6 @@ echo $iwd >>$isw
 echo OK!
 }
 }
-}
 sleep 1
 ;;
 b)
@@ -295,7 +299,7 @@ c)
 *)
 clear
 wbn="`pdg "$usv/mail"`"
-[ "$wbn" == "" ]||{
+[ -n "$wbn" ]&&{
 cat "$usv/mail/$wbn"
 echo Press enter to back
 echo Input d to delete
@@ -312,21 +316,21 @@ break
 ;;
 c)
 clear
-[ "$na" == "SYSOP" ]&&{
+slp&&{
 echo New part name:
 read npn
 mkdir "$hos/main/$npn"
 }
 ;;
 d)
-[ "$na" == "SYSOP" ]&&{
+slp&&{
 echo Which part to delete:
 read dpw
 rm -rf "$hos/main/$dpw"
 }
 ;;
 e)
-[ "$na" == "SYSOP" ]&&{
+slp&&{
 clear
 echo Input bulletin:
 read bul
@@ -336,7 +340,7 @@ echo "$bul" > $hos/bul
 *)
 int="$pac"
 pac="`pdg "$hos/main"`"
-[ "$pac" == "" ]||{
+[ -n "$pac" ]&&{
 sel="0"
 while true
 do
@@ -350,12 +354,12 @@ echo $fgx
 echo a.Make a new post
 echo b.Back
 [ `ls "$pcz" | wc -l ` -ge 10 ]&&echo c.Next page
-[ "$na" == "SYSOP" ]&&echo d.Delete a post
+slp&&echo d.Delete a post
 $inc
 read int
 case $int in
 a)
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 clear
 echo 'This is a [1.Post 2.Vote]:'
 read cht
@@ -364,7 +368,7 @@ case $cht in
 clear
 echo Input the title:
 read tit
-[ "`ls "$pcz" | grep "$tit"`" == "" ]&&{
+[ -n "`ls "$pcz" | grep "$tit"`" ]||{
 echo Word:
 read wod
 stt="$pcz/$tit"
@@ -379,7 +383,7 @@ echo >>$stt
 clear
 echo Input the title:
 read tit
-[ "`ls "$pcz" | grep "$tit"`" == "" ]&&{
+[ -n "`ls "$pcz" | grep "$tit"`" ]||{
 echo Main word:
 read wod
 echo "Option head:"
@@ -416,7 +420,7 @@ c)
 [ `ls "$pcz" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
 ;;
 d)
-[ "$na" == "SYSOP" ]&&{
+slp&&{
 echo Which post delete:
 read tdw
 rm -rf "$pcz/$tdw"
@@ -424,7 +428,7 @@ rm -rf "$pcz/$tdw"
 ;;
 *)
 wbn="`pdg "$pcz"`"
-[ "$wbn" == "" ]||{
+[ -n "$wbn" ]&&{
 wbb="$pcz/$wbn"
 [ -f "$wbb" ]&&zxth||{
 clear
@@ -434,15 +438,13 @@ cc `cat "$wbb/data"`
 [ -e "$wbb/talk" ]&&echo Input t to talk,or
 echo 'Choose one:'
 read ry
-[ "$ry" == "" ]||{
-[ "$ry" == "t" ]&&{
+[ -n "$ry" -a "$ry" == "t" ]&&{
 [ -e "$wbb/talk" ]&&{
 wbb="$wbb/talk"
 zxth
 }
 }||{
 [ -e "$wbb/opt/$ry" ]&&chse $ry
-}
 }
 }
 }
@@ -455,7 +457,7 @@ esac
 done
 ;;
 5)
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 clear
 echo Input Main title:
 read mt
@@ -487,7 +489,7 @@ fid
 }
 ;;
 6)
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 cfd="$usv/diary"
 sel="0"
 while true
@@ -507,7 +509,7 @@ case $int in
 a)
 clear
 mt="`date +%y.%m.%d`"
-[ "`ls "$cfd" | grep "$mt"`" == "" ]&&{
+[ -n "`ls "$cfd" | grep "$mt"`" ]||{
 echo Word:
 read wd
 mwt="$cfd/$mt"
@@ -525,7 +527,7 @@ c)
 ;;
 *)
 wbn="`pdg "$cfd"`"
-[ "$wbn" == "" ]||{
+[ -n "$wbn" ]&&{
 rmk="$cfd/$wbn"
 fid
 }
@@ -535,11 +537,61 @@ done
 }
 ;;
 7)
-[ "$na" == "guest" ]&&wblg||{
+glp&&wblg||{
 clear
 echo Input your new password:
 read nrd
-[ "$nrd" == "" ]||echo $nrd>$usv/pwd
+[ -n "$nrd" ]&&echo $nrd>$usv/pwd
+}
+;;
+8)
+clear
+glp&&wblg||{ 
+while true
+do
+clear
+echo Microblog
+cat "$usv/blog"
+ls "$usv/friend"|while read bl
+do
+cat "$hos/user/$bl/blog"
+done
+echo $fgx
+echo a.Send Microblog
+echo b.Back
+echo c.Add friend
+echo Input command:
+read int
+case $int in
+a)
+clear
+echo Word:
+read bwd
+echo $fgx >>"$usv/blog"
+echo $na  `date` >>"$usv/blog" 
+echo $bwd >>"$usv/blog"
+echo Notify who:
+read bwo
+[ -n "$bwo" -a -e "$hos/user/$bwo" ]&&{
+isw="$hos/user/$bwo/mail/Blog_Notify"
+echo From:System>>$isw
+echo To:$bwo>>$isw
+date>>$isw
+echo $fgx>>$isw
+echo $na notify you>>$isw
+}
+;;
+b)
+break 1
+;;
+c)
+clear
+echo Input friend name:
+read fnm
+[ -n "$fnm" -a -e "$hos/user/$fnm" ]&&touch "$usv/friend/$fnm"
+;;
+esac
+done
 }
 ;;
 esac
