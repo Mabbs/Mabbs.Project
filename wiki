@@ -28,7 +28,7 @@ echo Login:
 read ua
 echo Password:
 read pa
-[ -n "$ua" ]||np=0&&{
+[ -z "$ua" ]&&np=0||{
 [ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
 }
 [ "${pa}ck" == "$np" ]&&{
@@ -108,19 +108,15 @@ clear
 cat "$wbb"
 echo 'Input reply(Input e go back):'
 read ry
-if [ "$ry" == "e" ]
-then
-break 1
-elif [ "$ry" == "" ]
-then
-echo refreshing... 
-else
+[ "$ry" == "e" ]&&break 1||{
+[ -n "$ry" ]&&{
 glp&&wblg||{
 echo $na  `date` >>$wbb
 echo $ry >>$wbb
 echo >>$wbb
 }
-fi
+}
+}
 done
 }
 pxcx(){
@@ -195,7 +191,7 @@ echo Which one:
 read mtt
 [ -n "$mtt" ]&&{
 tkw=`ls "$whk" | grep "$mtt"`
-[ -n "$tkw" -a -e "$whk/$tkw" ]&&{
+[ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
 }
@@ -266,18 +262,18 @@ echo $ys-$as >>${hos}/ai
 }
 ais="`grep "$swd" "$hos/ai"`"
 ais=${ais#*-}
-[ "$swd" == "" -o "$ais" == "" ]&&ais="Sorry,I dont know what do you say"
+[ -z "$swd" -o -z "$ais" ]&&ais="Sorry,I dont know what do you say"
 echo Talk AI >>$usv/mail/Talk_AI
 date >>$usv/mail/Talk_AI
 echo $ais >>$usv/mail/Talk_AI
 echo >>$usv/mail/Talk_AI
 }
-[ -e "$hos/user/$st" ]&&{
+[ -n "$st" -a -e "$hos/user/$st" ]&&{
 echo $fgx
 echo Title:
 read swd
 isw="$hos/user/$st/mail/$swd"
-[ "$swd" == "" -o -e "$isw" ]||{
+[ -z "$swd" -o -e "$isw" ]||{
 echo Word:
 read iwd
 echo From:$na>>$isw
@@ -310,7 +306,7 @@ read nul
 esac
 done
 }
-;; 
+;;
 b)
 break
 ;;
@@ -438,13 +434,15 @@ cc `cat "$wbb/data"`
 [ -e "$wbb/talk" ]&&echo Input t to talk,or
 echo 'Choose one:'
 read ry
-[ -n "$ry" -a "$ry" == "t" ]&&{
+[ -n "$ry" ]&&{
+[ "$ry" == "t" ]&&{
 [ -e "$wbb/talk" ]&&{
 wbb="$wbb/talk"
 zxth
 }
 }||{
 [ -e "$wbb/opt/$ry" ]&&chse $ry
+}
 }
 }
 }
@@ -461,7 +459,7 @@ glp&&wblg||{
 clear
 echo Input Main title:
 read mt
-[ "`ls "$whk" | grep "$mt"`" == "" ]&&{
+[ -z "`ls "$whk" | grep "$mt"`" ]&&{
 echo Tags:
 read tgs
 echo Word:
