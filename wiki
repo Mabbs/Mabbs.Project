@@ -22,6 +22,12 @@ glp(){
 slp(){
 [ "$na" == "SYSOP" ]
 }
+fy(){
+[ `ls "$1" | wc -l` -ge 10 ]&&sel="$(($sel+10))" 
+}
+fyx(){
+[ `ls "$1" | wc -l` -ge 10 ]&&echo c.Next page
+}
 wblg(){
 clear
 echo Login:
@@ -241,7 +247,7 @@ ls "$usv/mail" | pxcx
 echo $fgx
 echo a.Send mail
 echo b.Back
-[ `ls "$usv/mail" | wc -l ` -ge 10 ]&&echo c.Next page
+fyx "$usv/mail"
 $inc
 read int
 case $int in
@@ -290,7 +296,7 @@ b)
 break 1
 ;;
 c)
-[ `ls "$usv/mail" | wc -l` -ge 10 ]&&sel="$(($sel+10))"
+fy "$usv/mail"
 ;;
 *)
 clear
@@ -349,7 +355,7 @@ ls "$pcz" | pxcx
 echo $fgx
 echo a.Make a new post
 echo b.Back
-[ `ls "$pcz" | wc -l ` -ge 10 ]&&echo c.Next page
+fyx "$pcz"
 slp&&echo d.Delete a post
 $inc
 read int
@@ -413,7 +419,7 @@ b)
 break 1
 ;;
 c)
-[ `ls "$pcz" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
+fy "$pcz"
 ;;
 d)
 slp&&{
@@ -500,7 +506,7 @@ ls "$cfd" | pxcx
 echo $fgx
 echo a.Write diary
 echo b.Back
-[ `ls "$cfd" | wc -l ` -ge 10 ]&&echo c.Next page
+fyx "$cfd"
 $inc
 read int
 case $int in
@@ -521,7 +527,7 @@ b)
 break 1
 ;;
 c)
-[ `ls "$cfd" | wc -l ` -ge 10 ]&&sel="$(($sel+10))"
+fy "$cfd"
 ;;
 *)
 wbn="`pdg "$cfd"`"
