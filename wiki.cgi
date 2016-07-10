@@ -1,9 +1,8 @@
 #!/system/bin/ash
-echo "Content-type: text/html"
+echo "Content-type:text/html;charset=utf-8"
 read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
 echo ""
-echo "<meta http-equiv="Content-Type" content="text/html; charset=utf-8">"
 echo '<title>Mabbs&Wiki</title>'
 hos="/sdcard/ba"
 whk="$hos/wiki"
@@ -44,6 +43,16 @@ done
 }
 fid(){
 cat "$rmk"|hcs
+echo "<a href="wiki.cgi?main">Press there to back</a>"
+}
+zxth(){
+cat "$rmk"|hcs
+echo "<form method="post" action="wiki.cgi?$QUERY_STRING\&hfz">"
+echo Input reply:
+echo "<input type="text" name="ry"><br>"
+echo "<input type="submit" value="Submit">"
+echo "</form>"
+$hc
 echo "<a href="wiki.cgi?main">Press there to back</a>"
 }
 chse(){
@@ -231,7 +240,8 @@ pac="`pdg "$hos/main"`"
 [ -n "$pac" ]&&{
 sel="0"
 pcz="$hos/main/$pac"
-cse="${QUERY_STRING#*&m2kk=}"
+cze="${QUERY_STRING#*&m2kk=}"
+cse=${cze%&hfz}
 [ "$cse" == "$QUERY_STRING" ]&&{
 echo Welecome,$na   Part:$pac
 $hc
@@ -285,10 +295,19 @@ int="$cse"
 wbn="`pdg "$pcz"`"
 [ -n "$wbn" ]&&{
 rmk="$pcz/$wbn"
-[ -f "$rmk" ]&&fid||{
+[ "${QUERY_STRING##*&}" == "hfz" ]&&{
+glp&&wblg||{
+echo $na  `date` >>$rmk
+echo ${tl#*=} >>$rmk
+echo >>$rmk
+echo OK
+}
+}||{
+[ -f "$rmk" ]&&zxth||{
 [ -e "$rmk/talk" ]&&{
 rmk="$rmk/talk"
-fid
+zxth
+}
 }
 }
 }
