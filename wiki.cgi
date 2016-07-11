@@ -19,26 +19,27 @@ pa="${HTTP_COOKIE#*pw=}"
 na="$ua"
 usv="$hos/user/$na"
 }||na="guest"
+eco(){
+echo "$1<br>"
+}
 glp(){
 [ "$na" == "guest" ]
 }
 wblg(){
 echo "<form method="post" action="wiki.cgi">"
 echo Login:
-echo "<input type="text" name="lon"><br>"
+eco "<input type="text" name="lon">"
 echo Password:
-echo "<input type="password" name="pw"><br>"
+eco "<input type="password" name="pw">"
 echo "<input type="submit" value="Submit">"
-echo "</form>"
-$hc
+eco "</form>"
 $hc
 echo "Dont have?<a href="wiki.cgi?zc">Join us</a>"
 }
 hcs(){
 while read pd
 do
-echo $pd
-$hc
+eco "$pd"
 done
 }
 fid(){
@@ -51,8 +52,7 @@ echo "<form method="post" action="wiki.cgi?$QUERY_STRING\&hfz">"
 echo Input reply:
 echo "<input type="text" name="ry"><br>"
 echo "<input type="submit" value="Submit">"
-echo "</form>"
-$hc
+eco "</form>"
 echo "<a href="wiki.cgi?main">Press there to back</a>"
 }
 chse(){
@@ -77,14 +77,12 @@ done
 cc(){
 for lop in `ls "$wbb/opt/"`
 do
-echo "<a href="wiki.cgi?chse&${QUERY_STRING#tk&}">$lop.$1 \(`cat "$wbb/opt/$lop" | wc -l`\)</a>"
-$hc
+eco "<a href="wiki.cgi?chse&${QUERY_STRING#tk&}">$lop.$1 \(`cat "$wbb/opt/$lop" | wc -l`\)</a>"
 shift
 done
 }
 [ -e "$hos/" ]&&{
-echo "<a href="wiki.cgi?main">Welecome to use Mabbs&Wiki</a>"
-$hc
+eco "<a href="wiki.cgi?main">Welecome to use Mabbs&Wiki</a>"
 }||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk"
@@ -93,31 +91,21 @@ echo
 }
 case $QUERY_STRING in
 main)
-echo MaWiki  User:$na
-$hc
-echo Total entry:`ls "$whk" | wc -l`
-$hc
-echo $fgx
-$hc
-echo "<a href="wiki.cgi?m1">1.Search</a>"
-$hc
-echo "<a href="wiki.cgi?m2">2.Go to MaBBS</a>"
-$hc
-echo "<a href="wiki.cgi?m3">3.Random</a>"
-$hc
-glp&&echo "<a href="wiki.cgi?m4">4.Login</a>"||{
-echo "<a href="wiki.cgi?m4">4.Make a new entry</a>"
-$hc
-echo "<a href="wiki.cgi?m5">5.Diary</a>"
-$hc
-echo "<a href="wiki.cgi?m6">6.Reset your password</a>"
-$hc
-echo "<a href="wiki.cgi?m7">7.Microblog</a>"
+eco "MaWiki  User:$na"
+eco "Total entry:`ls "$whk" | wc -l`"
+eco "$fgx"
+eco "<a href="wiki.cgi?m1">1.Search</a>"
+eco "<a href="wiki.cgi?m2">2.Go to MaBBS</a>"
+eco "<a href="wiki.cgi?m3">3.Random</a>"
+glp&&eco "<a href="wiki.cgi?m4">4.Login</a>"||{
+eco "<a href="wiki.cgi?m4">4.Make a new entry</a>"
+eco "<a href="wiki.cgi?m5">5.Diary</a>"
+eco "<a href="wiki.cgi?m6">6.Reset your password</a>"
+eco "<a href="wiki.cgi?m7">7.Microblog</a>"
 }
 ;;
 m1)
-echo Input Keyword or tags:
-$hc
+eco "Input Keyword or tags:"
 echo "<form method="post" action="wiki.cgi?m1j">"
 echo "<input type="text" name="kw"><br>"
 echo "<input type="submit" value="Submit">"
@@ -126,14 +114,11 @@ echo "</form>"
 m1j)
 kw="${tl#*=}"
 [ -n "$kw" ]&&{
-echo Result
-$hc
-echo $fgx
-$hc
+eco "Result"
+eco "$fgx"
 ls "$whk" | grep "$kw" | while read jg
 do
-echo "<a href="wiki.cgi?m1g=${jg%%+*}">${jg%%+*}</a>"
-$hc
+eco "<a href="wiki.cgi?m1g=${jg%%+*}">${jg%%+*}</a>"
 done
 }
 ;;
@@ -148,57 +133,41 @@ fid
 }
 ;;
 m2)
-echo Welecome,$na
-$hc
+eco "Welecome,$na"
 date
 $hc
-[ -e "$hos/bul" ]&&echo Bulletin:`cat "$hos/bul"`
-$hc
-echo $fgx
-$hc
+[ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
+eco "$fgx"
 co=0
 ls "$hos/main" | while read bm
 do
 co=$(($co+1))
-echo "<a href="wiki.cgi?m2k=$co">$co.$bm (`ls "$hos/main/$bm/" | wc -l `)</a>"
-$hc
+eco "<a href="wiki.cgi?m2k=$co">$co.$bm (`ls "$hos/main/$bm/" | wc -l `)</a>"
 done
-echo $fgx
-$hc
-echo "<a href="wiki.cgi?m2a">a.Mail box</a>"
-$hc
-echo "<a href="wiki.cgi?main">b.Back to MaWiki</a>"
-$hc
+eco "$fgx"
+eco "<a href="wiki.cgi?m2a">a.Mail box</a>"
+eco "<a href="wiki.cgi?main">b.Back to MaWiki</a>"
 ;;
 m2a)
 glp&&wblg||{
 sel=0
-echo Mail box
-$hc
-echo $fgx
-$hc
+eco "Mail box"
+eco "$fgx"
 co="0"
 ls "$usv/mail"|while read nr
 do
 co=$(($co+1))
-echo "<a href="wiki.cgi?m2ak=$co">$co.$nr</a>"
-$hc
+eco "<a href="wiki.cgi?m2ak=$co">$co.$nr</a>"
 done
-echo $fgx
-$hc
-echo "<a href="wiki.cgi?m2aa">a.Send mail</a>"
-$hc
-echo "<a href="wiki.cgi?m2">b.Back</a>"
-$hc
-fyx "$usv/mail"
-$hc
+eco "$fgx"
+eco "<a href="wiki.cgi?m2aa">a.Send mail</a>"
+eco "<a href="wiki.cgi?m2">b.Back</a>"
 }
 ;;
 m2aa)
 glp&&wblg||{
 echo "<form method="post" action="wiki.cgi?m2aas">"
-echo From:$na
-$hc
+eco "From:$na"
 echo To:
 echo "<input type="text" name="to"><br>"
 echo Title:
@@ -219,7 +188,7 @@ echo From:$na>>$isw
 echo To:${to#*=}>>$isw
 date>>$isw
 echo $fgx>>$isw
-echo $fsw >>$isw
+echo "$fsw" >>$isw
 echo OK!
 }
 ;;
@@ -243,23 +212,17 @@ pcz="$hos/main/$pac"
 cze="${QUERY_STRING#*&m2kk=}"
 cse=${cze%&hfz}
 [ "$cse" == "$QUERY_STRING" ]&&{
-echo Welecome,$na   Part:$pac
-$hc
-echo $fgx
-$hc
+eco "Welecome,$na   Part:$pac"
+eco "$fgx"
 co="0"
 ls "$pcz" | while read nr
 do
 co=$(($co+1))
-echo "<a href="wiki.cgi?$QUERY_STRING\&m2kk=$co">$co.$nr</a>"
-$hc
+eco "<a href="wiki.cgi?$QUERY_STRING\&m2kk=$co">$co.$nr</a>"
 done
-echo $fgx
-$hc
-echo "<a href="wiki.cgi?$QUERY_STRING\&m2kk=a">Make a new post</a>"
-$hc
-echo "<a href="wiki.cgi?m2">Back</a>"
-$hc
+eco "$fgx"
+eco "<a href="wiki.cgi?$QUERY_STRING\&m2kk=a">Make a new post</a>"
+eco "<a href="wiki.cgi?m2">Back</a>"
 }
 }
 case $cse in
@@ -298,7 +261,7 @@ rmk="$pcz/$wbn"
 [ "${QUERY_STRING##*&}" == "hfz" ]&&{
 glp&&wblg||{
 echo $na  `date` >>$rmk
-echo ${tl#*=} >>$rmk
+echo decode "${tl#*=}" >>$rmk
 echo >>$rmk
 echo OK
 }
@@ -336,7 +299,7 @@ echo $tit>>$mwt
 echo Made by:$na `date`>>$mwt
 echo Tags:From Web>>$mwt
 echo $fgx >>$mwt
-echo $wd >>$mwt
+echo decode "$wd" >>$mwt
 rmk="$mwt"
 fid
 }
@@ -355,29 +318,24 @@ fid
 m5)
 cfd="$usv/diary"
 sel="0"
-echo Welecome,$na
-$hc
-echo $fgx
-$hc
+eco "Welecome,$na"
+eco "$fgx"
 co="0"
 ls "$cfd"|while read nr
 do
 co=$(($co+1))
-echo "<a href="wiki.cgi?m5d=$co">$co.$nr</a>"
-$hc
+eco "<a href="wiki.cgi?m5d=$co">$co.$nr</a>"
 done
-echo $fgx
-$hc
-echo "<a href="wiki.cgi?m5w">Write diary</a>"
-$hc
-echo "<a href="wiki.cgi?main">Back</a>"
+eco "$fgx"
+eco "<a href="wiki.cgi?m5w">Write diary</a>"
+eco "<a href="wiki.cgi?main">Back</a>"
 ;;
 m5w)
 cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
 [ -n "`ls "$cfd" | grep "$mt"`" ]&&fid||{
 echo "<form method="post" action="wiki.cgi?m5ws">"
-echo Word:
+echo "Word:"
 echo "<input type="text" name="wd"><br>"
 echo "<input type="submit" value="Submit">"
 echo "</form>"
@@ -418,19 +376,15 @@ echo OK
 ;;
 m7)
 glp&&wblg||{ 
-echo Microblog
-$hc
+eco "Microblog"
 cat "$usv/blog"|hcs
 ls "$usv/friend"|while read bl
 do
 cat "$hos/user/$bl/blog"|hcs
 done
-echo $fgx
-$hc
-echo "<a href="wiki.cgi?m7w">Send Microblog</a>"
-$hc
-echo "<a href="wiki.cgi?main">Back</a>"
-$hc
+eco "$fgx"
+eco "<a href="wiki.cgi?m7w">Send Microblog</a>"
+eco "<a href="wiki.cgi?main">Back</a>"
 }
 ;;
 m7w)
@@ -470,8 +424,6 @@ echo OK
 ;;
 esac
 $hc
-echo $fgx
-$hc
-echo "You can use more thing on Telnet Version"
-$hc
+eco "$fgx"
+eco "You can use more thing on Telnet Version"
 echo "Copyright (C) 2016 by Mayx"
