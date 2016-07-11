@@ -261,7 +261,7 @@ rmk="$pcz/$wbn"
 [ "${QUERY_STRING##*&}" == "hfz" ]&&{
 glp&&wblg||{
 echo $na  `date` >>$rmk
-echo decode "${tl#*=}" >>$rmk
+echo "${tl#*=}" >>$rmk
 echo >>$rmk
 echo OK
 }
@@ -299,7 +299,7 @@ echo $tit>>$mwt
 echo Made by:$na `date`>>$mwt
 echo Tags:From Web>>$mwt
 echo $fgx >>$mwt
-echo decode "$wd" >>$mwt
+echo "$wd" >>$mwt
 rmk="$mwt"
 fid
 }
