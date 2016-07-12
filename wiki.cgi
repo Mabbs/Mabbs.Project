@@ -660,13 +660,6 @@ co=$(($co+1))
 [ "$int" == "$co" ]&&echo "$nr"
 done
 }
-cc(){
-for lop in `ls "$wbb/opt/"`
-do
-eco "<a href=wiki.cgi?chse&${QUERY_STRING#tk&}>$lop.$1 \(`cat "$wbb/opt/$lop" | wc -l`\)</a>"
-shift
-done
-}
 [ -e "$hos/" ]&&{
 eco "<a href=wiki.cgi?main>Welecome to use Mabbs&Wiki</a>"
 }||{
