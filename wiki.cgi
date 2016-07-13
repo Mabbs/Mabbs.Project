@@ -621,6 +621,10 @@ usv="$hos/user/$na"
 eco(){
 echo "$1<br>"
 }
+fmj(){
+echo "<input type=submit value=Submit>"
+echo "</form>"
+}
 wblg(){
 echo "<form method=post action=wiki.cgi>"
 echo Login:
@@ -644,7 +648,7 @@ echo "<a href=wiki.cgi?main>Press there to back</a>"
 }
 zxth(){
 cat "$rmk"|hcs
-echo "<form method=post action=wiki.cgi?$QUERY_STRING&hfz>"
+echo "<form method=post action=wiki.cgi?$QUERY_STRING&hfz enctype=multipart/form-data>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
 echo "<input type=submit value=Submit>"
@@ -686,8 +690,7 @@ m1)
 eco "Input Keyword or tags:"
 echo "<form method=post action=wiki.cgi?m1j>"
 echo "<input type=text name=kw><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 ;;
 m1j)
 kw="${tl#*=}"
@@ -752,8 +755,7 @@ echo Title:
 echo "<input type=text name=tit><br>"
 echo Word:
 echo "<input type=text name=fsw><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 }
 ;;
 m2aas)
@@ -811,8 +813,7 @@ echo Input the title:
 echo "<input type=text name=tit><br>"
 echo Word:
 echo "<input type=text name=wd><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 }
 ;;
 as)
@@ -838,8 +839,11 @@ wbn="`pdg "$pcz"`"
 rmk="$pcz/$wbn"
 [ "${QUERY_STRING##*&}" == "hfz" ]&&{
 glp&&wblg||{
+read b
+read c
+read ry
 echo $na  `date` >>$rmk
-echo "${tl#*=}" >>$rmk
+echo "$ry" >>$rmk
 echo >>$rmk
 echo OK
 }
@@ -862,8 +866,7 @@ echo Input Main title:
 echo "<input type=text name=tit><br>"
 echo Word:
 echo "<input type=text name=wd><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 }
 ;;
 m4f)
@@ -912,15 +915,16 @@ m5w)
 cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
 [ -n "`ls "$cfd" | grep "$mt"`" ]&&fid||{
-echo "<form method=post action=wiki.cgi?m5ws>"
+echo "<form method=post action=wiki.cgi?m5ws enctype=multipart/form-data>"
 echo "Word:"
 echo "<input type=text name=wd><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 }
 ;;
 m5ws)
-wd="${tl#*=}"
+read b
+read c
+read wd
 mt="`date +%y.%m.%d`"
 cfd="$usv/diary"
 mwt="$cfd/$mt"
@@ -943,8 +947,7 @@ glp&&wblg||{
 echo "<form method=post action=wiki.cgi?m6e>"
 echo Input your new password:
 echo "<input type=text name=pw><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 }
 ;;
 m6e)
@@ -961,21 +964,19 @@ do
 cat "$hos/user/$bl/blog"|hcs
 done
 eco "$fgx"
-eco "<a href=wiki.cgi?m7w>Send Microblog</a>"
+echo "<form method=post action=wiki.cgi?m7e enctype=multipart/form-data>"
+echo Word:
+echo "<input type=text name=pw><br>"
+fmj
 echo "<a href=wiki.cgi?main>Back</a>"
 }
 ;;
-m7w)
-echo "<form method=post action=wiki.cgi?m7e>"
-echo Word:
-echo "<input type=text name=pw><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
-;;
 m7e)
-bwd="${tl#*=}"
+read b
+read c
+read bwd
 echo $fgx >>"$usv/blog"
-echo $na  `date` >>"$usv/blog" 
+echo $na  `date` >>"$usv/blog"
 echo $bwd >>"$usv/blog"
 ;;
 zc)
@@ -984,8 +985,7 @@ echo Please input your name:
 echo "<input type=text name=name><br>"
 echo Please input new password:
 echo "<input type=password name=pw><br>"
-echo "<input type=submit value=Submit>"
-echo "</form>"
+fmj
 ;;
 zct)
 tid="${tl%&pw*}"
