@@ -664,6 +664,23 @@ co=$(($co+1))
 [ "$int" == "$co" ]&&echo "$nr"
 done
 }
+cc(){
+for lop in `ls "$rmk/opt/"`
+do
+eco "<a href=wiki.cgi?$QUERY_STRING&jg=$lop&tpa>$lop.$1 (`cat "$rmk/opt/$lop" | wc -l`)</a>"
+shift
+done
+}
+chse(){
+glp&&wblg||{
+vck="`cat "$rmk/opt/$1" | grep "$na"`"
+[ "$na" == "$vck" ]||{
+echo $na >> "$rmk/opt/$1"
+cat "$rmk/opt/$1"|hcs
+eco selected it.
+}
+}
+}
 [ -e "$hos/" ]&&{
 eco "<a href=wiki.cgi?main>Welecome to use Mabbs&Wiki</a>"
 }||{
@@ -791,6 +808,7 @@ sel="0"
 pcz="$hos/main/$pac"
 cze="${QUERY_STRING#*&m2kk=}"
 cse=${cze%&hfz}
+cse=${cse%&tpa}
 [ "$cse" == "$QUERY_STRING" ]&&{
 eco "Welecome,$na   Part:$pac"
 eco "$fgx"
@@ -833,12 +851,24 @@ echo "OK!"
 }
 ;;
 *)
+[ "${QUERY_STRING##*&}" == "tpa" ]&&{
+glp&&wblg||{
+int="${cse%&jg=*}"
+wbn="`pdg "$pcz"`"
+ry="${cse#*=}"
+[ -n "$wbn" ]&&{
+rmk="$pcz/$wbn"
+[ -e "$rmk/opt/$ry" ]&&chse $ry
+}
+}
+}||{
 int="$cse"
 wbn="`pdg "$pcz"`"
 [ -n "$wbn" ]&&{
 rmk="$pcz/$wbn"
 [ "${QUERY_STRING##*&}" == "hfz" ]&&{
 glp&&wblg||{
+[ -f "$rmk" ]||rmk="$pcz/$wbn/talk" 
 read b
 read c
 read ry
@@ -849,9 +879,14 @@ echo OK
 }
 }||{
 [ -f "$rmk" ]&&zxth||{
+cat "$rmk/main"|hcs
+eco $fgx
+cc `cat "$rmk/data"`
+eco $fgx
 [ -e "$rmk/talk" ]&&{
 rmk="$rmk/talk"
 zxth
+}
 }
 }
 }
