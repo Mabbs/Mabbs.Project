@@ -608,6 +608,7 @@ read tl
 echo ""
 echo '<title>Mabbs&Wiki</title>'
 hc='echo <br>'
+ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
 pa="${HTTP_COOKIE#*pw=}"
@@ -648,7 +649,7 @@ echo "<a href=wiki.cgi?main>Press there to back</a>"
 }
 zxth(){
 cat "$rmk"|hcs
-echo "<form method=post action=wiki.cgi?$QUERY_STRING&hfz enctype=multipart/form-data>"
+echo "<form method=post action=wiki.cgi?$QUERY_STRING&hfz $ent>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
 echo "<input type=submit value=Submit>"
@@ -670,6 +671,11 @@ do
 eco "<a href=wiki.cgi?$QUERY_STRING&jg=$lop&tpa>$lop.$1 (`cat "$rmk/opt/$lop" | wc -l`)</a>"
 shift
 done
+}
+fgy(){
+read a
+read b
+read c
 }
 chse(){
 glp&&wblg||{
@@ -705,12 +711,15 @@ echo "<a href=wiki.cgi?m7>7.Microblog</a>"
 ;;
 m1)
 eco "Input Keyword or tags:"
-echo "<form method=post action=wiki.cgi?m1j>"
+echo "<form method=post action=wiki.cgi?m1j $ent>"
 echo "<input type=text name=kw><br>"
 fmj
 ;;
 m1j)
-kw="${tl#*=}"
+read b
+read c
+read kk
+kw=${kk%?}
 [ -n "$kw" ]&&{
 eco "Result"
 eco "$fgx"
@@ -764,7 +773,7 @@ echo "<a href=wiki.cgi?m2>b.Back</a>"
 ;;
 m2aa)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m2aas>"
+echo "<form method=post action=wiki.cgi?m2aas $ent>"
 eco "From:$na"
 echo To:
 echo "<input type=text name=to><br>"
@@ -777,12 +786,18 @@ fmj
 ;;
 m2aas)
 glp&&wblg||{
-to="${tl%&tit*}"
-tit="${tl%&fsw*}"
-fsw="${tl#*&fsw=}"
-isw="$hos/user/${to#*=}/mail/${tit##*=}"
+read b
+read c
+read to
+fgy
+read tit
+fgy
+read fsw
+to="${to%?}"
+tit="${tit%?}"
+isw="$hos/user/$to/mail/$tit"
 echo From:$na>>$isw
-echo To:${to#*=}>>$isw
+echo To:$to>>$isw
 date>>$isw
 echo $fgx>>$isw
 echo $fsw >>$isw
@@ -826,7 +841,7 @@ echo "<a href=wiki.cgi?m2>Back</a>"
 case $cse in
 a)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m2k=$int&m2kk=as>"
+echo "<form method=post action=wiki.cgi?m2k=$int&m2kk=as $ent>"
 echo Input the title:
 echo "<input type=text name=tit><br>"
 echo Word:
@@ -836,9 +851,12 @@ fmj
 ;;
 as)
 glp&&wblg||{
-tid="${tl%&wd*}"
-tit="${tid#*=}"
-wd="${tl#*wd=}"
+read b
+read c
+read tit
+fgy
+read wd
+tit="${tit%?}"
 [ -n "`ls "$pcz" | grep "$tit"`" ]||{
 stt="$pcz/$tit"
 echo $tit >>$stt
@@ -896,9 +914,11 @@ esac
 ;;
 m4)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m4f>"
+echo "<form method=post action=wiki.cgi?m4f $ent>"
 echo Input Main title:
 echo "<input type=text name=tit><br>"
+echo Tags:
+echo "<input type=text name=tag><br>"
 echo Word:
 echo "<input type=text name=wd><br>"
 fmj
@@ -906,14 +926,20 @@ fmj
 ;;
 m4f)
 glp&&wblg||{
-tid="${tl%&wd*}"
-wd="${tl#*wd=}"
-tit="${tid#*=}"
-mwt="$whk/$tit"
+read b
+read c
+read tit
+fgy
+read tag
+fgy
+read wd
+tit="${tit%?}"
+tag="${tag%?}"
+mwt="$whk/$tit+$tag"
 [ -z "`ls "$whk" | grep "$tit"`" ]&&{
 echo $tit>>$mwt
 echo Made by:$na `date`>>$mwt
-echo Tags:From Web>>$mwt
+echo Tags:$tag>>$mwt
 echo $fgx >>$mwt
 echo "$wd" >>$mwt
 rmk="$mwt"
@@ -949,8 +975,9 @@ eco "<a href=wiki.cgi?main>Back</a>"
 m5w)
 cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
+rmk="$cfd/$mt"
 [ -n "`ls "$cfd" | grep "$mt"`" ]&&fid||{
-echo "<form method=post action=wiki.cgi?m5ws enctype=multipart/form-data>"
+echo "<form method=post action=wiki.cgi?m5ws $ent>"
 echo "Word:"
 echo "<input type=text name=wd><br>"
 fmj
@@ -999,7 +1026,7 @@ do
 cat "$hos/user/$bl/blog"|hcs
 done
 eco "$fgx"
-echo "<form method=post action=wiki.cgi?m7e enctype=multipart/form-data>"
+echo "<form method=post action=wiki.cgi?m7e $ent>"
 echo Word:
 echo "<input type=text name=pw><br>"
 fmj
