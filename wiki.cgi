@@ -654,7 +654,7 @@ echo Input reply:
 echo "<input type=text name=ry><br>"
 echo "<input type=submit value=Submit>"
 eco "</form>"
-echo "<a href=wiki.cgi?main>Press there to back</a>"
+echo "<a href=wiki.cgi?${QUERY_STRING%&m2kk=*}>Press there to back</a>"
 }
 pdg(){
 wbn=""
@@ -893,9 +893,8 @@ read ry
 echo $na  `date` >>$rmk
 echo "$ry" >>$rmk
 echo >>$rmk
-echo OK
 }
-}||{
+}
 [ -f "$rmk" ]&&zxth||{
 cat "$rmk/main"|hcs
 eco $fgx
@@ -904,7 +903,6 @@ eco $fgx
 [ -e "$rmk/talk" ]&&{
 rmk="$rmk/talk"
 zxth
-}
 }
 }
 }
