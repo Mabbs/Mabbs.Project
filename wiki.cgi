@@ -1040,17 +1040,26 @@ echo $na  `date` >>"$usv/blog"
 echo $bwd >>"$usv/blog"
 ;;
 zc)
-echo "<form method=post action=wiki.cgi?zct>"
+vv="`cat /proc/sys/kernel/random/uuid`"
+vv="${vv%%-*}"
+echo "<form method=post action=wiki.cgi?zct&vv=$vv>"
 echo Please input your name:
 echo "<input type=text name=name><br>"
 echo Please input new password:
 echo "<input type=password name=pw><br>"
+eco "Please input verifcation code:"
+eco $vv
+echo "<input type=password name=vv><br>"
 fmj
 ;;
-zct)
+zct*)
+vs="${QUERY_STRING#*=}"
 tid="${tl%&pw*}"
-npd="${tl#*pw=}"
+npe="${tl#*pw=}"
+npd="${npe%&vv*}"
 nep="${tid#*=}"
+vv="${tl##*=}"
+[ "$vv" == "$vs" ]&&{
 chk="`ls "$hos/user" | grep "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 usk="$hos/user/$nep"
@@ -1058,6 +1067,7 @@ mkdir -p "$usk/diary" "$usk/mail" "$usk/friend"
 touch "$usk/blog"
 echo $npd>>$usk/pwd
 echo OK
+}
 }
 ;;
 esac
