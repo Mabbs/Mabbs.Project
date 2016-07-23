@@ -632,8 +632,8 @@ echo Login:
 eco "<input type=text name=lon>"
 echo Password:
 eco "<input type=password name=pw>"
-echo "<input type=submit value=Submit>"
-eco "</form>"
+fmj
+$hc
 $hc
 echo "Dont have?<a href=wiki.cgi?zc>Join us</a>"
 }
@@ -649,12 +649,14 @@ echo "<a href=wiki.cgi?main>Press there to back</a>"
 }
 zxth(){
 cat "$rmk"|hcs
+glp&&eco "<a href=wiki.cgi?m4>Login</a>"||{
 echo "<form method=post action=wiki.cgi?$QUERY_STRING&hfz $ent>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
-echo "<input type=submit value=Submit>"
-eco "</form>"
-echo "<a href=wiki.cgi?${QUERY_STRING%&m2kk=*}>Press there to back</a>"
+fmj
+$hc
+}
+echo "<a href=wiki.cgi?${QUERY_STRING%&m2kk=*}>Press there to back</a>" 
 }
 pdg(){
 wbn=""
@@ -1049,7 +1051,7 @@ echo Please input new password:
 echo "<input type=password name=pw><br>"
 eco "Please input verifcation code:"
 eco $vv
-echo "<input type=password name=vv><br>"
+echo "<input type=text name=vv><br>"
 fmj
 ;;
 zct*)
