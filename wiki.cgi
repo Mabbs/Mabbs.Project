@@ -689,6 +689,14 @@ eco selected it.
 }
 }
 }
+wpxc(){
+while read nr
+do
+co=$(($co+1))
+eco "<a href=wiki.cgi?$1=$co>$co.$nr</a>"
+done
+eco "$fgx"
+}
 [ -e "$hos/" ]&&{
 eco "<a href=wiki.cgi?main>Welecome to use Mabbs&Wiki</a>"
 }||{
@@ -763,12 +771,7 @@ sel=0
 eco "Mail box"
 eco "$fgx"
 co="0"
-ls "$usv/mail"|while read nr
-do
-co=$(($co+1))
-eco "<a href=wiki.cgi?m2ak=$co>$co.$nr</a>"
-done
-eco "$fgx"
+ls "$usv/mail"|wpxc "m2ak"
 eco "<a href=wiki.cgi?m2aa>a.Send mail</a>"
 echo "<a href=wiki.cgi?m2>b.Back</a>"
 }
@@ -830,12 +833,7 @@ cse=${cse%&tpa}
 eco "Welecome,$na   Part:$pac"
 eco "$fgx"
 co="0"
-ls "$pcz" | while read nr
-do
-co=$(($co+1))
-eco "<a href=wiki.cgi?$QUERY_STRING&m2kk=$co>$co.$nr</a>"
-done
-eco "$fgx"
+ls "$pcz" | wpxc "$QUERY_STRING&m2kk"
 eco "<a href=wiki.cgi?$QUERY_STRING&m2kk=a>Make a new post</a>"
 echo "<a href=wiki.cgi?m2>Back</a>"
 }
@@ -963,12 +961,7 @@ sel="0"
 eco "Welecome,$na"
 eco "$fgx"
 co="0"
-ls "$cfd"|while read nr
-do
-co=$(($co+1))
-eco "<a href=wiki.cgi?m5d=$co>$co.$nr</a>"
-done
-eco "$fgx"
+ls "$cfd"|wpxc "m5d"
 eco "<a href=wiki.cgi?m5w>Write diary</a>"
 eco "<a href=wiki.cgi?main>Back</a>"
 ;;
