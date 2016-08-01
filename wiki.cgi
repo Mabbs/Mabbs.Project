@@ -650,7 +650,8 @@ echo "<a href=wiki.cgi?main>Press there to back</a>"
 zxth(){
 cat "$rmk"|hcs
 glp&&eco "<a href=wiki.cgi?m4>Login</a>"||{
-echo "<form method=post action=wiki.cgi?$QUERY_STRING&hfz $ent>"
+[ "${QUERY_STRING##*&}" == "hfz" ]||zhy="&hfz"
+echo "<form method=post action=wiki.cgi?$QUERY_STRING$zhy $ent>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
 fmj
@@ -700,9 +701,7 @@ eco "$fgx"
 [ -e "$hos/" ]&&{
 eco "<a href=wiki.cgi?main>Welecome to use Mabbs&Wiki</a>"
 }||{
-echo Installing...
-mkdir -p "$hos/main" "$hos/user" "$whk"
-touch "$hos/ai"
+echo "Please run it on shell"
 }
 case $QUERY_STRING in
 main)
