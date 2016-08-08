@@ -190,9 +190,20 @@ read kw
 clear
 echo Result
 echo $fgx
-ls "$whk" | grep "$kw" | while read jg
+echo Entry
+echo -------
+ls "$whk"|grep "$kw"|while read jg
 do
 echo ${jg%%+*}
+done
+echo User
+echo -------
+ls "$hos/user"|grep "$kw"
+echo Post
+echo -------
+ls "$hos/main"|while read nr
+do
+ls "$hos/main/$nr"|grep "$kw"
 done
 echo Which one:
 read mtt
@@ -732,9 +743,20 @@ kw=${kk%?}
 [ -n "$kw" ]&&{
 eco "Result"
 eco "$fgx"
+eco "Entry"
+eco "-------"
 ls "$whk" | grep "$kw" | while read jg
 do
 eco "<a href=wiki.cgi?m1g=${jg%%+*}>${jg%%+*}</a>"
+done
+eco User
+eco -------
+ls "$hos/user"|grep "$kw"|hcs
+eco Post
+eco -------
+ls "$hos/main"|while read nr
+do
+ls "$hos/main/$nr"|grep "$kw"|hcs
 done
 }
 ;;
