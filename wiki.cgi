@@ -758,9 +758,11 @@ co=0
 ls "$hos/main"|while read nr
 do
 co=$(($co+1))
-ls "$hos/main/$nr"|grep "$kw"|while read mr
+eo=0
+ls "$hos/main/$nr"|while read mr
 do
-eco "<a href=wiki.cgi?m2k=$co>$mr</a>"
+eo=$(($eo+1))
+[ -n "`echo "$mr"|grep "$kw"`" ]&&eco "<a href=wiki.cgi?m2k=$co&m2kk=$eo>$mr</a>"
 done
 done
 }
