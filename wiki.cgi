@@ -654,9 +654,12 @@ do
 eco "$pd"
 done
 }
+clj(){
+echo "<a href=wiki.cgi?$1>$2</a>"
+}
 fid(){
 cat "$rmk"|hcs
-echo "<a href=wiki.cgi?main>Press there to back</a>"
+clj "main" "Press there to back"
 }
 zxth(){
 cat "$rmk"|hcs
@@ -668,7 +671,7 @@ echo "<input type=text name=ry><br>"
 fmj
 $hc
 }
-echo "<a href=wiki.cgi?${QUERY_STRING%&m2kk=*}>Press there to back</a>" 
+clj "${QUERY_STRING%&m2kk=*}" "Press there to back" 
 }
 pdg(){
 wbn=""
@@ -682,7 +685,8 @@ done
 cc(){
 for lop in `ls "$rmk/opt/"`
 do
-eco "<a href=wiki.cgi?$QUERY_STRING&jg=$lop&tpa>$lop.$1 (`cat "$rmk/opt/$lop" | wc -l`)</a>"
+clj "$QUERY_STRING&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop" | wc -l`)"
+$hc
 shift
 done
 }
@@ -705,12 +709,14 @@ wpxc(){
 while read nr
 do
 co=$(($co+1))
-eco "<a href=wiki.cgi?$1=$co>$co.$nr</a>"
+clj "$1=$co" "$co.$nr"
+$hc
 done
 eco "$fgx"
 }
 [ -e "$hos/" ]&&{
-eco "<a href=wiki.cgi?main>Welecome to use Mabbs&Wiki</a>"
+clj "main" "Welecome to use Mabbs&Wiki"
+$hc
 }||{
 echo "Please run it on shell"
 }
@@ -719,14 +725,20 @@ main)
 eco "MaWiki  User:$na"
 eco "Total entry:`ls "$whk" | wc -l`"
 eco "$fgx"
-eco "<a href=wiki.cgi?m1>1.Search</a>"
-eco "<a href=wiki.cgi?m2>2.Go to MaBBS</a>"
-eco "<a href=wiki.cgi?m3>3.Random</a>"
-glp&&echo "<a href=wiki.cgi?m4>4.Login</a>"||{
-eco "<a href=wiki.cgi?m4>4.Make a new entry</a>"
-eco "<a href=wiki.cgi?m5>5.Diary</a>"
-eco "<a href=wiki.cgi?m6>6.Reset your password</a>"
-echo "<a href=wiki.cgi?m7>7.Microblog</a>"
+clj "m1" "1.Search"
+$hc
+clj "m2" "2.Go to MaBBS"
+$hc
+clj "m3" "3.Random"
+$hc
+glp&&clj "m4" "4.Login"||{
+clj "m4" "4.Make a new entry"
+$hc
+clj "m5" "5.Diary"
+$hc
+clj "m6" "6.Reset your password"
+$hc
+clj "m7" "7.Microblog"
 }
 ;;
 m1)
@@ -745,9 +757,9 @@ eco "Result"
 eco "$fgx"
 eco "Entry"
 eco "-------"
-ls "$whk" | grep "$kw" | while read jg
+ls "$whk"|grep "$kw"|while read jg
 do
-eco "<a href=wiki.cgi?m1g=${jg%%+*}>${jg%%+*}</a>"
+clj "m1g=${jg%%+*}" "${jg%%+*}"
 done
 eco User
 eco -------
@@ -787,11 +799,13 @@ co=0
 ls "$hos/main" | while read bm
 do
 co=$(($co+1))
-eco "<a href=wiki.cgi?m2k=$co>$co.$bm (`ls "$hos/main/$bm/" | wc -l `)</a>"
+clj "m2k=$co" "$co.$bm (`ls "$hos/main/$bm/" | wc -l `)"
+$hc
 done
 eco "$fgx"
-eco "<a href=wiki.cgi?m2a>a.Mail box</a>"
-echo "<a href=wiki.cgi?main>b.Back to MaWiki</a>"
+clj "m2a" "a.Mail box"
+$hc
+clj "main" "b.Back to MaWiki"
 ;;
 m2a)
 glp&&wblg||{
@@ -800,8 +814,9 @@ eco "Mail box"
 eco "$fgx"
 co="0"
 ls "$usv/mail"|wpxc "m2ak"
-eco "<a href=wiki.cgi?m2aa>a.Send mail</a>"
-echo "<a href=wiki.cgi?m2>b.Back</a>"
+clj "m2aa" "a.Send mail"
+$hc
+clj "m2" "b.Back"
 }
 ;;
 m2aa)
@@ -843,7 +858,7 @@ int="${QUERY_STRING#*=}"
 wbn="`pdg "$usv/mail"`"
 [ -n "$wbn" ]&&{
 cat "$usv/mail/$wbn"|hcs
-echo "<a href=wiki.cgi?m2a>Back</a>"
+clj "m2a" "Back"
 }
 }
 ;;
@@ -862,8 +877,9 @@ eco "Welecome,$na   Part:$pac"
 eco "$fgx"
 co="0"
 ls "$pcz" | wpxc "$QUERY_STRING&m2kk"
-eco "<a href=wiki.cgi?$QUERY_STRING&m2kk=a>Make a new post</a>"
-echo "<a href=wiki.cgi?m2>Back</a>"
+clj "$QUERY_STRING&m2kk=a" "Make a new post"
+$hc
+clj "m2" "Back"
 }
 }
 case $cse in
@@ -990,8 +1006,10 @@ eco "Welecome,$na"
 eco "$fgx"
 co="0"
 ls "$cfd"|wpxc "m5d"
-eco "<a href=wiki.cgi?m5w>Write diary</a>"
-eco "<a href=wiki.cgi?main>Back</a>"
+clj "m5w" "Write diary"
+$hc
+clj "main" "Back"
+$hc
 ;;
 m5w)
 cfd="$usv/diary"
@@ -1051,7 +1069,7 @@ echo "<form method=post action=wiki.cgi?m7e $ent>"
 echo Word:
 echo "<input type=text name=pw><br>"
 fmj
-echo "<a href=wiki.cgi?main>Back</a>"
+clj "main" "Back"
 }
 ;;
 m7e)
