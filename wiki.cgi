@@ -754,9 +754,14 @@ eco -------
 ls "$hos/user"|grep "$kw"|hcs
 eco Post
 eco -------
+co=0
 ls "$hos/main"|while read nr
 do
-ls "$hos/main/$nr"|grep "$kw"|hcs
+co=$(($co+1))
+ls "$hos/main/$nr"|grep "$kw"|while read mr
+do
+eco "<a href=wiki.cgi?m2k=$co>$mr</a>"
+done
 done
 }
 ;;
