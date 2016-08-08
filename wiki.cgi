@@ -760,6 +760,7 @@ eco "-------"
 ls "$whk"|grep "$kw"|while read jg
 do
 clj "m1g=${jg%%+*}" "${jg%%+*}"
+$hc
 done
 eco User
 eco -------
