@@ -14,6 +14,28 @@ echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
 }
+wcl(){
+nb="0"
+while read nul
+do
+nb="$(($nb+1))"
+done
+echo "$nb"
+}
+chse(){
+glp&&wblg||{
+vck="`cat "$wbb/opt/$1"|grep "$na"`"
+[ "$na" == "$vck" ]||{
+echo $na >> "$wbb/opt/$1"
+[ -z "$HTTP_HOST" ]&&{
+cat "$wbb/opt/$1"
+}||{
+cat "$wbb/opt/$1"|hcs
+}
+echo "selected it."
+}
+}
+}
 [ -z "$HTTP_HOST" ]&&{
 inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
@@ -32,10 +54,10 @@ slp(){
 [ "$na" == "SYSOP" ]
 }
 fy(){
-[ `ls "$1" | wc -l` -ge 10 ]&&sel="$(($sel+10))" 
+[ `ls "$1"|wcl` -ge 10 ]&&sel="$(($sel+10))" 
 }
 fyx(){
-[ `ls "$1" | wc -l` -ge 10 ]&&echo c.Next page
+[ `ls "$1"|wcl` -ge 10 ]&&echo c.Next page
 }
 wblg(){
 clear
@@ -59,7 +81,7 @@ echo Please input your name:
 read nep
 echo Please input new password:
 read npd
-chk="`ls "$hos/user" | grep "$nep"`"
+chk="`ls "$hos/user"|grep "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 echo Please input verifcation code:
 vv="`cat /proc/sys/kernel/random/uuid`"
@@ -141,18 +163,6 @@ co=$(($co+1))
 [ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]&&echo $co.$nr
 done
 }
-chse(){
-glp&&wblg||{
-vck="`cat "$wbb/opt/$1" | grep "$na"`"
-[ "$na" == "$vck" ]||{
-echo $na >> "$wbb/opt/$1"
-clear
-cat "$wbb/opt/$1"
-echo selected it.
-sleep 3
-}
-}
-}
 pdg(){
 wbn=""
 co="0" 
@@ -165,7 +175,7 @@ done
 cc(){
 for lop in `ls "$wbb/opt/"`
 do
-echo $lop.$1 \(`cat "$wbb/opt/$lop" | wc -l`\)
+echo $lop.$1 \(`cat "$wbb/opt/$lop"|wcl`\)
 shift
 done
 }
@@ -175,7 +185,7 @@ while true
 do
 clear
 echo MaWiki  User:$na
-echo Total entry:`ls "$whk" | wc -l`
+echo Total entry:`ls "$whk"|wcl`
 echo $fgx
 echo 1.Search
 echo 2.Exit
@@ -216,7 +226,7 @@ done
 echo Which one:
 read mtt
 [ -n "$mtt" ]&&{
-tkw=`ls "$whk" | grep "$mtt"`
+tkw=`ls "$whk"|grep "$mtt"`
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
@@ -237,10 +247,10 @@ date
 [ -e "$hos/bul" ]&&echo Bulletin:`cat "$hos/bul"`
 echo $fgx
 co=0
-ls "$hos/main" | while read bm
+ls "$hos/main"|while read bm
 do
 co=$(($co+1))
-echo $co.$bm \(`ls "$hos/main/$bm/" | wc -l `\)
+echo $co.$bm \(`ls "$hos/main/$bm/"|wcl`\)
 done
 echo $fgx
 echo a.Mail box
@@ -263,7 +273,7 @@ clear
 echo Mail box
 echo $fgx
 co="0"
-ls "$usv/mail" | pxcx
+ls "$usv/mail"|pxcx
 echo $fgx
 echo a.Send mail
 echo b.Back
@@ -371,7 +381,7 @@ clear
 echo Welecome,$na   Part:$pac
 echo $fgx
 co="0"
-ls "$pcz" | pxcx
+ls "$pcz"|pxcx
 echo $fgx
 echo a.Make a new post
 echo b.Back
@@ -390,7 +400,7 @@ case $cht in
 clear
 echo Input the title:
 read tit
-[ -n "`ls "$pcz" | grep "$tit"`" ]||{
+[ -n "`ls "$pcz"|grep "$tit"`" ]||{
 echo Word:
 read wod
 plx
@@ -400,7 +410,7 @@ plx
 clear
 echo Input the title:
 read tit
-[ -n "`ls "$pcz" | grep "$tit"`" ]||{
+[ -n "`ls "$pcz"|grep "$tit"`" ]||{
 echo Main word:
 read wod
 echo "Option head:"
@@ -462,7 +472,9 @@ wbb="$wbb/talk"
 zxth
 }
 }||{
+clear
 [ -e "$wbb/opt/$ry" ]&&chse $ry
+sleep 3
 }
 }
 }
@@ -480,7 +492,7 @@ glp&&wblg||{
 clear
 echo Input Main title:
 read mt
-[ -z "`ls "$whk" | grep "$mt"`" ]&&{
+[ -z "`ls "$whk"|grep "$mt"`" ]&&{
 echo Tags:
 read tgs
 echo Word:
@@ -497,7 +509,7 @@ fid
 }
 ;;
 4)
-jld="`ls "$whk" | wc -l`"
+jld="`ls "$whk"|wcl`"
 [ "$jld" == "0" ]&&{
 echo Not found...
 sleep 1
@@ -517,7 +529,7 @@ clear
 echo Welecome,$na
 echo $fgx
 co="0"
-ls "$cfd" | pxcx
+ls "$cfd"|pxcx
 echo $fgx
 echo a.Write diary
 echo b.Back
@@ -528,7 +540,7 @@ case $int in
 a)
 clear
 mt="`date +%y.%m.%d`"
-[ -n "`ls "$cfd" | grep "$mt"`" ]||{
+[ -n "`ls "$cfd"|grep "$mt"`" ]||{
 echo Word:
 read wd
 mwt="$cfd/$mt"
@@ -688,7 +700,7 @@ done
 cc(){
 for lop in `ls "$rmk/opt/"`
 do
-clj "$QUERY_STRING&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop" | wc -l`)"
+clj "$QUERY_STRING&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
 $hc
 shift
 done
@@ -697,16 +709,6 @@ fgy(){
 read a
 read b
 read c
-}
-chse(){
-glp&&wblg||{
-vck="`cat "$rmk/opt/$1" | grep "$na"`"
-[ "$na" == "$vck" ]||{
-echo $na >> "$rmk/opt/$1"
-cat "$rmk/opt/$1"|hcs
-eco selected it.
-}
-}
 }
 wpxc(){
 while read nr
@@ -726,7 +728,7 @@ echo "Please run it on shell"
 case $QUERY_STRING in
 main)
 eco "MaWiki  User:$na"
-eco "Total entry:`ls "$whk" | wc -l`"
+eco "Total entry:`ls "$whk"|wcl`"
 eco "$fgx"
 clj "m1" "1.Search"
 $hc
@@ -786,7 +788,7 @@ done
 m1g=*)
 mtt="${QUERY_STRING#*=}"
 [ -n "$mtt" ]&&{
-tkw="`ls "$whk" | grep "$mtt"`"
+tkw="`ls "$whk"|grep "$mtt"`"
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
@@ -800,10 +802,10 @@ $hc
 [ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
 eco "$fgx"
 co=0
-ls "$hos/main" | while read bm
+ls "$hos/main"|while read bm
 do
 co=$(($co+1))
-clj "m2k=$co" "$co.$bm (`ls "$hos/main/$bm/" | wc -l `)"
+clj "m2k=$co" "$co.$bm (`ls "$hos/main/$bm/"|wcl`)"
 $hc
 done
 eco "$fgx"
@@ -880,7 +882,7 @@ cse=${cse%&tpa}
 eco "Welecome,$na   Part:$pac"
 eco "$fgx"
 co="0"
-ls "$pcz" | wpxc "$QUERY_STRING&m2kk"
+ls "$pcz"|wpxc "$QUERY_STRING&m2kk"
 clj "$QUERY_STRING&m2kk=a" "Make a new post"
 $hc
 clj "m2" "Back"
@@ -905,7 +907,7 @@ read tit
 fgy
 read wod
 tit="${tit%?}"
-[ -n "`ls "$pcz" | grep "$tit"`" ]||{
+[ -n "`ls "$pcz"|grep "$tit"`" ]||{
 plx
 echo "OK!"
 }
@@ -918,8 +920,8 @@ int="${cse%&jg=*}"
 wbn="`pdg "$pcz"`"
 ry="${cse#*=}"
 [ -n "$wbn" ]&&{
-rmk="$pcz/$wbn"
-[ -e "$rmk/opt/$ry" ]&&chse $ry
+wbb="$pcz/$wbn"
+[ -e "$wbb/opt/$ry" ]&&chse $ry
 }
 }
 }||{
@@ -977,7 +979,7 @@ read wd
 tit="${tit%?}"
 tag="${tag%?}"
 mwt="$whk/$tit+$tag"
-[ -z "`ls "$whk" | grep "$tit"`" ]&&{
+[ -z "`ls "$whk"|grep "$tit"`" ]&&{
 echo $tit>>$mwt
 echo Made by:$na `date`>>$mwt
 echo Tags:$tag>>$mwt
@@ -989,7 +991,7 @@ fid
 }
 ;;
 m3)
-jld="`ls "$whk" | wc -l`"
+jld="`ls "$whk"|wcl`"
 [ "$jld" == "0" ]&&{
 echo Not found...
 }||{
@@ -1014,7 +1016,7 @@ m5w)
 cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
-[ -n "`ls "$cfd" | grep "$mt"`" ]&&fid||{
+[ -n "`ls "$cfd"|grep "$mt"`" ]&&fid||{
 echo "<form method=post action=$0?m5ws $ent>"
 echo "Word:"
 echo "<input type=text name=wd><br>"
@@ -1100,7 +1102,7 @@ npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
 [ "$vv" == "$vs" ]&&{
-chk="`ls "$hos/user" | grep "$nep"`"
+chk="`ls "$hos/user"|grep "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 usk="$hos/user/$nep"
 mkdir -p "$usk/diary" "$usk/mail" "$usk/friend"
