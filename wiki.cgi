@@ -6,6 +6,14 @@ fgx="============"
 glp(){
 [ "$na" == "guest" ]
 }
+plx(){
+stt="$pcz/$tit"
+echo $tit >>$stt
+echo $fgx >>$stt
+echo Post master:$na  `date` >>$stt
+echo $wod >>$stt
+echo >>$stt
+}
 [ -z "$HTTP_HOST" ]&&{
 inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
@@ -385,12 +393,7 @@ read tit
 [ -n "`ls "$pcz" | grep "$tit"`" ]||{
 echo Word:
 read wod
-stt="$pcz/$tit"
-echo $tit >>$stt
-echo $fgx >>$stt
-echo Post master:$na  `date` >>$stt
-echo $wod >>$stt
-echo >>$stt
+plx
 }
 ;;
 2)
@@ -638,7 +641,7 @@ echo "<input type=submit value=Submit>"
 echo "</form>"
 }
 wblg(){
-echo "<form method=post action=wiki.cgi>"
+echo "<form method=post action=$0>"
 echo Login:
 eco "<input type=text name=lon>"
 echo Password:
@@ -646,7 +649,7 @@ eco "<input type=password name=pw>"
 fmj
 $hc
 $hc
-echo "Dont have?<a href=wiki.cgi?zc>Join us</a>"
+echo "Dont have?<a href=$0?zc>Join us</a>"
 }
 hcs(){
 while read pd
@@ -655,7 +658,7 @@ eco "$pd"
 done
 }
 clj(){
-echo "<a href=wiki.cgi?$1>$2</a>"
+echo "<a href=$0?$1>$2</a>"
 }
 fid(){
 cat "$rmk"|hcs
@@ -663,9 +666,9 @@ clj "main" "Press there to back"
 }
 zxth(){
 cat "$rmk"|hcs
-glp&&eco "<a href=wiki.cgi?m4>Login</a>"||{
+glp&&eco "<a href=$0?m4>Login</a>"||{
 [ "${QUERY_STRING##*&}" == "hfz" ]||zhy="&hfz"
-echo "<form method=post action=wiki.cgi?$QUERY_STRING$zhy $ent>"
+echo "<form method=post action=$0?$QUERY_STRING$zhy $ent>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
 fmj
@@ -743,7 +746,7 @@ clj "m7" "7.Microblog"
 ;;
 m1)
 eco "Input Keyword or tags:"
-echo "<form method=post action=wiki.cgi?m1j $ent>"
+echo "<form method=post action=$0?m1j $ent>"
 echo "<input type=text name=kw><br>"
 fmj
 ;;
@@ -775,7 +778,7 @@ eo=0
 ls "$hos/main/$nr"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grep "$kw"`" ]&&eco "<a href=wiki.cgi?m2k=$co&m2kk=$eo>$mr</a>"
+[ -n "`echo "$mr"|grep "$kw"`" ]&&eco "<a href=$0?m2k=$co&m2kk=$eo>$mr</a>"
 done
 done
 }
@@ -822,7 +825,7 @@ clj "m2" "b.Back"
 ;;
 m2aa)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m2aas $ent>"
+echo "<form method=post action=$0?m2aas $ent>"
 eco "From:$na"
 echo To:
 echo "<input type=text name=to><br>"
@@ -886,7 +889,7 @@ clj "m2" "Back"
 case $cse in
 a)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m2k=$int&m2kk=as $ent>"
+echo "<form method=post action=$0?m2k=$int&m2kk=as $ent>"
 echo Input the title:
 echo "<input type=text name=tit><br>"
 echo Word:
@@ -900,15 +903,10 @@ read b
 read c
 read tit
 fgy
-read wd
+read wod
 tit="${tit%?}"
 [ -n "`ls "$pcz" | grep "$tit"`" ]||{
-stt="$pcz/$tit"
-echo $tit >>$stt
-echo $fgx >>$stt
-echo Post master:$na  `date` >>$stt
-echo $wd >>$stt
-echo >>$stt
+plx
 echo "OK!"
 }
 }
@@ -957,7 +955,7 @@ esac
 ;;
 m4)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m4f $ent>"
+echo "<form method=post action=$0?m4f $ent>"
 echo Input Main title:
 echo "<input type=text name=tit><br>"
 echo Tags:
@@ -1017,7 +1015,7 @@ cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
 [ -n "`ls "$cfd" | grep "$mt"`" ]&&fid||{
-echo "<form method=post action=wiki.cgi?m5ws $ent>"
+echo "<form method=post action=$0?m5ws $ent>"
 echo "Word:"
 echo "<input type=text name=wd><br>"
 fmj
@@ -1046,7 +1044,7 @@ fid
 ;;
 m6)
 glp&&wblg||{
-echo "<form method=post action=wiki.cgi?m6e>"
+echo "<form method=post action=$0?m6e>"
 echo Input your new password:
 echo "<input type=text name=pw><br>"
 fmj
@@ -1066,7 +1064,7 @@ do
 cat "$hos/user/$bl/blog"|hcs
 done
 eco "$fgx"
-echo "<form method=post action=wiki.cgi?m7e $ent>"
+echo "<form method=post action=$0?m7e $ent>"
 echo Word:
 echo "<input type=text name=pw><br>"
 fmj
@@ -1084,7 +1082,7 @@ echo $bwd >>"$usv/blog"
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
-echo "<form method=post action=wiki.cgi?zct&vv=$vv>"
+echo "<form method=post action=$0?zct&vv=$vv>"
 echo Please input your name:
 echo "<input type=text name=name><br>"
 echo Please input new password:
