@@ -906,8 +906,8 @@ m7)
 glp&&wblg||{
 cfd="$usv/chat"
 sel="0"
-eco Chat Room
-eco Welecome,$na
+eco "Chat Room"
+eco "Welecome,$na"
 eco $fgx
 co="0"
 ls "$cfd"|wpxc "m7k"
