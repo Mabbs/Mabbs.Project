@@ -50,7 +50,6 @@ inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room"
-touch "$hos/ai"
 echo Master name:SYSOP
 echo New password:
 read mnp
@@ -667,7 +666,7 @@ $hc
 done
 echo "</td></tr><tr>"
 echo "<td>Other</td><td>"
-glp&&clj "m4" "1.Login"||{
+glp&&wblg||{
 clj "m4" "1.Make a new entry"
 $hc
 clj "m5" "2.Diary"
