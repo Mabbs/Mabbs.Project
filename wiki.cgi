@@ -1,6 +1,7 @@
 #!/system/bin/ash
 hos="/sdcard/ba"
 whk="$hos/wiki"
+gly="SYSOP"
 err="echo Error!"
 fgx="============"
 glp(){
@@ -14,6 +15,12 @@ echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
 }
+zcc(){
+usk="$hos/user/$nep"
+mkdir -p "$usk/diary" "$usk/mail"
+touch "$usk/chat"
+echo $npd>>$usk/pwd
+}
 wcl(){
 nb="0"
 while read nul
@@ -24,8 +31,9 @@ echo "$nb"
 }
 pdg(){
 wbn=""
-co="0" 
-ls "$1"|while read nr
+co="0"
+[ "$2" == "1" ]&&zgj="cat "$1""||zgj="ls "$1""
+$zgj|while read nr
 do
 co=$(($co+1))
 [ "$int" == "$co" ]&&echo "$nr"
@@ -50,15 +58,14 @@ inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room"
-echo Master name:SYSOP
+nep="$gly"
+echo Master name:$gly
 echo New password:
-read mnp
-smk="$hos/user/SYSOP"
-mkdir -p "$smk/diary" "$smk/mail" "$smk/chat"
-echo "$mnp">>$smk/pwd
+read npd
+zcc
 }
 slp(){
-[ "$na" == "SYSOP" ]
+[ "$na" == "$gly" ]
 }
 fy(){
 [ `ls "$1"|wcl` -ge 10 ]&&sel="$(($sel+10))" 
@@ -96,9 +103,7 @@ vv="${vv%%-*}"
 echo $vv
 read vc
 [ "$vc" == "$vv" ]&&{
-usk="$hos/user/$nep"
-mkdir -p "$usk/diary" "$usk/mail" "$usk/chat"
-echo $npd>>$usk/pwd
+zcc
 na="$nep"
 usv="$hos/user/$na"
 }
@@ -161,7 +166,7 @@ a)
 clear
 echo Input friend name:
 read fnm
-[ -n "$fnm" -a -e "$hos/user/$fnm" ]&&touch "$hos/user/$fnm/chat/${wbb##*/}"
+[ -n "$fnm" -a -e "$hos/user/$fnm" ]&&echo "$wbn,$qmz">>"$hos/user/$fnm/chat"
 }
 ;;
 *)
@@ -517,31 +522,35 @@ echo Chat Room
 echo Welecome,$na
 echo $fgx
 co="0"
-ls "$cfd"|pxcx
+cat "$cfd"|while read nr
+do
+co=$(($co+1))
+echo $co.${nr#*,}
+done
 echo $fgx
 echo a.Make chat room
 echo b.Back
-fyx "$cfd"
 $inc
 read int
 case $int in
 a)
 clear
-chz="$((`ls "$hos/room"|wcl`+1))"
-wbb="$hos/room/$chz"
-echo "Chat Room #$chz">$wbb
+echo Input Chat room name:
+read qmz
+wbn="$((`ls "$hos/room"|wcl`+1))"
+wbb="$hos/room/$wbn"
+echo "Chat Room #$wbn">$wbb
 echo "$fgx">>$wbb
-touch "$cfd/$chz"
+echo "$wbn,$qmz">>$cfd
 zxth "1"
 ;;
 b)
 break 1
 ;;
-c)
-fy "$cfd"
-;;
 *)
-wbn="`pdg "$cfd"`"
+wwn="`pdg "$cfd" "1"`"
+wbn="${wwn%%,*}"
+qmz="${wwn#*,}" 
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
 zxth "1"
@@ -564,6 +573,7 @@ ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
 pa="${HTTP_COOKIE#*pw=}"
+qus="$QUERY_STRING"
 [ -z "$ua" ]&&np=0||{
 [ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
 }
@@ -605,19 +615,19 @@ clj "main" "Press there to back"
 zxth(){
 cat "$rmk"|hcs
 glp&&eco "<a href=$0?m4>Login</a>"||{
-[ "${QUERY_STRING##*&}" == "hfz" ]||zhy="&hfz"
-echo "<form method=post action=$0?$QUERY_STRING$zhy $ent>"
+[ "${qus##*&}" == "hfz" ]||zhy="&hfz"
+echo "<form method=post action=$0?$qus$zhy $ent>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
 fmj
 $hc
 }
-clj "${QUERY_STRING%&m2kk=*}" "Press there to back" 
+clj "${qus%&m2kk=*}" "Press there to back" 
 }
 cc(){
 for lop in `ls "$rmk/opt/"`
 do
-clj "$QUERY_STRING&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
+clj "$qus&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
 $hc
 shift
 done
@@ -642,7 +652,7 @@ $hc
 }||{
 echo "Please run it on shell"
 }
-case $QUERY_STRING in
+case $qus in
 main)
 eco "MaWiki  User:$na"
 eco "Total entry:`ls "$whk"|wcl`"
@@ -714,7 +724,7 @@ done
 }
 ;;
 m1g=*)
-mtt="${QUERY_STRING#*=}"
+mtt="${qus#*=}"
 [ -n "$mtt" ]&&{
 tkw="`ls "$whk"|grep "$mtt"`"
 [ -n "$tkw" ]&&{
@@ -724,23 +734,23 @@ fid
 }
 ;;
 m2k=*)
-ind="${QUERY_STRING#*=}"
+ind="${qus#*=}"
 int="${ind%&m2kk=*}"
 pac="`pdg "$hos/main"`"
 [ -n "$pac" ]&&{
 sel="0"
 pcz="$hos/main/$pac"
-cze="${QUERY_STRING#*&m2kk=}"
+cze="${qus#*&m2kk=}"
 cse=${cze%&hfz}
 cse=${cse%&tpa}
-[ "$cse" == "$QUERY_STRING" ]&&{
+[ "$cse" == "$qus" ]&&{
 eco "Welecome,$na   Part:$pac"
 eco "$fgx"
 co="0"
-ls "$pcz"|wpxc "$QUERY_STRING&m2kk"
-clj "$QUERY_STRING&m2kk=a" "Make a new post"
+ls "$pcz"|wpxc "$qus&m2kk"
+clj "$qus&m2kk=a" "Make a new post"
 $hc
-clj "m2" "Back"
+clj "main" "Back"
 }
 }
 case $cse in
@@ -769,7 +779,7 @@ echo "OK!"
 }
 ;;
 *)
-[ "${QUERY_STRING##*&}" == "tpa" ]&&{
+[ "${qus##*&}" == "tpa" ]&&{
 glp&&wblg||{
 int="${cse%&jg=*}"
 wbn="`pdg "$pcz"`"
@@ -784,7 +794,7 @@ int="$cse"
 wbn="`pdg "$pcz"`"
 [ -n "$wbn" ]&&{
 rmk="$pcz/$wbn"
-[ "${QUERY_STRING##*&}" == "hfz" ]&&{
+[ "${qus##*&}" == "hfz" ]&&{
 glp&&wblg||{
 [ -f "$rmk" ]||rmk="$pcz/$wbn/talk" 
 read b
@@ -845,8 +855,13 @@ fid
 }
 }
 ;;
-m5)
+m5*)
+glp&&wblg||{
 cfd="$usv/diary"
+mt="`date +%y.%m.%d`"
+rmk="$cfd/$mt"
+case $qus in
+m5)
 sel="0"
 eco "Welecome,$na"
 eco "$fgx"
@@ -858,9 +873,6 @@ clj "main" "Back"
 $hc
 ;;
 m5w)
-cfd="$usv/diary"
-mt="`date +%y.%m.%d`"
-rmk="$cfd/$mt"
 [ -n "`ls "$cfd"|grep "$mt"`" ]&&fid||{
 echo "<form method=post action=$0?m5ws $ent>"
 echo "Word:"
@@ -872,21 +884,20 @@ m5ws)
 read b
 read c
 read wd
-mt="`date +%y.%m.%d`"
-cfd="$usv/diary"
-mwt="$cfd/$mt"
-echo Diary:$mt>>$mwt
-echo $wd >>$mwt
-rmk="$cfd/$mt"
+echo Diary:$mt>>$rmk
+echo $wd >>$rmk
 fid
 ;;
 m5d=*)
-int="${QUERY_STRING#*=}" 
+int="${qus#*=}" 
 cfd="$usv/diary"
 wbn="`pdg "$cfd"`"
 [ -n "$wbn" ]&&{
 rmk="$cfd/$wbn"
 fid
+}
+;;
+esac
 }
 ;;
 m6)
@@ -910,31 +921,25 @@ eco "Chat Room"
 eco "Welecome,$na"
 eco $fgx
 co="0"
-ls "$cfd"|wpxc "m7k"
-clj "m7a" "a.Make chat room"
+cat "$cfd"|while read nr
+do
+co=$(($co+1))
+clj "m7k=$co" "$co.${nr#*,}"
 $hc
-clj "main" "b.back"
-}
-;;
-m7a)
-glp&&wblg||{
-chz="$((`ls "$hos/room"|wcl`+1))"
-wbb="$hos/room/$chz"
-echo "Chat Room #$chz">$wbb
-echo "$fgx">>$wbb
-touch "$usv/chat/$chz"
-echo OK,Chat Room ID:$chz
-clj "m7" "Back"
+done
+eco "$fgx"
+clj "main" "a.back"
 }
 ;;
 m7k=*)
 cfd="$usv/chat"
-ind="${QUERY_STRING#*=}"
+ind="${qus#*=}"
 int="${ind%&hfz}"
-wbn="`pdg "$cfd"`"
+wwn="`pdg "$cfd" "1"`"
+wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
-[ "${QUERY_STRING##*&}" == "hfz" ]&&{
+[ "${qus##*&}" == "hfz" ]&&{
 read b
 read c
 read ry
@@ -965,7 +970,7 @@ echo "<input type=text name=vv><br>"
 fmj
 ;;
 zct*)
-vs="${QUERY_STRING#*=}"
+vs="${qus#*=}"
 tid="${tl%&pw*}"
 npe="${tl#*pw=}"
 npd="${npe%&vv*}"
@@ -974,9 +979,7 @@ vv="${tl##*=}"
 [ "$vv" == "$vs" ]&&{
 chk="`ls "$hos/user"|grep "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
-usk="$hos/user/$nep"
-mkdir -p "$usk/diary" "$usk/mail" "$usk/chat"
-echo $npd>>$usk/pwd
+zcc
 echo OK
 }
 }
