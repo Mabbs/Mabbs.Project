@@ -605,12 +605,15 @@ do
 eco "$pd"
 done
 }
+bk(){
+clj "main" "Back"
+}
 clj(){
 echo "<a href=$0?$1>$2</a>"
 }
 fid(){
 cat "$rmk"|hcs
-clj "main" "Press there to back"
+bk
 }
 zxth(){
 cat "$rmk"|hcs
@@ -750,7 +753,7 @@ co="0"
 ls "$pcz"|wpxc "$qus&m2kk"
 clj "$qus&m2kk=a" "Make a new post"
 $hc
-clj "main" "Back"
+bk
 }
 }
 case $cse in
@@ -869,7 +872,7 @@ co="0"
 ls "$cfd"|wpxc "m5d"
 clj "m5w" "Write diary"
 $hc
-clj "main" "Back"
+bk
 $hc
 ;;
 m5w)
@@ -928,7 +931,7 @@ clj "m7k=$co" "$co.${nr#*,}"
 $hc
 done
 eco "$fgx"
-clj "main" "a.back"
+bk
 }
 ;;
 m7k=*)
