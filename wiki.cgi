@@ -57,12 +57,15 @@ echo "selected it."
 inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
-mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room"
+mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room" "$hos/up"
 nep="$gly"
 echo Master name:$gly
 echo New password:
 read npd
 zcc
+}
+bk(){
+echo b.Back
 }
 slp(){
 [ "$na" == "$gly" ]
@@ -197,7 +200,7 @@ done
 }
 na="guest"
 sleep 1
-while true
+until [ "$cmd" == "2" ]
 do
 clear
 echo MaWiki  User:$na
@@ -207,11 +210,12 @@ echo 1.Search
 echo 2.Exit
 echo 3.Go to MaBBS
 echo 4.Random
-glp&&echo 5.Login||{
-echo 5.Make a new entry
-echo 6.Diary 
-echo 7.Reset your password
-echo 8.Chat Room
+echo 5.Novel Viewer
+glp&&echo 6.Login||{
+echo 6.Make a new entry
+echo 7.Diary 
+echo 8.Reset your password
+echo 9.Chat Room
 }
 echo Input command:
 read cmd
@@ -250,10 +254,6 @@ fid
 }
 }
 ;;
-2)
-echo Bye
-break
-;;
 3)
 while true
 do
@@ -280,7 +280,7 @@ read pac
 [ -n "$pac" ]||pac="#"
 case $pac in
 a)
-break
+break 1
 ;;
 b)
 clear
@@ -320,7 +320,7 @@ co="0"
 ls "$pcz"|pxcx
 echo $fgx
 echo a.Make a new post
-echo b.Back
+bk
 fyx "$pcz"
 slp&&echo d.Delete a post
 $inc
@@ -424,6 +424,38 @@ esac
 done
 ;;
 5)
+cfd="$hos/up"
+sel="0"
+while true
+do
+clear
+echo Novel Viewer
+echo $fgx
+co="0"
+ls "$cfd"|pxcx
+echo $fgx
+echo You can Upload novel on Web
+bk
+fyx "$cfd"
+$inc
+read int
+case $int in
+b)
+break 1
+;;
+c)
+fy "$cfd"
+;;
+*)
+wbn="`pdg "$cfd"`"
+[ -n "$wbn" ]&&{
+more "$cfd/$wbn"
+}
+;;
+esac
+done
+;;
+6)
 glp&&wblg||{
 clear
 echo Input Main title:
@@ -455,7 +487,7 @@ rmk="$whk/`pdg "$whk"`"
 fid
 }
 ;;
-6)
+7)
 glp&&wblg||{
 cfd="$usv/diary"
 sel="0"
@@ -468,7 +500,7 @@ co="0"
 ls "$cfd"|pxcx
 echo $fgx
 echo a.Write diary
-echo b.Back
+bk
 fyx "$cfd"
 $inc
 read int
@@ -503,7 +535,7 @@ esac
 done
 }
 ;;
-7)
+8)
 glp&&wblg||{
 clear
 echo Input your new password:
@@ -511,7 +543,7 @@ read nrd
 [ -n "$nrd" ]&&echo $nrd>$usv/pwd
 }
 ;;
-8)
+9)
 glp&&wblg||{
 cfd="$usv/chat"
 sel="0"
@@ -529,7 +561,7 @@ echo $co.${nr#*,}
 done
 echo $fgx
 echo a.Make chat room
-echo b.Back
+bk
 $inc
 read int
 case $int in
@@ -687,6 +719,8 @@ $hc
 clj "m6" "3.Reset your password"
 $hc
 clj "m7" "4.Chat Room"
+$hc
+clj "m8" "5.Novel Uploader"
 }
 echo "</td></tr></table>"
 ;;
@@ -951,13 +985,28 @@ echo "$ry" >>$wbb
 echo >>$wbb
 }
 cat "$wbb"|hcs
-echo "<form method=post action=$0?m7k=$int&hfz $ent>"
-echo Input reply:
-echo "<input type=text name=ry><br>"
+echo "<form method=post action=$0?m7k=$int&hfz $ent>Input reply:<input type=text name=ry><br>"
 fmj
 $hc
 clj "m7" "Press there to back"
 }
+;;
+m8)
+echo "<form method=post action=$0?m8u $ent> <input type=file name=File...>"
+fmj
+;;
+m8u)
+read meta
+read ct
+fnm="${meta#*filename=}"
+nr="${fnm//\"/}"
+st="$hos/up/${nr%?}"
+echo "Uploader:$na">$st
+while read thing
+do
+echo "$thing" >>$st
+done
+echo "$nr saved,you can use Telnet to view it"
 ;;
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
