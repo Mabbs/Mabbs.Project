@@ -243,6 +243,9 @@ ls "$hos/main"|while read nr
 do
 ls "$hos/main/$nr"|grep "$kw"
 done
+echo Novel
+echo -------
+ls "$hos/up"|grep "$kw"
 echo Which one:
 read mtt
 [ -n "$mtt" ]&&{
@@ -595,6 +598,16 @@ done
 esac
 done
 }||{
+qus="$QUERY_STRING"
+[ "${qus%%=*}" == "m8d" ]&&{
+echo "Content-type:text/plain;charset=utf-8"
+int="${qus#*=}" 
+cfd="$hos/up"
+wbn="`pdg "$cfd"`"
+echo "Content-Disposition:filename=$wbn"
+echo ""
+[ -n "$wbn" ]&&cat "$cfd/$wbn"
+}||{
 echo "Content-type:text/html;charset=utf-8"
 read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
@@ -605,7 +618,6 @@ ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
 pa="${HTTP_COOKIE#*pw=}"
-qus="$QUERY_STRING"
 [ -z "$ua" ]&&np=0||{
 [ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
 }
@@ -720,7 +732,7 @@ clj "m6" "3.Reset your password"
 $hc
 clj "m7" "4.Chat Room"
 $hc
-clj "m8" "5.Novel Uploader"
+clj "m8" "5.Novel Up/Downloader"
 }
 echo "</td></tr></table>"
 ;;
@@ -757,6 +769,16 @@ clj "m2k=$co&m2kk=$eo" "$mr"
 $hc
 }
 done
+done
+eco "Novel"
+eco "-------"
+ls "$hos/up"|while read mr
+do
+eo=$(($eo+1))
+[ -n "`echo "$mr"|grep "$kw"`" ]&&{
+clj "m8d=$eo" "$mr"
+$hc
+}
 done
 }
 ;;
@@ -992,21 +1014,31 @@ clj "m7" "Press there to back"
 }
 ;;
 m8)
-echo "<form method=post action=$0?m8u $ent> <input type=file name=File...>"
+sel="0"
+eco "Welecome,$na"
+eco "$fgx"
+co="0"
+ls "$hos/up"|wpxc "m8d"
+eco "Upload Novel:"
+echo "<form method=post action=$0?m8u $ent> <input type=file name=file>"
 fmj
+$hc
+bk
+$hc
 ;;
 m8u)
 read meta
 read ct
 fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
-st="$hos/up/${nu%\"*}"
+mu="${nu%\"*}"
+st="$hos/up/${mu%.txt}.txt"
 echo "Uploader:$na">$st
-while read thing
+while read nr
 do
-echo "$thing" >>$st
+echo "$nr" >>$st
 done
-echo "${nu%\"*} saved,you can use Telnet to view it"
+echo "${mu%.txt}.txt saved."
 ;;
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
@@ -1041,4 +1073,5 @@ $hc
 eco "$fgx"
 eco "You can use more thing on Telnet Version"
 echo "Copyright (C) 2016 by Mayx"
+}
 }
