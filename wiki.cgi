@@ -999,14 +999,14 @@ m8u)
 read meta
 read ct
 fnm="${meta#*filename=}"
-nr="${fnm//\"/}"
-st="$hos/up/${nr%?}"
+nu="${fnm#\"*}"
+st="$hos/up/${nu%\"*}"
 echo "Uploader:$na">$st
 while read thing
 do
 echo "$thing" >>$st
 done
-echo "$nr saved,you can use Telnet to view it"
+echo "${nu%\"*} saved,you can use Telnet to view it"
 ;;
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
