@@ -243,8 +243,8 @@ ls "$hos/main"|while read nr
 do
 ls "$hos/main/$nr"|grep "$kw"
 done
-echo Novel
-echo -------
+echo "Novel"
+echo "-------"
 ls "$hos/up"|grep "$kw"
 echo Which one:
 read mtt
@@ -452,7 +452,9 @@ fy "$cfd"
 *)
 wbn="`pdg "$cfd"`"
 [ -n "$wbn" ]&&{
+clear
 more "$cfd/$wbn"
+read nul
 }
 ;;
 esac
