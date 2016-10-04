@@ -748,10 +748,13 @@ eco "Result"
 eco "$fgx"
 eco "Entry"
 eco "-------"
-ls "$whk"|grep "$kw"|while read jg
+ls "$whk"|while read mr
 do
-clj "m1g=${jg%%+*}" "${jg%%+*}"
+eo=$(($eo+1))
+[ -n "`echo "$mr"|grep "$kw"`" ]&&{
+clj "m1g=$eo" "${mr%%+*}"
 $hc
+}
 done
 eco User
 eco -------
@@ -785,13 +788,11 @@ done
 }
 ;;
 m1g=*)
-mtt="${qus#*=}"
-[ -n "$mtt" ]&&{
-tkw="`ls "$whk"|grep "$mtt"`"
+int="${qus#*=}"
+tkw="`pdg "$whk"`"
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
-}
 }
 ;;
 m2k=*)
