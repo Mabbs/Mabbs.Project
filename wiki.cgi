@@ -1,5 +1,16 @@
 #!/system/bin/ash
 hos="/sdcard/ba"
+[ "$1" == "stop" ]&&{
+killall tcpsvd
+killall telnetd
+killall httpd
+}
+[ "$1" == "start" ]&&{
+wzd="$(cd `dirname $0`; cd ..; pwd)"
+tcpsvd -vE 0.0.0.0 21 ftpd -w "$hos/up"&
+telnetd -l "$wzd/cgi-bin/wiki.cgi"
+httpd -h "$wzd"
+}
 whk="$hos/wiki"
 gly="SYSOP"
 err="echo Error!"
@@ -114,6 +125,15 @@ usv="$hos/user/$na"
 ;;
 esac
 }
+}
+pag(){
+wbn=""
+co="0"
+ls "$cfd"|grep ".txt"|while read nr
+do
+co=$(($co+1))
+[ "$int" == "$co" ]&&echo "$nr"
+done
 }
 fid(){
 while true
@@ -435,7 +455,7 @@ clear
 echo Novel Viewer
 echo $fgx
 co="0"
-ls "$cfd"|pxcx
+ls "$cfd"|grep ".txt"|pxcx
 echo $fgx
 echo You can Upload novel on Web
 bk
@@ -450,7 +470,7 @@ c)
 fy "$cfd"
 ;;
 *)
-wbn="`pdg "$cfd"`"
+wbn="`pag`"
 [ -n "$wbn" ]&&{
 clear
 more "$cfd/$wbn"
@@ -602,10 +622,10 @@ done
 }||{
 qus="$QUERY_STRING"
 [ "${qus%%=*}" == "m8d" ]&&{
-echo "Content-type:text/plain;charset=utf-8"
 int="${qus#*=}" 
 cfd="$hos/up"
 wbn="`pdg "$cfd"`"
+[ "${wbn##*.}" == "jpg" ]&&echo "Content-type:image/jpeg;charset=utf-8"||echo "Content-type:application/octet-stream;charset=utf-8"
 echo "Content-Disposition:filename=$wbn"
 echo ""
 [ -n "$wbn" ]&&cat "$cfd/$wbn"
@@ -734,7 +754,7 @@ clj "m6" "3.Reset your password"
 $hc
 clj "m7" "4.Chat Room"
 $hc
-clj "m8" "5.Novel Up/Downloader"
+clj "m8" "5.File Explorer"
 }
 echo "</td></tr></table>"
 ;;
@@ -757,10 +777,10 @@ $hc
 }
 done
 eco User
-eco -------
+eco "-------"
 ls "$hos/user"|grep "$kw"|hcs
 eco Post
-eco -------
+eco "-------"
 co=0
 ls "$hos/main"|while read nr
 do
@@ -775,7 +795,7 @@ $hc
 }
 done
 done
-eco "Novel"
+eco File
 eco "-------"
 ls "$hos/up"|while read mr
 do
@@ -1018,16 +1038,17 @@ clj "m7" "Press there to back"
 ;;
 m8)
 sel="0"
-eco "Welecome,$na"
+echo "Welecome,$na"
+clj "m8v" "Photo Viewer"
+$hc
 eco "$fgx"
 co="0"
 ls "$hos/up"|wpxc "m8d"
-eco "Upload Novel:"
+eco "Upload Novel:(Upload other use FTP)"
 echo "<form method=post action=$0?m8u $ent> <input type=file name=file>"
 fmj
 $hc
 bk
-$hc
 ;;
 m8u)
 read meta
@@ -1042,6 +1063,37 @@ do
 echo "$nr" >>$st
 done
 echo "${mu%.txt}.txt saved."
+;;
+m8v)
+sel="0"
+eco "Photo Viewer"
+eco "$fgx"
+echo "<table border=1><tr>"
+co="0"
+mo="0"
+ls "$hos/up/"|while read nr
+do
+co=$(($co+1))
+[ "${nr##*.}" == "jpg" ]&&{
+mo=$(($mo+1))
+echo "<td>"
+clj "m8x=$co" "<img src=$0?m8d=$co width=80px height=60px />"
+echo "</td>"
+[ "$mo" == "3" ]&&{
+echo "</tr><tr>"
+mo="0"
+}
+}
+done
+echo "</tr></table>"
+eco "$fgx"
+bk
+;;
+m8x=*)
+int="${qus#*=}" 
+cfd="$hos/up"
+eco "<img src=$0?m8d=$int />"
+clj "m8x=$(($int+1))" "Next Photo"
 ;;
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
