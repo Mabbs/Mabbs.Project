@@ -1087,13 +1087,15 @@ mo="0"
 done
 echo "</tr></table>"
 eco "$fgx"
-bk
+clj "m8" "Back"
 ;;
 m8x=*)
 int="${qus#*=}" 
 cfd="$hos/up"
 eco "<img src=$0?m8d=$int />"
 clj "m8x=$(($int+1))" "Next Photo"
+$hc
+clj "m8v" "Back"
 ;;
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
