@@ -26,6 +26,16 @@ echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
 }
+grp(){
+while read nr
+do
+case $nr in
+*${1}*)
+echo $nr
+;;
+esac
+done
+}
 zcc(){
 usk="$hos/user/$nep"
 mkdir -p "$usk/diary" "$usk/mail"
@@ -52,7 +62,7 @@ done
 }
 chse(){
 glp&&wblg||{
-vck="`cat "$wbb/opt/$1"|grep "$na"`"
+vck="`cat "$wbb/opt/$1"|grp "$na"`"
 [ "$na" == "$vck" ]||{
 echo $na >> "$wbb/opt/$1"
 [ -z "$HTTP_HOST" ]&&{
@@ -69,6 +79,7 @@ inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room" "$hos/up"
+touch "$hos/ip"
 nep="$gly"
 echo Master name:$gly
 echo New password:
@@ -109,7 +120,7 @@ echo Please input your name:
 read nep
 echo Please input new password:
 read npd
-chk="`ls "$hos/user"|grep "$nep"`"
+chk="`ls "$hos/user"|grp "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 echo Please input verifcation code:
 vv="`cat /proc/sys/kernel/random/uuid`"
@@ -129,7 +140,7 @@ esac
 pag(){
 wbn=""
 co="0"
-ls "$cfd"|grep ".txt"|while read nr
+ls "$cfd"|grp ".txt"|while read nr
 do
 co=$(($co+1))
 [ "$int" == "$co" ]&&echo "$nr"
@@ -250,26 +261,26 @@ echo Result
 echo $fgx
 echo Entry
 echo -------
-ls "$whk"|grep "$kw"|while read jg
+ls "$whk"|grp "$kw"|while read jg
 do
 echo ${jg%%+*}
 done
 echo User
 echo -------
-ls "$hos/user"|grep "$kw"
+ls "$hos/user"|grp "$kw"
 echo Post
 echo -------
 ls "$hos/main"|while read nr
 do
-ls "$hos/main/$nr"|grep "$kw"
+ls "$hos/main/$nr"|grp "$kw"
 done
 echo "Novel"
 echo "-------"
-ls "$hos/up"|grep "$kw"
+ls "$hos/up"|grp "$kw"
 echo Which one:
 read mtt
 [ -n "$mtt" ]&&{
-tkw=`ls "$whk"|grep "$mtt"`
+tkw=`ls "$whk"|grp "$mtt"`
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
@@ -359,7 +370,7 @@ case $cht in
 clear
 echo Input the title:
 read tit
-[ -n "`ls "$pcz"|grep "$tit"`" ]||{
+[ -n "`ls "$pcz"|grp "$tit"`" ]||{
 echo Word:
 read wod
 plx
@@ -369,7 +380,7 @@ plx
 clear
 echo Input the title:
 read tit
-[ -n "`ls "$pcz"|grep "$tit"`" ]||{
+[ -n "`ls "$pcz"|grp "$tit"`" ]||{
 echo Main word:
 read wod
 echo "Option head:"
@@ -455,7 +466,7 @@ clear
 echo Novel Viewer
 echo $fgx
 co="0"
-ls "$cfd"|grep ".txt"|pxcx
+ls "$cfd"|grp ".txt"|pxcx
 echo $fgx
 echo You can Upload novel on Web
 bk
@@ -485,7 +496,7 @@ glp&&wblg||{
 clear
 echo Input Main title:
 read mt
-[ -z "`ls "$whk"|grep "$mt"`" ]&&{
+[ -z "`ls "$whk"|grp "$mt"`" ]&&{
 echo Tags:
 read tgs
 echo Word:
@@ -533,7 +544,7 @@ case $int in
 a)
 clear
 mt="`date +%y.%m.%d`"
-[ -n "`ls "$cfd"|grep "$mt"`" ]||{
+[ -n "`ls "$cfd"|grp "$mt"`" ]||{
 echo Word:
 read wd
 mwt="$cfd/$mt"
@@ -771,14 +782,14 @@ eco "-------"
 ls "$whk"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grep "$kw"`" ]&&{
+[ -n "`echo "$mr"|grp "$kw"`" ]&&{
 clj "m1g=$eo" "${mr%%+*}"
 $hc
 }
 done
 eco User
 eco "-------"
-ls "$hos/user"|grep "$kw"|hcs
+ls "$hos/user"|grp "$kw"|hcs
 eco Post
 eco "-------"
 co=0
@@ -789,7 +800,7 @@ eo=0
 ls "$hos/main/$nr"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grep "$kw"`" ]&&{
+[ -n "`echo "$mr"|grp "$kw"`" ]&&{
 clj "m2k=$co&m2kk=$eo" "$mr"
 $hc
 }
@@ -800,7 +811,7 @@ eco "-------"
 ls "$hos/up"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grep "$kw"`" ]&&{
+[ -n "`echo "$mr"|grp "$kw"`" ]&&{
 clj "m8d=$eo" "$mr"
 $hc
 }
@@ -854,7 +865,7 @@ read tit
 fgy
 read wod
 tit="${tit%?}"
-[ -n "`ls "$pcz"|grep "$tit"`" ]||{
+[ -n "`ls "$pcz"|grp "$tit"`" ]||{
 plx
 echo "OK!"
 }
@@ -926,7 +937,7 @@ read wd
 tit="${tit%?}"
 tag="${tag%?}"
 mwt="$whk/$tit+$tag"
-[ -z "`ls "$whk"|grep "$tit"`" ]&&{
+[ -z "`ls "$whk"|grp "$tit"`" ]&&{
 echo $tit>>$mwt
 echo Made by:$na `date`>>$mwt
 echo Tags:$tag>>$mwt
@@ -955,7 +966,7 @@ bk
 $hc
 ;;
 m5w)
-[ -n "`ls "$cfd"|grep "$mt"`" ]&&fid||{
+[ -n "`ls "$cfd"|grp "$mt"`" ]&&fid||{
 echo "<form method=post action=$0?m5ws $ent>"
 echo "Word:"
 echo "<input type=text name=wd><br>"
@@ -1044,7 +1055,7 @@ $hc
 eco "$fgx"
 co="0"
 ls "$hos/up"|wpxc "m8d"
-eco "Upload Novel:(Upload other use FTP)"
+eco "Upload Novel:(Upload other use <a href=ftp://$HTTP_HOST>FTP</a>)"
 echo "<form method=post action=$0?m8u $ent> <input type=file name=file>"
 fmj
 $hc
@@ -1118,7 +1129,7 @@ npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
 [ "$vv" == "$vs" ]&&{
-chk="`ls "$hos/user"|grep "$nep"`"
+chk="`ls "$hos/user"|grp "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 zcc
 echo OK
@@ -1128,7 +1139,10 @@ echo OK
 esac
 $hc
 eco "$fgx"
-eco "You can use more thing on Telnet Version"
+rip="${REMOTE_ADDR##*:}"
+[ -z `cat "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
+eco Counter:`cat "$hos/ip"|wcl`
+eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) 2016 by Mayx"
 }
 }
