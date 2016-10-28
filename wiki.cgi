@@ -140,7 +140,7 @@ esac
 pag(){
 wbn=""
 co="0"
-ls "$cfd"|grp ".txt"|while read nr
+ls "$1"|grp "$2"|while read nr
 do
 co=$(($co+1))
 [ "$int" == "$co" ]&&echo "$nr"
@@ -219,7 +219,7 @@ pxcx(){
 while read nr
 do
 co=$(($co+1))
-[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]&&echo $co.$nr
+[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]&&echo "$1$co.$nr"
 done
 }
 cc(){
@@ -261,9 +261,11 @@ echo Result
 echo $fgx
 echo Entry
 echo -------
+co="0"
 ls "$whk"|grp "$kw"|while read jg
 do
-echo ${jg%%+*}
+co=$(($co+1))
+echo a$co.${jg%%+*}
 done
 echo User
 echo -------
@@ -276,16 +278,29 @@ ls "$hos/main/$nr"|grp "$kw"
 done
 echo "Novel"
 echo "-------"
-ls "$hos/up"|grp "$kw"
+sel="0"
+ls "$hos/up"|grp ".txt"|grp "$kw"|pxcx "b"
 echo Which one:
 read mtt
-[ -n "$mtt" ]&&{
-tkw=`ls "$whk"|grp "$mtt"`
+case $mtt in
+a*)
+int="${mtt#a}"
+tkw="`pag "$whk" "$kw"`"
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
 }
+;;
+b*)
+int="${mtt#b}"
+tkw="`pag "$hos/up" "$kw"`"
+[ -n "$tkw" ]&&{
+clear
+more "$hos/up/$tkw"
+read nul
 }
+;;
+esac
 }
 ;;
 3)
@@ -481,7 +496,7 @@ c)
 fy "$cfd"
 ;;
 *)
-wbn="`pag`"
+wbn="`pag "$cfd" ".txt"`"
 [ -n "$wbn" ]&&{
 clear
 more "$cfd/$wbn"
