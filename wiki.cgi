@@ -53,8 +53,7 @@ echo "$nb"
 pdg(){
 wbn=""
 co="0"
-[ "$2" == "1" ]&&zgj="cat "$1""||zgj="ls "$1""
-$zgj|while read nr
+while read nr
 do
 co=$(($co+1))
 [ "$int" == "$co" ]&&echo "$nr"
@@ -136,15 +135,6 @@ usv="$hos/user/$na"
 ;;
 esac
 }
-}
-pag(){
-wbn=""
-co="0"
-ls "$1"|grp "$2"|while read nr
-do
-co=$(($co+1))
-[ "$int" == "$co" ]&&echo "$nr"
-done
 }
 fid(){
 while true
@@ -285,7 +275,7 @@ read mtt
 case $mtt in
 a*)
 int="${mtt#a}"
-tkw="`pag "$whk" "$kw"`"
+tkw="`ls "$whk"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
@@ -293,7 +283,7 @@ fid
 ;;
 b*)
 int="${mtt#b}"
-tkw="`pag "$hos/up" "$kw"`"
+tkw="`ls "$hos/up"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
 clear
 more "$hos/up/$tkw"
@@ -356,7 +346,7 @@ echo "$bul" > $hos/bul
 ;;
 *)
 int="$pac"
-pac="`pdg "$hos/main"`"
+pac="`ls "$hos/main"|pdg`"
 [ -n "$pac" ]&&{
 sel="0"
 while true
@@ -439,7 +429,7 @@ rm -rf "$pcz/$tdw"
 }
 ;;
 *)
-wbn="`pdg "$pcz"`"
+wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
 wbb="$pcz/$wbn"
 [ -f "$wbb" ]&&zxth||{
@@ -496,7 +486,7 @@ c)
 fy "$cfd"
 ;;
 *)
-wbn="`pag "$cfd" ".txt"`"
+wbn="`ls "$cfd"|grp ".txt"|pdg`"
 [ -n "$wbn" ]&&{
 clear
 more "$cfd/$wbn"
@@ -534,7 +524,7 @@ echo Not found...
 sleep 1
 }||{
 int=$((`date +%s`%$jld+1))
-rmk="$whk/`pdg "$whk"`"
+rmk="$whk/`ls "$whk"|pdg`"
 fid
 }
 ;;
@@ -576,7 +566,7 @@ c)
 fy "$cfd"
 ;;
 *)
-wbn="`pdg "$cfd"`"
+wbn="`ls "$cfd"|pdg`"
 [ -n "$wbn" ]&&{
 rmk="$cfd/$wbn"
 fid
@@ -631,7 +621,7 @@ b)
 break 1
 ;;
 *)
-wwn="`pdg "$cfd" "1"`"
+wwn="`cat "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 qmz="${wwn#*,}" 
 [ -n "$wbn" ]&&{
@@ -650,7 +640,7 @@ qus="$QUERY_STRING"
 [ "${qus%%=*}" == "m8d" ]&&{
 int="${qus#*=}" 
 cfd="$hos/up"
-wbn="`pdg "$cfd"`"
+wbn="`ls "$cfd"|pdg`"
 [ "${wbn##*.}" == "jpg" ]&&echo "Content-type:image/jpeg;charset=utf-8"||echo "Content-type:application/octet-stream;charset=utf-8"
 echo "Content-Disposition:filename=$wbn"
 echo ""
@@ -755,7 +745,7 @@ eco "Total entry:`ls "$whk"|wcl`"
 jld="`ls "$whk"|wcl`"
 [ "$jld" == "0" ]||{
 int=$((`date +%s`%$jld+1))
-sjs="`pdg "$whk"`"
+sjs="`ls "$whk"|pdg`"
 } 
 echo "<form method=post action=$0?m1j $ent>"
 echo "<input type=text name=kw value=${sjs%%+*}>"
@@ -835,7 +825,7 @@ done
 ;;
 m1g=*)
 int="${qus#*=}"
-tkw="`pdg "$whk"`"
+tkw="`ls "$whk"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$whk/$tkw"
 fid
@@ -844,7 +834,7 @@ fid
 m2k=*)
 ind="${qus#*=}"
 int="${ind%&m2kk=*}"
-pac="`pdg "$hos/main"`"
+pac="`ls "$hos/main"|pdg`"
 [ -n "$pac" ]&&{
 sel="0"
 pcz="$hos/main/$pac"
@@ -890,7 +880,7 @@ echo "OK!"
 [ "${qus##*&}" == "tpa" ]&&{
 glp&&wblg||{
 int="${cse%&jg=*}"
-wbn="`pdg "$pcz"`"
+wbn="`ls "$pcz"|pdg`"
 ry="${cse#*=}"
 [ -n "$wbn" ]&&{
 wbb="$pcz/$wbn"
@@ -899,7 +889,7 @@ wbb="$pcz/$wbn"
 }
 }||{
 int="$cse"
-wbn="`pdg "$pcz"`"
+wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
 rmk="$pcz/$wbn"
 [ "${qus##*&}" == "hfz" ]&&{
@@ -999,7 +989,7 @@ fid
 m5d=*)
 int="${qus#*=}" 
 cfd="$usv/diary"
-wbn="`pdg "$cfd"`"
+wbn="`ls "$cfd"|pdg`"
 [ -n "$wbn" ]&&{
 rmk="$cfd/$wbn"
 fid
@@ -1043,7 +1033,7 @@ m7k=*)
 cfd="$usv/chat"
 ind="${qus#*=}"
 int="${ind%&hfz}"
-wwn="`pdg "$cfd" "1"`"
+wwn="`cat "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
