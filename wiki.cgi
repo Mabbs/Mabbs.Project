@@ -1,16 +1,5 @@
 #!/system/bin/ash
 hos="/sdcard/ba"
-[ "$1" == "stop" ]&&{
-killall tcpsvd
-killall telnetd
-killall httpd
-}
-[ "$1" == "start" ]&&{
-wzd="$(cd `dirname $0`; cd ..; pwd)"
-tcpsvd -vE 0.0.0.0 21 ftpd -w "$hos/up"&
-telnetd -l "$wzd/cgi-bin/wiki.cgi"
-httpd -h "$wzd"
-}
 whk="$hos/wiki"
 gly="SYSOP"
 err="echo Error!"
@@ -128,8 +117,8 @@ echo $vv
 read vc
 [ "$vc" == "$vv" ]&&{
 zcc
-na="$nep"
-usv="$hos/user/$na"
+echo OK!
+sleep 1
 }
 }
 ;;
@@ -700,8 +689,7 @@ bk
 zxth(){
 cat "$rmk"|hcs
 glp&&eco "<a href=$0?m4>Login</a>"||{
-[ "${qus##*&}" == "hfz" ]||zhy="&hfz"
-echo "<form method=post action=$0?$qus$zhy $ent>"
+echo "<form method=post action=$0?$qus $ent>"
 echo Input reply:
 echo "<input type=text name=ry><br>"
 fmj
@@ -892,7 +880,7 @@ int="$cse"
 wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
 rmk="$pcz/$wbn"
-[ "${qus##*&}" == "hfz" ]&&{
+[ "$REQUEST_METHOD" == "POST" ]&&{
 glp&&wblg||{
 [ -f "$rmk" ]||rmk="$pcz/$wbn/talk" 
 read b
@@ -1037,7 +1025,7 @@ wwn="`cat "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
-[ "${qus##*&}" == "hfz" ]&&{
+[ "$REQUEST_METHOD" == "POST" ]&&{
 read b
 read c
 read ry
@@ -1046,7 +1034,7 @@ echo "$ry" >>$wbb
 echo >>$wbb
 }
 cat "$wbb"|hcs
-echo "<form method=post action=$0?m7k=$int&hfz $ent>Input reply:<input type=text name=ry><br>"
+echo "<form method=post action=$0?m7k=$int $ent>Input reply:<input type=text name=ry><br>"
 fmj
 $hc
 clj "m7" "Press there to back"
