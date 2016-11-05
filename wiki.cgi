@@ -28,7 +28,7 @@ done
 zcc(){
 usk="$hos/user/$nep"
 mkdir -p "$usk/diary" "$usk/mail"
-touch "$usk/chat"
+>"$usk/chat"
 echo $npd>>$usk/pwd
 }
 wcl(){
@@ -67,7 +67,7 @@ inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room" "$hos/up"
-touch "$hos/ip"
+>"$hos/ip"
 nep="$gly"
 echo Master name:$gly
 echo New password:
@@ -393,7 +393,7 @@ echo $opt>>$tsm/data
 mkdir "$tsm/opt" 
 for sle in $oph
 do
-touch "$tsm/opt/$sle"
+>"$tsm/opt/$sle"
 done
 [ "$utk" == "y" ]&&{
 echo Talk>>"$tsm/talk"
@@ -630,10 +630,13 @@ qus="$QUERY_STRING"
 int="${qus#*=}" 
 cfd="$hos/up"
 wbn="`ls "$cfd"|pdg`"
-[ "${wbn##*.}" == "jpg" ]&&echo "Content-type:image/jpeg;charset=utf-8"||echo "Content-type:application/octet-stream;charset=utf-8"
+[ -f "$cfd/$wbn" ]&&{
+[ "${wbn##*.}" == "jpg" ]&&cot="image/jpeg"||cot="application/octet-stream"
+echo "Content-type:$cot;charset=utf-8"
 echo "Content-Disposition:filename=$wbn"
 echo ""
 [ -n "$wbn" ]&&cat "$cfd/$wbn"
+}
 }||{
 echo "Content-type:text/html;charset=utf-8"
 read tl
@@ -1062,10 +1065,7 @@ nu="${fnm#\"*}"
 mu="${nu%\"*}"
 st="$hos/up/${mu%.txt}.txt"
 echo "Uploader:$na">$st
-while read nr
-do
-echo "$nr" >>$st
-done
+cat >>$st
 echo "${mu%.txt}.txt saved."
 ;;
 m8v)
