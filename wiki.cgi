@@ -62,7 +62,7 @@ echo "selected it."
 }
 }
 }
-[ -z "$HTTP_HOST" ]&&{
+[ -z "$REMOTE_ADDR" ]&&{
 inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
 echo Installing...
@@ -638,10 +638,12 @@ echo ""
 [ -n "$wbn" ]&&cat "$cfd/$wbn"
 }
 }||{
+echo "Content-Encoding:gzip"
 echo "Content-type:text/html;charset=utf-8"
 read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
 echo ""
+{
 echo '<title>Mabbs&Wiki</title>'
 hc='echo <br>'
 ent="enctype=multipart/form-data"
@@ -1137,5 +1139,6 @@ rip="${REMOTE_ADDR##*:}"
 eco Counter:`cat "$hos/ip"|wcl`
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) 2016 by Mayx"
+}|gzip -c
 }
 }
