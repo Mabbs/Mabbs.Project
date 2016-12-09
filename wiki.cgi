@@ -15,6 +15,20 @@ echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
 }
+lct(){
+while read nr
+do
+echo $nr
+done <$1 
+}
+gaen(){
+tho=`date +%H`
+ztg=night
+[ $tho -ge 6 -a $tho -lt 12 ]&&ztg=morning
+[ $tho -ge 12 -a $tho -lt 18 ]&&ztg=afternoon
+[ $tho -ge 18 -a $tho -lt 21 ]&&ztg=evening
+echo "Good ${ztg},$na"
+}
 grp(){
 while read nr
 do
@@ -50,13 +64,13 @@ done
 }
 chse(){
 glp&&wblg||{
-vck="`cat "$wbb/opt/$1"|grp "$na"`"
+vck="`lct "$wbb/opt/$1"|grp "$na"`"
 [ "$na" == "$vck" ]||{
 echo $na >> "$wbb/opt/$1"
 [ -z "$HTTP_HOST" ]&&{
-cat "$wbb/opt/$1"
+lct "$wbb/opt/$1"
 }||{
-cat "$wbb/opt/$1"|hcs
+lct "$wbb/opt/$1"|hcs
 }
 echo "selected it."
 }
@@ -93,7 +107,7 @@ read ua
 echo Password:
 read pa
 [ -z "$ua" ]&&np=0||{
-[ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
+[ -e "$hos/user/$ua" ]&&np="`lct "$hos/user/$ua/pwd"`ck"
 }
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
@@ -111,7 +125,7 @@ read npd
 chk="`ls "$hos/user"|grp "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 echo Please input verifcation code:
-vv="`cat /proc/sys/kernel/random/uuid`"
+vv="`lct /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
 echo $vv
 read vc
@@ -129,27 +143,15 @@ fid(){
 while true
 do
 clear
-cat "$rmk"
+lct "$rmk"
 echo Press enter to back
 glp&&{
 read nul
 break 1
 }||{
-echo Input e to insert a new paragraph
 echo Input c to continue write
 read pd
 case $pd in
-e)
-clear
-echo Input title:
-read tt
-echo Word:
-read nwd
-echo >>$rmk
-echo $tt >>$rmk
-echo -------- >>$rmk
-echo $nwd >>$rmk
-;;
 c)
 echo Word:
 read nw 
@@ -166,7 +168,7 @@ zxth(){
 while true
 do
 clear
-cat "$wbb"
+lct "$wbb"
 echo 'Input reply(Input e go back):'
 [ "$1" == "1" ]&&echo "Input a to add friend:"
 read ry
@@ -204,7 +206,7 @@ done
 cc(){
 for lop in `ls "$wbb/opt/"`
 do
-echo $lop.$1 \(`cat "$wbb/opt/$lop"|wcl`\)
+echo $lop.$1 \(`lct "$wbb/opt/$lop"|wcl`\)
 shift
 done
 }
@@ -213,7 +215,7 @@ sleep 1
 until [ "$cmd" == "2" ]
 do
 clear
-echo MaWiki  User:$na
+echo "MaWiki   User:$na"
 echo Total entry:`ls "$whk"|wcl`
 echo $fgx
 echo 1.Search
@@ -286,9 +288,9 @@ esac
 while true
 do
 clear
-echo Welecome,$na
+gaen
 date
-[ -e "$hos/bul" ]&&echo Bulletin:`cat "$hos/bul"`
+[ -e "$hos/bul" ]&&echo Bulletin:`lct "$hos/bul"`
 echo $fgx
 co=0
 ls "$hos/main"|while read bm
@@ -342,7 +344,7 @@ while true
 do
 pcz="$hos/main/$pac"
 clear
-echo Welecome,$na   Part:$pac
+echo `gaen`   Part:$pac
 echo $fgx
 co="0"
 ls "$pcz"|pxcx
@@ -423,9 +425,9 @@ wbn="`ls "$pcz"|pdg`"
 wbb="$pcz/$wbn"
 [ -f "$wbb" ]&&zxth||{
 clear
-cat "$wbb/main"
+lct "$wbb/main"
 echo $fgx
-cc `cat "$wbb/data"`
+cc `lct "$wbb/data"`
 [ -e "$wbb/talk" ]&&echo Input t to talk,or
 echo 'Choose one:'
 read ry
@@ -524,7 +526,7 @@ sel="0"
 while true
 do
 clear
-echo Welecome,$na
+gaen
 echo $fgx
 co="0"
 ls "$cfd"|pxcx
@@ -581,10 +583,10 @@ while true
 do
 clear
 echo Chat Room
-echo Welecome,$na
+gaen
 echo $fgx
 co="0"
-cat "$cfd"|while read nr
+lct "$cfd"|while read nr
 do
 co=$(($co+1))
 echo $co.${nr#*,}
@@ -610,7 +612,7 @@ b)
 break 1
 ;;
 *)
-wwn="`cat "$cfd"|pdg`"
+wwn="`lct "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 qmz="${wwn#*,}" 
 [ -n "$wbn" ]&&{
@@ -635,7 +637,7 @@ wbn="`ls "$cfd"|pdg`"
 echo "Content-type:$cot;charset=utf-8"
 echo "Content-Disposition:filename=$wbn"
 echo ""
-[ -n "$wbn" ]&&cat "$cfd/$wbn"
+[ -n "$wbn" ]&&lct "$cfd/$wbn"
 }
 }||{
 echo "Content-Encoding:gzip"
@@ -651,7 +653,7 @@ uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
 pa="${HTTP_COOKIE#*pw=}"
 [ -z "$ua" ]&&np=0||{
-[ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
+[ -e "$hos/user/$ua" ]&&np="`lct "$hos/user/$ua/pwd"`ck"
 }
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
@@ -688,11 +690,11 @@ clj(){
 echo "<a href=$0?$1>$2</a>"
 }
 fid(){
-cat "$rmk"|hcs
+lct "$rmk"|hcs
 bk
 }
 zxth(){
-cat "$rmk"|hcs
+lct "$rmk"|hcs
 glp&&eco "<a href=$0?m4>Login</a>"||{
 echo "<form method=post action=$0?$qus $ent>"
 echo Input reply:
@@ -705,7 +707,7 @@ clj "${qus%&m2kk=*}" "Press there to back"
 cc(){
 for lop in `ls "$rmk/opt/"`
 do
-clj "$qus&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
+clj "$qus&jg=$lop&tpa" "$lop.$1 (`lct "$rmk/opt/$lop"|wcl`)"
 $hc
 shift
 done
@@ -732,9 +734,9 @@ echo "Please run it on shell"
 }
 case $qus in
 main)
-eco "MaWiki  User:$na"
+eco "MaWiki   User:$na"
 eco "Total entry:`ls "$whk"|wcl`"
-[ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
+[ -e "$hos/bul" ]&&eco "Bulletin:`lct "$hos/bul"`"
 jld="`ls "$whk"|wcl`"
 [ "$jld" == "0" ]||{
 int=$((`date +%s`%$jld+1))
@@ -835,7 +837,7 @@ cze="${qus#*&m2kk=}"
 cse=${cze%&hfz}
 cse=${cse%&tpa}
 [ "$cse" == "$qus" ]&&{
-eco "Welecome,$na   Part:$pac"
+eco "`gaen`   Part:$pac"
 eco "$fgx"
 co="0"
 ls "$pcz"|wpxc "$qus&m2kk"
@@ -897,9 +899,9 @@ echo >>$rmk
 }
 }
 [ -f "$rmk" ]&&zxth||{
-cat "$rmk/main"|hcs
+lct "$rmk/main"|hcs
 eco $fgx
-cc `cat "$rmk/data"`
+cc `lct "$rmk/data"`
 eco $fgx
 [ -e "$rmk/talk" ]&&{
 rmk="$rmk/talk"
@@ -954,7 +956,8 @@ rmk="$cfd/$mt"
 case $qus in
 m5)
 sel="0"
-eco "Welecome,$na"
+gaen
+$hc
 eco "$fgx"
 co="0"
 ls "$cfd"|wpxc "m5d"
@@ -1009,10 +1012,11 @@ glp&&wblg||{
 cfd="$usv/chat"
 sel="0"
 eco "Chat Room"
-eco "Welecome,$na"
+gaen
+$hc
 eco $fgx
 co="0"
-cat "$cfd"|while read nr
+lct "$cfd"|while read nr
 do
 co=$(($co+1))
 clj "m7k=$co" "$co.${nr#*,}"
@@ -1026,7 +1030,7 @@ m7k=*)
 cfd="$usv/chat"
 ind="${qus#*=}"
 int="${ind%&hfz}"
-wwn="`cat "$cfd"|pdg`"
+wwn="`lct "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
@@ -1038,7 +1042,7 @@ echo $na  `date` >>$wbb
 echo "$ry" >>$wbb
 echo >>$wbb
 }
-cat "$wbb"|hcs
+lct "$wbb"|hcs
 echo "<form method=post action=$0?m7k=$int $ent>Input reply:<input type=text name=ry><br>"
 fmj
 $hc
@@ -1047,7 +1051,8 @@ clj "m7" "Press there to back"
 ;;
 m8)
 sel="0"
-echo "Welecome,$na"
+eco "File Explorer"
+gaen
 clj "m8v" "Photo Viewer"
 $hc
 eco "$fgx"
@@ -1067,7 +1072,17 @@ nu="${fnm#\"*}"
 mu="${nu%\"*}"
 st="$hos/up/${mu%.txt}.txt"
 echo "Uploader:$na">$st
-cat >>$st
+while read thing
+do
+case "$thing" in
+*${CONTENT_TYPE##*=}*)
+break
+;;
+*)
+echo "$thing" >>$st
+;;
+esac
+done
 echo "${mu%.txt}.txt saved."
 ;;
 m8v)
@@ -1104,7 +1119,7 @@ $hc
 clj "m8v" "Back"
 ;;
 zc)
-vv="`cat /proc/sys/kernel/random/uuid`"
+vv="`lct /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
 echo "<form method=post action=$0?zct&vv=$vv>"
 echo Please input your name:
@@ -1135,8 +1150,8 @@ esac
 $hc
 eco "$fgx"
 rip="${REMOTE_ADDR##*:}"
-[ -z `cat "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
-eco Counter:`cat "$hos/ip"|wcl`
+[ -z `lct "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
+eco Counter:`lct "$hos/ip"|wcl`
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) 2016 by Mayx"
 }|gzip -c
