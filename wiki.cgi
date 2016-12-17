@@ -209,7 +209,7 @@ sleep 1
 until [ "$cmd" == "2" ]
 do
 clear
-echo "MaWiki   User:$na"
+echo "MaWiki User:$na"
 echo Total entry:`ls "$whk"|wcl`
 echo $fgx
 echo 1.Search
@@ -684,7 +684,24 @@ clj(){
 echo "<a href=$0?$1>$2</a>"
 }
 fid(){
+[ "$REQUEST_METHOD" == "POST" ]&&{
+glp&&wblg||{
+read b
+read c
+read ry
+echo "$ry" >>$rmk
+}
+}
 cat "$rmk"|hcs
+[ "${qus##*w}" == "s" ]||{
+glp&&eco "<a href=$0?m4>Login</a>"||{
+echo "<form method=post action=$0?$qus $ent>"
+echo Word:
+echo "<input type=text name=ry><br>"
+fmj
+$hc
+}
+}
 bk
 }
 zxth(){
@@ -696,7 +713,13 @@ echo "<input type=text name=ry><br>"
 fmj
 $hc
 }
-clj "${qus%&m2kk=*}" "Press there to back" 
+int="$(($int+1))"
+wbn="`ls "$pcz"|pdg`"
+[ -n "$wbn" ]&&{
+clj "${qus%=*}=$int" "Next Post $wbn"
+$hc
+}
+clj "${qus%&m2kk=*}" "Press there to back"
 }
 cc(){
 for lop in `ls "$rmk/opt/"`
@@ -728,7 +751,7 @@ echo "Please run it on shell"
 }
 case $qus in
 main)
-eco "MaWiki   User:$na"
+eco "MaWiki User:$na"
 eco "Total entry:`ls "$whk"|wcl`"
 [ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
 jld="`ls "$whk"|wcl`"
@@ -909,7 +932,7 @@ esac
 ;;
 m4)
 glp&&wblg||{
-echo "<form method=post action=$0?m4f $ent>"
+echo "<form method=post action=$0?m4ws $ent>"
 echo Input Main title:
 echo "<input type=text name=tit><br>"
 echo Tags:
@@ -919,7 +942,7 @@ echo "<input type=text name=wd><br>"
 fmj
 }
 ;;
-m4f)
+m4ws)
 glp&&wblg||{
 read b
 read c
@@ -992,7 +1015,7 @@ m6)
 glp&&wblg||{
 echo "<form method=post action=$0?m6e>"
 echo Input your new password:
-echo "<input type=text name=pw><br>"
+echo "<input type=password name=pw><br>"
 fmj
 }
 ;;
