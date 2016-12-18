@@ -164,11 +164,15 @@ do
 clear
 cat "$wbb"
 echo 'Input reply(Input e go back):'
+slp&&echo Input d delete the post
 [ "$1" == "1" ]&&echo "Input a to add friend:"
 read ry
 case $ry in
 e)
 break 1
+;;
+d)
+slp&&rm -rf "$wbb"&break 1
 ;;
 a)
 [ "$1" == "1" ]&&{
@@ -296,8 +300,7 @@ echo $fgx
 echo a.Back to MaWiki
 slp&&{
 echo b.Make a part
-echo c.Delete a part
-echo d.Release bulletin
+echo c.Release bulletin
 }
 $inc
 read pac
@@ -315,13 +318,6 @@ mkdir "$hos/main/$npn"
 }
 ;;
 c)
-slp&&{
-echo Which part to delete:
-read dpw
-rm -rf "$hos/main/$dpw"
-}
-;;
-d)
 slp&&{
 clear
 echo Input bulletin:
@@ -346,7 +342,7 @@ echo $fgx
 echo a.Make a new post
 bk
 fyx "$pcz"
-slp&&echo d.Delete a post
+slp&&echo d.Delete the part
 $inc
 read int
 case $int in
@@ -407,11 +403,7 @@ c)
 fy "$pcz"
 ;;
 d)
-slp&&{
-echo Which post delete:
-read tdw
-rm -rf "$pcz/$tdw"
-}
+slp&&rm -rf "$pcz"&break 1
 ;;
 *)
 wbn="`ls "$pcz"|pdg`"
