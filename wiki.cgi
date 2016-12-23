@@ -634,6 +634,7 @@ echo ""
 {
 echo '<title>Mabbs&Wiki</title>'
 hc='echo <br>'
+tb="<table border=1>"
 ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
@@ -727,13 +728,20 @@ read b
 read c
 }
 wpxc(){
+echo "$tb<tr>"
+[ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td>"
 while read nr
 do
 co=$(($co+1))
+echo "<tr><td>"
 clj "$1=$co" "$co.$nr"
-$hc
+echo "</td>"
+[ "$2" == "1" ]&&{
+[ -f "$pcz/$nr" ]&&echo "<td>$(((`cat "$pcz/$nr"|wcl`-2)/3))</td>"||echo "<td>$(((`cat "$pcz/$nr/talk"|wcl`-2)/3))</td>"
+}
+echo "</tr>"
 done
-eco "$fgx"
+echo "</tr></table>"
 }
 [ -e "$hos/" ]&&{
 clj "main" "Welecome to use Mabbs&Wiki"
@@ -754,7 +762,7 @@ sjs="`ls "$whk"|pdg`"
 echo "<form method=post action=$0?m1j $ent>"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
-echo "<table border=1><tr>"
+echo "$tb<tr>"
 echo "<td>MaBBS</td><td>"
 co=0
 ls "$hos/main"|while read bm
@@ -847,9 +855,8 @@ cse=${cze%&hfz}
 cse=${cse%&tpa}
 [ "$cse" == "$qus" ]&&{
 eco "`gaen`   Part:$pac"
-eco "$fgx"
 co="0"
-ls "$pcz"|wpxc "$qus&m2kk"
+ls "$pcz"|wpxc "$qus&m2kk" "1"
 clj "$qus&m2kk=a" "Make a new post"
 $hc
 bk
@@ -967,7 +974,6 @@ m5)
 sel="0"
 gaen
 $hc
-eco "$fgx"
 co="0"
 ls "$cfd"|wpxc "m5d"
 clj "m5w" "Write diary"
@@ -1064,7 +1070,6 @@ eco "File Explorer"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
-eco "$fgx"
 co="0"
 ls "$hos/up"|wpxc "m8d"
 eco "Upload Novel:(Upload other use <a href=ftp://$HTTP_HOST>FTP</a>)"
@@ -1087,8 +1092,7 @@ echo "${mu%.txt}.txt saved."
 m8v)
 sel="0"
 eco "Photo Viewer"
-eco "$fgx"
-echo "<table border=1><tr>"
+echo "$tb<tr>"
 co="0"
 mo="0"
 ls "$hos/up/"|while read nr
@@ -1106,7 +1110,6 @@ mo="0"
 }
 done
 echo "</tr></table>"
-eco "$fgx"
 clj "m8" "Back"
 ;;
 m8x=*)
@@ -1157,7 +1160,7 @@ echo OK
 ;;
 esac
 $hc
-eco "$fgx"
+echo "<hr>"
 rip="${REMOTE_ADDR##*:}"
 [ -z `cat "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
 eco Counter:`cat "$hos/ip"|wcl`
