@@ -632,7 +632,7 @@ read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
 echo ""
 {
-echo '<title>Mabbs&Wiki</title><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" >'
+echo '<title>Mabbs&Wiki</title>'
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -1037,7 +1037,7 @@ sel="0"
 eco "Chat Room"
 gaen
 $hc
-eco $fgx
+echo $thc
 co="0"
 cat "$cfd"|while read nr
 do
@@ -1045,7 +1045,7 @@ co=$(($co+1))
 clj "m7k=$co" "$co.${nr#*,}"
 $hc
 done
-eco "$fgx"
+echo $thc
 bk
 }
 ;;
