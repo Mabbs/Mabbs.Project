@@ -632,9 +632,11 @@ read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
 echo ""
 {
-echo '<title>Mabbs&Wiki</title>'
+echo '<title>Mabbs&Wiki</title><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" >'
 hc='echo <br>'
-tb="<table border=1>"
+tb="<table border=1><tr>"
+thc="</td></tr><tr><td>"
+tbo="</tr></table>"
 ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
@@ -728,7 +730,7 @@ read b
 read c
 }
 wpxc(){
-echo "$tb<tr>"
+echo "$tb"
 [ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td>"
 while read nr
 do
@@ -741,14 +743,16 @@ echo "</td>"
 }
 echo "</tr>"
 done
-echo "</tr></table>"
+echo "$tbo"
 }
+echo "$tb<td>"
 [ -e "$hos/" ]&&{
 clj "main" "Welecome to use Mabbs&Wiki"
 $hc
 }||{
 echo "Please run it on shell"
 }
+echo "$thc"
 case $qus in
 main)
 eco "MaWiki User:$na"
@@ -762,7 +766,7 @@ sjs="`ls "$whk"|pdg`"
 echo "<form method=post action=$0?m1j $ent>"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
-echo "$tb<tr>"
+echo "$tb"
 echo "<td>MaBBS</td><td>"
 co=0
 ls "$hos/main"|while read bm
@@ -771,8 +775,7 @@ co=$(($co+1))
 clj "m2k=$co" "$co.$bm (`ls "$hos/main/$bm/"|wcl`)"
 $hc
 done
-echo "</td></tr><tr>"
-echo "<td>Other</td><td>"
+echo "${thc}Other</td><td>"
 glp&&wblg||{
 clj "m4" "1.Make a new entry"
 $hc
@@ -784,7 +787,7 @@ clj "m7" "4.Chat Room"
 $hc
 clj "m8" "5.File Explorer"
 }
-echo "</td></tr></table>"
+echo "</td>$tbo"
 ;;
 m1j)
 read b
@@ -792,10 +795,9 @@ read c
 read kk
 kw=${kk%?}
 [ -n "$kw" ]&&{
-eco "Result"
-eco "$fgx"
+echo "Result$thc"
 eco "Entry"
-eco "-------"
+eco "$fgx"
 ls "$whk"|while read mr
 do
 eo=$(($eo+1))
@@ -805,10 +807,10 @@ $hc
 }
 done
 eco User
-eco "-------"
+eco "$fgx"
 ls "$hos/user"|grp "$kw"|hcs
 eco Post
-eco "-------"
+eco "$fgx"
 co=0
 ls "$hos/main"|while read nr
 do
@@ -824,7 +826,7 @@ $hc
 done
 done
 eco File
-eco "-------"
+eco "$fgx"
 ls "$hos/up"|while read mr
 do
 eo=$(($eo+1))
@@ -1092,7 +1094,7 @@ echo "${mu%.txt}.txt saved."
 m8v)
 sel="0"
 eco "Photo Viewer"
-echo "$tb<tr>"
+echo "$tb"
 co="0"
 mo="0"
 ls "$hos/up/"|while read nr
@@ -1109,7 +1111,7 @@ mo="0"
 }
 }
 done
-echo "</tr></table>"
+echo "$tbo"
 clj "m8" "Back"
 ;;
 m8x=*)
@@ -1160,12 +1162,11 @@ echo OK
 ;;
 esac
 $hc
-echo "<hr>"
 rip="${REMOTE_ADDR##*:}"
 [ -z `cat "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
-eco Counter:`cat "$hos/ip"|wcl`
+eco "${thc}Counter:`cat "$hos/ip"|wcl`"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
-echo "Copyright (C) 2016 by Mayx"
+echo "Copyright (C) 2016 by Mayx</td>$tbo"
 }|gzip -c
 }
 }
