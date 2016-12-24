@@ -737,7 +737,7 @@ read c
 }
 wpxc(){
 echo "$tb"
-[ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td>"
+[ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td><td>Sender</td><td>Send Time</td>"
 while read nr
 do
 co=$(($co+1))
@@ -745,7 +745,19 @@ echo "<tr><td>"
 clj "$1=$co" "$co.$nr"
 echo "</td>"
 [ "$2" == "1" ]&&{
-[ -f "$pcz/$nr" ]&&echo "<td>$(((`cat "$pcz/$nr"|wcl`-2)/3))</td>"||echo "<td>$(((`cat "$pcz/$nr/talk"|wcl`-2)/3))</td>"
+[ -f "$pcz/$nr" ]&&{
+echo "<td>$(((`cat "$pcz/$nr"|wcl`-2)/3))</td>"
+mo=0
+cat "$pcz/$nr"|while read nc
+do
+mo=$(($mo+1))
+[ $mo == 3 ]&&{
+ni="${nc#*:}"
+echo "<td>${ni%% *}</td><td>${ni#* }</td>"
+break 1
+}
+done
+}||echo "<td>$(((`cat "$pcz/$nr/talk"|wcl`-2)/3))</td>"
 }
 echo "</tr>"
 done
