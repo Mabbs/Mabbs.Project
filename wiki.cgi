@@ -648,6 +648,12 @@ pa="${HTTP_COOKIE#*pw=}"
 na="$ua"
 usv="$hos/user/$na"
 }||na="guest"
+fom(){
+echo "<form method=$1 action=$2 $3>"
+}
+ipt(){
+echo "<input type=text name=$1><br>"
+}
 eco(){
 echo "$1<br>"
 }
@@ -656,7 +662,7 @@ echo "<input type=submit value=Submit>"
 echo "</form>"
 }
 wblg(){
-echo "<form method=post action=$0>"
+fom post "$0"
 echo Login:
 eco "<input type=text name=lon>"
 echo Password:
@@ -690,9 +696,9 @@ echo "$ry" >>$rmk
 cat "$rmk"|hcs
 [ "${qus##*w}" == "s" ]||{
 glp&&eco "<a href=$0?m4>Login</a>"||{
-echo "<form method=post action=$0?$qus $ent>"
+fom post "$0?$qus" "$ent"
 echo Word:
-echo "<input type=text name=ry><br>"
+ipt ry
 fmj
 $hc
 }
@@ -702,9 +708,9 @@ bk
 zxth(){
 cat "$rmk"|hcs
 glp&&eco "<a href=$0?m4>Login</a>"||{
-echo "<form method=post action=$0?$qus $ent>"
+fom post "$0?$qus" "$ent"
 echo Input reply:
-echo "<input type=text name=ry><br>"
+ipt ry
 fmj
 $hc
 }
@@ -763,7 +769,7 @@ jld="`ls "$whk"|wcl`"
 int=$((`date +%s`%$jld+1))
 sjs="`ls "$whk"|pdg`"
 } 
-echo "<form method=post action=$0?m1j $ent>"
+fom post "$0?m1j" "$ent"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
 echo "$tb"
@@ -867,11 +873,11 @@ bk
 case $cse in
 a)
 glp&&wblg||{
-echo "<form method=post action=$0?m2k=$int&m2kk=as $ent>"
+fom post "$0?m2k=$int&m2kk=as" "$ent"
 echo Input the title:
-echo "<input type=text name=tit><br>"
+ipt tit
 echo Word:
-echo "<input type=text name=wd><br>"
+ipt wd
 fmj
 }
 ;;
@@ -933,13 +939,13 @@ esac
 ;;
 m4)
 glp&&wblg||{
-echo "<form method=post action=$0?m4ws $ent>"
+fom post "$0?m4ws" "$ent"
 echo Input Main title:
-echo "<input type=text name=tit><br>"
+ipt tit
 echo Tags:
-echo "<input type=text name=tag><br>"
+ipt tag
 echo Word:
-echo "<input type=text name=wd><br>"
+ipt wd
 fmj
 }
 ;;
@@ -985,9 +991,9 @@ $hc
 ;;
 m5w)
 [ -n "`ls "$cfd"|grp "$mt"`" ]&&fid||{
-echo "<form method=post action=$0?m5ws $ent>"
+fom post "$0?m5ws" "$ent"
 echo "Word:"
-echo "<input type=text name=wd><br>"
+ipt wd
 fmj
 }
 ;;
@@ -1013,7 +1019,7 @@ esac
 ;;
 m6)
 glp&&wblg||{
-echo "<form method=post action=$0?m6e>"
+fom post "$0?m6e"
 echo Input your new password:
 echo "<input type=password name=pw><br>"
 fmj
@@ -1060,7 +1066,8 @@ echo "$ry" >>$wbb
 echo >>$wbb
 }
 cat "$wbb"|hcs
-echo "<form method=post action=$0?m7k=$int $ent>Input reply:<input type=text name=ry><br>"
+fom post "$0?m7k=$int" "$ent"
+echo "Input reply:<input type=text name=ry><br>"
 fmj
 $hc
 clj "m7" "Press there to back"
@@ -1075,7 +1082,8 @@ $hc
 co="0"
 ls "$hos/up"|wpxc "m8d"
 eco "Upload Novel:(Upload other use <a href=ftp://$HTTP_HOST>FTP</a>)"
-echo "<form method=post action=$0?m8u $ent> <input type=file name=file>"
+fom post "action=$0?m8u" "$ent" 
+echo "<input type=file name=file>"
 fmj
 $hc
 bk
@@ -1135,14 +1143,14 @@ clj "m8v" "Back"
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
-echo "<form method=post action=$0?zct&vv=$vv>"
+fom post "$0?zct&vv=$vv"
 echo Please input your name:
-echo "<input type=text name=name><br>"
+ipt name
 echo Please input new password:
 echo "<input type=password name=pw><br>"
 eco "Please input verifcation code:"
 eco $vv
-echo "<input type=text name=vv><br>"
+ipt vv
 fmj
 ;;
 zct*)
