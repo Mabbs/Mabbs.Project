@@ -746,9 +746,15 @@ clj "$1=$co" "$co.$nr"
 echo "</td>"
 [ "$2" == "1" ]&&{
 [ -f "$pcz/$nr" ]&&{
-echo "<td>$(((`cat "$pcz/$nr"|wcl`-2)/3))</td>"
+ift="$pcz/$nr"
+ifo="$ift"
+}||{
+ift="$pcz/$nr/talk"
+ifo="$pcz/$nr/main"
+} 
+echo "<td>$(((`cat "$ift"|wcl`-2)/3))</td>"
 mo=0
-cat "$pcz/$nr"|while read nc
+cat "$ifo"|while read nc
 do
 mo=$(($mo+1))
 [ $mo == 3 ]&&{
@@ -757,7 +763,6 @@ echo "<td>${ni%% *}</td><td>${ni#* }</td>"
 break 1
 }
 done
-}||echo "<td>$(((`cat "$pcz/$nr/talk"|wcl`-2)/3))</td>"
 }
 echo "</tr>"
 done
@@ -1186,7 +1191,7 @@ rip="${REMOTE_ADDR##*:}"
 [ -z `cat "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
 eco "${thc}Counter:`cat "$hos/ip"|wcl`"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
-echo "Copyright (C) 2016 by Mayx</td>$tbo"
+echo "Copyright (C) `date +%Y` by Mayx</td>$tbo"
 }|gzip -c
 }
 }
