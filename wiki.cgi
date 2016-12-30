@@ -15,6 +15,13 @@ echo Post master:$na  `date` >>$stt
 echo $wod >>$stt
 echo >>$stt
 }
+nwe(){
+echo $mt>>$mwt
+echo Made by:$na `date`>>$mwt
+echo Tags:$tgs>>$mwt
+echo $fgx >>$mwt
+echo $wd >>$mwt
+}
 gaen(){
 tho=`date +%H`
 ztg=night
@@ -237,9 +244,9 @@ read kw
 [ -n "$kw" ]&&{
 clear
 echo Result
-echo $fgx
+echo $fgx$fgx
 echo Entry
-echo -------
+echo $fgx
 co="0"
 ls "$whk"|grp "$kw"|while read jg
 do
@@ -247,16 +254,16 @@ co=$(($co+1))
 echo a$co.${jg%%+*}
 done
 echo User
-echo -------
+echo $fgx
 ls "$hos/user"|grp "$kw"
 echo Post
-echo -------
+echo $fgx
 ls "$hos/main"|while read nr
 do
 ls "$hos/main/$nr"|grp "$kw"
 done
-echo "Novel"
-echo "-------"
+echo Novel
+echo $fgx
 sel="0"
 ls "$hos/up"|grp ".txt"|grp "$kw"|pxcx "b"
 echo Which one:
@@ -322,7 +329,7 @@ slp&&{
 clear
 echo Input bulletin:
 read bul
-echo "$bul" > $hos/bul
+echo "$bul">$hos/bul
 }
 ;;
 *)
@@ -484,12 +491,8 @@ read tgs
 echo Word:
 read wd
 mwt="$whk/$mt+$tgs"
-echo $mt>>$mwt
-echo Made by:$na `date`>>$mwt
-echo Tags:$tgs>>$mwt
-echo $fgx >>$mwt
-echo $wd >>$mwt
-rmk="$whk/$mt+$tgs"
+nwe
+rmk="$mwt"
 fid
 }
 }
@@ -970,20 +973,16 @@ m4ws)
 glp&&wblg||{
 read b
 read c
-read tit
+read mt
 fgy
-read tag
+read tgs
 fgy
 read wd
-tit="${tit%?}"
-tag="${tag%?}"
-mwt="$whk/$tit+$tag"
-[ -z "`ls "$whk"|grp "$tit"`" ]&&{
-echo $tit>>$mwt
-echo Made by:$na `date`>>$mwt
-echo Tags:$tag>>$mwt
-echo $fgx >>$mwt
-echo "$wd" >>$mwt
+mt="${mt%?}"
+tgs="${tgs%?}"
+mwt="$whk/$mt+$tgs"
+[ -z "`ls "$whk"|grp "$mt"`" ]&&{
+nwe
 rmk="$mwt"
 fid
 }
