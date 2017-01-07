@@ -8,19 +8,18 @@ glp(){
 [ "$na" == "guest" ]
 }
 plx(){
-stt="$pcz/$tit"
-echo $tit >>$stt
-echo $fgx >>$stt
-echo Post master:$na  `date` >>$stt
-echo $wod >>$stt
-echo >>$stt
+echo "$tit
+$fgx
+Post master:$na  `date`
+$wod
+">>"$pcz/$tit"
 }
 nwe(){
-echo $mt>>$mwt
-echo Made by:$na `date`>>$mwt
-echo Tags:$tgs>>$mwt
-echo $fgx >>$mwt
-echo $wd >>$mwt
+echo "$mt
+Made by:$na `date`
+Tags:$tgs
+$fgx
+$wd">>$mwt
 }
 gaen(){
 tho=`date +%H`
@@ -84,8 +83,8 @@ echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room" "$hos/up"
 >"$hos/ip"
 nep="$gly"
-echo Master name:$gly
-echo New password:
+echo "Master name:$gly"
+echo "New password:"
 read npd
 zcc
 }
@@ -192,9 +191,9 @@ read fnm
 *)
 [ -n "$ry" ]&&{
 glp&&wblg||{
-echo $na  `date` >>$wbb
-echo $ry >>$wbb
-echo >>$wbb
+echo "$na  `date`
+$ry
+">>$wbb
 }
 }
 ;;
@@ -220,19 +219,19 @@ sleep 1
 until [ "$cmd" == "2" ]
 do
 clear
-echo "MaWiki User:$na"
-echo Total entry:`ls "$whk"|wcl`
-echo $fgx
-echo 1.Search
-echo 2.Exit
-echo 3.Go to MaBBS
-echo 4.Random
-echo 5.Novel Viewer
+echo "MaWiki User:$na
+Total entry:`ls "$whk"|wcl`
+$fgx
+1.Search
+2.Exit
+3.Go to MaBBS
+4.Random
+5.Novel Viewer"
 glp&&echo 6.Login||{
-echo 6.Make a new entry
-echo 7.Diary 
-echo 8.Reset your password
-echo 9.Chat Room
+echo "6.Make a new entry
+7.Diary 
+8.Reset your password
+9.Chat Room"
 }
 echo Input command:
 read cmd
@@ -243,27 +242,27 @@ echo Input Keyword or tags:
 read kw
 [ -n "$kw" ]&&{
 clear
-echo Result
-echo $fgx$fgx
-echo Entry
-echo $fgx
+echo "Result
+$fgx$fgx
+Entry
+$fgx"
 co="0"
 ls "$whk"|grp "$kw"|while read jg
 do
 co=$(($co+1))
 echo a$co.${jg%%+*}
 done
-echo User
-echo $fgx
+echo "User
+$fgx"
 ls "$hos/user"|grp "$kw"
-echo Post
-echo $fgx
+echo "Post
+$fgx"
 ls "$hos/main"|while read nr
 do
 ls "$hos/main/$nr"|grp "$kw"
 done
-echo Novel
-echo $fgx
+echo "Novel
+$fgx"
 sel="0"
 ls "$hos/up"|grp ".txt"|grp "$kw"|pxcx "b"
 echo Which one:
@@ -303,8 +302,8 @@ do
 co=$(($co+1))
 echo $co.$bm \(`ls "$hos/main/$bm/"|wcl`\)
 done
-echo $fgx
-echo a.Back to MaWiki
+echo "$fgx
+a.Back to MaWiki"
 slp&&{
 echo b.Make a part
 echo c.Release bulletin
@@ -341,12 +340,12 @@ while true
 do
 pcz="$hos/main/$pac"
 clear
-echo `gaen`   Part:$pac
-echo $fgx
+echo "`gaen`   Part:$pac
+$fgx"
 co="0"
 ls "$pcz"|pxcx
-echo $fgx
-echo a.Make a new post
+echo "$fgx
+a.Make a new post"
 bk
 fyx "$pcz"
 slp&&echo d.Delete the part
@@ -384,10 +383,10 @@ echo 'Use talking?[Y/N]:'
 read utk
 tsm="$pcz/$tit"
 mkdir "$tsm"
-echo $tit >>$tsm/main
-echo $fgx >>$tsm/main
-echo Vote master:$na  `date` >>$tsm/main
-echo $wod >>$tsm/main
+echo "$tit
+$fgx
+Vote master:$na  `date`
+$wod">>$tsm/main
 echo $opt>>$tsm/data
 mkdir "$tsm/opt" 
 for sle in $oph
@@ -519,8 +518,8 @@ gaen
 echo $fgx
 co="0"
 ls "$cfd"|pxcx
-echo $fgx
-echo a.Write diary
+echo "$fgx
+a.Write diary"
 bk
 fyx "$cfd"
 $inc
@@ -533,8 +532,8 @@ mt="`date +%y.%m.%d`"
 echo Word:
 read wd
 mwt="$cfd/$mt"
-echo Diary:$mt>>$mwt
-echo $wd >>$mwt
+echo "Diary:$mt
+$wd">>$mwt
 }
 rmk="$cfd/$mt"
 fid
@@ -622,15 +621,14 @@ int="${qus#*=}"
 cfd="$hos/up"
 wbn="`ls "$cfd"|pdg`"
 [ -f "$cfd/$wbn" ]&&{
-[ "${wbn##*.}" == "jpg" ]&&cot="image/jpeg"||cot="application/octet-stream"
-echo "Content-type:$cot;charset=utf-8"
-echo "Content-Disposition:filename=$wbn"
-echo ""
+echo "Content-type:application/octet-stream;charset=utf-8
+Content-Disposition:attachment;filename=$wbn
+"
 [ -n "$wbn" ]&&cat "$cfd/$wbn"
 }
 }||{
-echo "Content-Encoding:gzip"
-echo "Content-type:text/html;charset=utf-8"
+echo "Content-Encoding:gzip
+Content-type:text/html;charset=utf-8"
 read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
 echo ""
@@ -667,7 +665,7 @@ echo "</form>"
 wblg(){
 fom post "$0"
 echo Login:
-eco "<input type=text name=lon>"
+ipt lon
 echo Password:
 eco "<input type=password name=pw>"
 fmj
@@ -822,8 +820,7 @@ read kk
 kw=${kk%?}
 [ -n "$kw" ]&&{
 echo "Result$thc"
-eco "Entry"
-eco "$fgx"
+echo "$tb<td>Entry</td><td>User</td><td>Post</td><td>File$thc"
 ls "$whk"|while read mr
 do
 eo=$(($eo+1))
@@ -832,11 +829,9 @@ clj "m1g=$eo" "${mr%%+*}"
 $hc
 }
 done
-eco User
-eco "$fgx"
+echo "</td><td>"
 ls "$hos/user"|grp "$kw"|hcs
-eco Post
-eco "$fgx"
+echo "</td><td>"
 co=0
 ls "$hos/main"|while read nr
 do
@@ -851,8 +846,7 @@ $hc
 }
 done
 done
-eco File
-eco "$fgx"
+echo "</td><td>"
 ls "$hos/up"|while read mr
 do
 eo=$(($eo+1))
@@ -861,6 +855,7 @@ clj "m8d=$eo" "$mr"
 $hc
 }
 done
+echo "</td>$tbo" 
 }
 ;;
 m1g=*)
@@ -1077,9 +1072,9 @@ wbb="$hos/room/$wbn"
 read b
 read c
 read ry
-echo $na  `date` >>$wbb
-echo "$ry" >>$wbb
-echo >>$wbb
+echo "$na  `date`
+$ry
+">>$wbb
 }
 cat "$wbb"|hcs
 fom post "$0?m7k=$int" "$ent"
