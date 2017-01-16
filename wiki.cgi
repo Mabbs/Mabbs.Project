@@ -19,7 +19,7 @@ echo "$mt
 Made by:$na `date`
 Tags:$tgs
 $fgx
-$wd">>$mwt
+$wd">$mwt
 }
 gaen(){
 tho=`date +%H`
@@ -779,14 +779,26 @@ echo "Please run it on shell"
 echo "$thc"
 case $qus in
 main)
-eco "MaWiki User:$na"
+echo "MaWiki User:"
+fne="User-$na+User space"
+[ -e "$whk/$fne" ]&&{
+ls "$whk"|while read mr
+do
+eo=$(($eo+1))
+[ "$mr" == "$fne" ]&&{
+clj "m1g=$eo" "$na "
+}
+done
+clj "cop" "Rewrite"
+}||clj "cop" "$na"
+$hc
 eco "Total entry:`ls "$whk"|wcl`"
 [ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
 jld="`ls "$whk"|wcl`"
 [ "$jld" == "0" ]||{
 int=$((`date +%s`%$jld+1))
 sjs="`ls "$whk"|pdg`"
-} 
+}
 fom post "$0?m1j" "$ent"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
@@ -830,7 +842,20 @@ $hc
 }
 done
 echo "</td><td>"
-ls "$hos/user"|grp "$kw"|hcs
+ls "$hos/user"|grp "$kw"|while read nr
+do
+fne="User-$nr+User space"
+[ -e "$whk/$fne" ]&&{
+ls "$whk"|while read mr
+do
+eo=$(($eo+1))
+[ "$mr" == "$fne" ]&&{
+clj "m1g=$eo" "$nr"
+$hc
+}
+done
+}||eco "$nr"
+done
 echo "</td><td>"
 co=0
 ls "$hos/main"|while read nr
@@ -932,9 +957,12 @@ glp&&wblg||{
 read b
 read c
 read ry
-echo $na  `date` >>$rmk
-echo "$ry" >>$rmk
-echo >>$rmk
+ry="${ry%?}"
+[ -n "$ry" ]&&{
+echo "$na  `date`
+$ry
+">>$rmk
+}
 }
 }
 [ -f "$rmk" ]&&zxth||{
@@ -1072,9 +1100,12 @@ wbb="$hos/room/$wbn"
 read b
 read c
 read ry
+ry="${ry%?}"
+[ -n "$ry" ]&&{
 echo "$na  `date`
 $ry
 ">>$wbb
+}
 }
 cat "$wbb"|hcs
 fom post "$0?m7k=$int" "$ent"
@@ -1093,7 +1124,7 @@ $hc
 co="0"
 ls "$hos/up"|wpxc "m8d"
 eco "Upload Novel:(Upload other use <a href=ftp://$HTTP_HOST>FTP</a>)"
-fom post "action=$0?m8u" "$ent" 
+fom post "$0?m8u" "$ent" 
 echo "<input type=file name=file>"
 fmj
 $hc
@@ -1150,6 +1181,27 @@ break 1
 done
 $hc
 clj "m8v" "Back"
+;;
+cop)
+glp&&wblg||{
+fom post "$0?cows" "$ent"
+echo Word:
+ipt wd
+fmj
+}
+;;
+cows)
+glp&&wblg||{
+read b
+read c
+read wd
+mt="User-$na"
+tgs="User space"
+mwt="$whk/$mt+$tgs"
+nwe
+rmk="$mwt"
+fid
+}
 ;;
 zc)
 vv="`cat /proc/sys/kernel/random/uuid`"
