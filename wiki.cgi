@@ -736,6 +736,23 @@ read a
 read b
 read c
 }
+usg(){
+fne="User-$nr+User space" 
+if [ -e "$whk/$fne" ]
+then
+ls "$whk"|while read mr
+do
+eo=$(($eo+1))
+[ "$mr" == "$fne" ]&&{
+clj "m1g=$eo" "$nr"
+}
+done
+[ "$1" == "1" ]&&clj "cop" "Rewrite"
+else
+[ "$1" == "1" ]&&clj "cop" "$na"||echo "$nr"
+fi
+$hc
+}
 wpxc(){
 echo "$tb"
 [ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td><td>Sender</td><td>Send Time</td>"
@@ -780,18 +797,8 @@ echo "$thc"
 case $qus in
 main)
 echo "MaWiki User:"
-fne="User-$na+User space"
-[ -e "$whk/$fne" ]&&{
-ls "$whk"|while read mr
-do
-eo=$(($eo+1))
-[ "$mr" == "$fne" ]&&{
-clj "m1g=$eo" "$na "
-}
-done
-clj "cop" "Rewrite"
-}||clj "cop" "$na"
-$hc
+nr="$na"
+usg 1
 eco "Total entry:`ls "$whk"|wcl`"
 [ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
 jld="`ls "$whk"|wcl`"
@@ -844,17 +851,7 @@ done
 echo "</td><td>"
 ls "$hos/user"|grp "$kw"|while read nr
 do
-fne="User-$nr+User space"
-[ -e "$whk/$fne" ]&&{
-ls "$whk"|while read mr
-do
-eo=$(($eo+1))
-[ "$mr" == "$fne" ]&&{
-clj "m1g=$eo" "$nr"
-$hc
-}
-done
-}||eco "$nr"
+usg
 done
 echo "</td><td>"
 co=0
