@@ -7,6 +7,15 @@ fgx="============"
 glp(){
 [ "$na" == "guest" ]
 }
+bfx(){
+[ -n "$ry" ]&&{
+glp&&wblg||{
+echo "$na  `date` #$(((`cat "$wbb"|wcl`-2)/3+1))
+$ry
+">>$wbb
+}
+}
+}
 plx(){
 echo "$tit
 $fgx
@@ -189,13 +198,7 @@ read fnm
 }
 ;;
 *)
-[ -n "$ry" ]&&{
-glp&&wblg||{
-echo "$na  `date`
-$ry
-">>$wbb
-}
-}
+bfx
 ;;
 esac
 done
@@ -753,6 +756,16 @@ else
 fi
 $hc
 }
+wfx(){
+[ "$REQUEST_METHOD" == "POST" ]&&{
+[ -f "$wbb" ]||wbb="$pcz/$wbn/talk"
+read b
+read c
+read ry
+ry="${ry%?}"
+bfx
+}
+}
 wpxc(){
 echo "$tb"
 [ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td><td>Sender</td><td>Send Time</td>"
@@ -947,28 +960,16 @@ wbb="$pcz/$wbn"
 int="$cse"
 wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
-rmk="$pcz/$wbn"
-[ "$REQUEST_METHOD" == "POST" ]&&{
-glp&&wblg||{
-[ -f "$rmk" ]||rmk="$pcz/$wbn/talk" 
-read b
-read c
-read ry
-ry="${ry%?}"
-[ -n "$ry" ]&&{
-echo "$na  `date`
-$ry
-">>$rmk
-}
-}
-}
-[ -f "$rmk" ]&&zxth||{
-cat "$rmk/main"|hcs
+wbb="$pcz/$wbn"
+wfx
+rmk="$wbb"
+[ -f "$wbb" ]&&zxth||{
+cat "$wbb/main"|hcs
 eco $fgx
-cc `cat "$rmk/data"`
+cc `cat "$wbb/data"`
 eco $fgx
-[ -e "$rmk/talk" ]&&{
-rmk="$rmk/talk"
+[ -e "$wbb/talk" ]&&{
+rmk="$wbb/talk"
 zxth
 }
 }
@@ -1093,17 +1094,7 @@ wwn="`cat "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
-[ "$REQUEST_METHOD" == "POST" ]&&{
-read b
-read c
-read ry
-ry="${ry%?}"
-[ -n "$ry" ]&&{
-echo "$na  `date`
-$ry
-">>$wbb
-}
-}
+wfx
 cat "$wbb"|hcs
 fom post "$0?m7k=$int" "$ent"
 echo "Input reply:<input type=text name=ry><br>"
