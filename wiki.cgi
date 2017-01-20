@@ -618,12 +618,21 @@ done
 esac
 done
 }||{
-txc(){
-echo "$co.$bm(`ls "$hos/main/$bm/"|wcl`)"
-}
 ctj(){
 echo "Content-type:$1;charset=utf-8"
 }
+rxh(){
+co=0
+ls "$hos/main"|while read bm
+do
+co=$(($co+1))
+txc="$co.$bm(`ls "$hos/main/$bm/"|wcl`)"
+[ $1 == 1 ]&&{
+clj "m2k=$co" "$txc"
+$hc
+}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co</link></item>"
+done
+} 
 qus="$QUERY_STRING"
 case $qus in
 m8d=*)
@@ -643,12 +652,7 @@ wsf="http://$HTTP_HOST/cgi-bin/$0"
 echo '
 <?xml version="1.0"?><rss version="2.0"><channel><title>MaBBS</title>'
 echo "<link>${wsf}?main</link>"
-co=0
-ls "$hos/main"|while read bm
-do
-co=$(($co+1))
-echo "<item><title>`txc`</title><link>${wsf}?m2k=$co</link></item>"
-done
+rxh
 echo "</channel></rss>"
 ;;
 *)
@@ -847,13 +851,7 @@ echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
 echo "$tb"
 echo "<td>MaBBS</td><td>"
-co=0
-ls "$hos/main"|while read bm
-do
-co=$(($co+1))
-clj "m2k=$co" "`txc`"
-$hc
-done
+rxh 1
 echo "${thc}Other</td><td>"
 glp&&wblg||{
 clj "m4" "1.Make a new entry"
@@ -874,12 +872,14 @@ read c
 read kk
 kw=${kk%?}
 [ -n "$kw" ]&&{
-echo "Result$thc"
-echo "$tb<td>Entry</td><td>User</td><td>Post</td><td>File$thc"
+pkc(){
+[ -n "`echo "$mr"|grp "$kw"`" ]
+}
+echo "Result$thc$tb<td>Entry</td><td>User</td><td>Post</td><td>File$thc"
 ls "$whk"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grp "$kw"`" ]&&{
+pkc&&{
 clj "m1g=$eo" "${mr%%+*}"
 $hc
 }
@@ -898,7 +898,7 @@ eo=0
 ls "$hos/main/$nr"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grp "$kw"`" ]&&{
+pkc&&{
 clj "m2k=$co&m2kk=$eo" "$mr"
 $hc
 }
@@ -908,7 +908,7 @@ echo "</td><td>"
 ls "$hos/up"|while read mr
 do
 eo=$(($eo+1))
-[ -n "`echo "$mr"|grp "$kw"`" ]&&{
+pkc&&{
 clj "m8d=$eo" "$mr"
 $hc
 }
