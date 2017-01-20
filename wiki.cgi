@@ -19,7 +19,7 @@ $ry
 plx(){
 echo "$tit
 $fgx
-Post master:$na  `date`
+Post master:$na  `date` #1
 $wod
 ">>"$pcz/$tit"
 }
@@ -618,25 +618,47 @@ done
 esac
 done
 }||{
+txc(){
+echo "$co.$bm(`ls "$hos/main/$bm/"|wcl`)"
+}
+ctj(){
+echo "Content-type:$1;charset=utf-8"
+}
 qus="$QUERY_STRING"
-[ "${qus%%=*}" == "m8d" ]&&{
+case $qus in
+m8d=*)
 int="${qus#*=}" 
 cfd="$hos/up"
 wbn="`ls "$cfd"|pdg`"
 [ -f "$cfd/$wbn" ]&&{
-echo "Content-type:application/octet-stream;charset=utf-8
-Content-Disposition:attachment;filename=$wbn
+ctj "application/octet-stream"
+echo "Content-Disposition:attachment;filename=$wbn
 "
 [ -n "$wbn" ]&&cat "$cfd/$wbn"
 }
-}||{
-echo "Content-Encoding:gzip
-Content-type:text/html;charset=utf-8"
+;;
+rss)
+ctj "text/xml"
+wsf="http://$HTTP_HOST/cgi-bin/$0"
+echo '
+<?xml version="1.0"?><rss version="2.0"><channel><title>MaBBS</title>'
+echo "<link>${wsf}?main</link>"
+co=0
+ls "$hos/main"|while read bm
+do
+co=$(($co+1))
+echo "<item><title>`txc`</title><link>${wsf}?m2k=$co</link></item>"
+done
+echo "</channel></rss>"
+;;
+*)
+echo "Content-Encoding:gzip"
+ctj "text/html"
 read tl
 [ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
 echo ""
 {
-echo '<title>Mabbs&Wiki</title>'
+echo "<title>Mabbs&Wiki</title><link rel="alternate" type="application/rss+xml" title="MaBBS" href="$0?rss" >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -655,11 +677,17 @@ usv="$hos/user/$na"
 fom(){
 echo "<form method=$1 action=$2 $3>"
 }
-ipt(){
-echo "<input type=text name=$1><br>"
+hcs(){
+while read pd
+do
+eco "$pd"
+done
 }
 eco(){
 echo "$1<br>"
+}
+ipt(){
+echo "<input type=text name=$1><br>"
 }
 fmj(){
 echo "<input type=submit value=Submit>"
@@ -675,12 +703,6 @@ fmj
 $hc
 $hc
 echo "Dont have?<a href=$0?zc>Join us</a>"
-}
-hcs(){
-while read pd
-do
-eco "$pd"
-done
 }
 bk(){
 clj "main" "Back"
@@ -782,7 +804,7 @@ ifo="$ift"
 }||{
 ift="$pcz/$nr/talk"
 ifo="$pcz/$nr/main"
-} 
+}
 echo "<td>$(((`cat "$ift"|wcl`-2)/3))</td>"
 mo=0
 cat "$ifo"|while read nc
@@ -790,7 +812,8 @@ do
 mo=$(($mo+1))
 [ $mo == 3 ]&&{
 ni="${nc#*:}"
-echo "<td>${ni%% *}</td><td>${ni#* }</td>"
+nl="${ni#* }"
+echo "<td>${ni%% *}</td><td>${nl%%#*}</td>"
 break 1
 }
 done
@@ -828,7 +851,7 @@ co=0
 ls "$hos/main"|while read bm
 do
 co=$(($co+1))
-clj "m2k=$co" "$co.$bm (`ls "$hos/main/$bm/"|wcl`)"
+clj "m2k=$co" "`txc`"
 $hc
 done
 echo "${thc}Other</td><td>"
@@ -1227,5 +1250,6 @@ eco "${thc}Counter:`cat "$hos/ip"|wcl`"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) `date +%Y` by Mayx</td>$tbo"
 }|gzip -c
-}
+;;
+esac
 }
