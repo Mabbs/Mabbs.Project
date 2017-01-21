@@ -658,7 +658,7 @@ echo "</channel></rss>"
 *)
 read tl
 [ "${tl%%=*}" == "lon" ]&&{
-echo "HTTP/1.1 301 Moved Permanently
+echo "HTTP/1.1 302 Found
 Location:$0?main
 Set-Cookie:$tl;PATH=/"
 }||{
