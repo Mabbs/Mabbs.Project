@@ -656,10 +656,15 @@ rxh
 echo "</channel></rss>"
 ;;
 *)
+read tl
+[ "${tl%%=*}" == "lon" ]&&{
+echo "HTTP/1.1 301 Moved Permanently
+Location:$0?main
+Set-Cookie:$tl;PATH=/"
+}||{
 echo "Content-Encoding:gzip"
 ctj "text/html"
-read tl
-[ "${tl%%=*}" == "lon" ]&&echo "Set-Cookie:$tl;PATH=/"
+}
 echo ""
 {
 echo "<title>Mabbs&Wiki</title><link rel="alternate" type="application/rss+xml" title="MaBBS" href="$0?rss" >"
