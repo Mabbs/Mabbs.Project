@@ -1,11 +1,19 @@
 #!/system/bin/ash
 hos="/sdcard/ba"
+bsn="MaBBS"
+wsn="MaWiki"
+zsn="$bsn&Wiki"
+wcm="Welecome to use $zsn"
 whk="$hos/wiki"
 gly="SYSOP"
 err="echo Error!"
 fgx="============"
 glp(){
 [ "$na" == "guest" ]
+}
+uck(){
+vv="`cat /proc/sys/kernel/random/uuid`"
+vv="${vv%%-*}"
 }
 bfx(){
 [ -n "$ry" ]&&{
@@ -87,7 +95,7 @@ echo "selected it."
 }
 [ -z "$REMOTE_ADDR" ]&&{
 inc="echo Input number or command:"
-[ -e "$hos/" ]&&echo 'Welecome to use MaWiki&BBS'||{
+[ -e "$hos/" ]&&echo "$wcm"||{
 echo Installing...
 mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room" "$hos/up"
 >"$hos/ip"
@@ -134,8 +142,7 @@ read npd
 chk="`ls "$hos/user"|grp "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
 echo Please input verifcation code:
-vv="`cat /proc/sys/kernel/random/uuid`"
-vv="${vv%%-*}"
+uck
 echo $vv
 read vc
 [ "$vc" == "$vv" ]&&{
@@ -147,6 +154,7 @@ sleep 1
 ;;
 esac
 }
+true
 }
 fid(){
 while true
@@ -222,12 +230,12 @@ sleep 1
 until [ "$cmd" == "2" ]
 do
 clear
-echo "MaWiki User:$na
+echo "$wsn User:$na
 Total entry:`ls "$whk"|wcl`
 $fgx
 1.Search
 2.Exit
-3.Go to MaBBS
+3.Go to $bsn
 4.Random
 5.Novel Viewer"
 glp&&echo 6.Login||{
@@ -306,7 +314,7 @@ co=$(($co+1))
 echo $co.$bm \(`ls "$hos/main/$bm/"|wcl`\)
 done
 echo "$fgx
-a.Back to MaWiki"
+a.Back to $wsn"
 slp&&{
 echo b.Make a part
 echo c.Release bulletin
@@ -650,8 +658,8 @@ rss)
 ctj "text/xml"
 wsf="http://$HTTP_HOST/cgi-bin/$0"
 echo '
-<?xml version="1.0"?><rss version="2.0"><channel><title>MaBBS</title>'
-echo "<link>${wsf}?main</link>"
+<?xml version="1.0"?><rss version="2.0"><channel><title>'
+echo "$bsn</title><link>${wsf}?main</link>"
 rxh
 echo "</channel></rss>"
 ;;
@@ -667,7 +675,7 @@ ctj "text/html"
 }
 echo ""
 {
-echo "<title>Mabbs&Wiki</title><link rel="alternate" type="application/rss+xml" title="MaBBS" href="$0?rss" >"
+echo "<title>$zsn</title><link rel="alternate" type="application/rss+xml" title="$bsn" href="$0?rss" >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -771,7 +779,7 @@ read b
 read c
 }
 usg(){
-fne="User-$nr+User space" 
+fne="User-$nr+User space"
 if [ -e "$whk/$fne" ]
 then
 ls "$whk"|while read mr
@@ -833,7 +841,7 @@ echo "$tbo"
 }
 echo "$tb<td>"
 [ -e "$hos/" ]&&{
-clj "main" "Welecome to use Mabbs&Wiki"
+clj "main" "$wcm"
 $hc
 }||{
 echo "Please run it on shell"
@@ -841,7 +849,7 @@ echo "Please run it on shell"
 echo "$thc"
 case $qus in
 main)
-echo "MaWiki User:"
+echo "$wsn User:"
 nr="$na"
 usg 1
 eco "Total entry:`ls "$whk"|wcl`"
@@ -855,7 +863,7 @@ fom post "$0?m1j" "$ent"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
 echo "$tb"
-echo "<td>MaBBS</td><td>"
+echo "<td>$bsn</td><td>"
 rxh 1
 echo "${thc}Other</td><td>"
 glp&&wblg||{
@@ -1220,8 +1228,7 @@ fid
 }
 ;;
 zc)
-vv="`cat /proc/sys/kernel/random/uuid`"
-vv="${vv%%-*}"
+uck
 fom post "$0?zct&vv=$vv"
 echo Please input your name:
 ipt name
