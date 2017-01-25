@@ -5,6 +5,9 @@ wsn="MaWiki"
 zsn="$bsn&Wiki"
 wcm="Welecome to use $zsn"
 whk="$hos/wiki"
+wna="Please input your name:"
+wnb="Please input new password:"
+wnc="Please input verifcation code:"
 gly="SYSOP"
 err="echo Error!"
 fgx="============"
@@ -135,13 +138,13 @@ echo Join us?[Y/N]:
 read ju
 case $ju in
 Y|y)
-echo Please input your name:
+echo $wna
 read nep
-echo Please input new password:
+echo $wnb
 read npd
 chk="`ls "$hos/user"|grp "$nep"`"
 [ "$chk" == "$nep" -o "$nep" = "" ]||{
-echo Please input verifcation code:
+echo $wnc
 uck
 echo $vv
 read vc
@@ -1230,11 +1233,11 @@ fid
 zc)
 uck
 fom post "$0?zct&vv=$vv"
-echo Please input your name:
+echo $wna
 ipt name
-echo Please input new password:
+echo $wnb
 echo "<input type=password name=pw><br>"
-eco "Please input verifcation code:"
+eco "$wnc"
 eco $vv
 ipt vv
 fmj
