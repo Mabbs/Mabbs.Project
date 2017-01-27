@@ -1136,7 +1136,8 @@ wbb="$hos/room/$wbn"
 wfx
 cat "$wbb"|hcs
 fom post "$0?m7k=$int" "$ent"
-echo "Input reply:<input type=text name=ry><br>"
+echo "Input reply:"
+ipt ry
 fmj
 $hc
 clj "m7" "Press there to back"
@@ -1150,7 +1151,7 @@ clj "m8v" "Photo Viewer"
 $hc
 co="0"
 ls "$hos/up"|wpxc "m8d"
-eco "Upload Novel:(Upload other use <a href=ftp://$HTTP_HOST>FTP</a>)"
+eco "Upload File:"
 fom post "$0?m8u" "$ent" 
 echo "<input type=file name=file>"
 fmj
@@ -1159,14 +1160,14 @@ bk
 ;;
 m8u)
 read meta
-read ct
+read a
+read b
 fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
-st="$hos/up/${mu%.txt}.txt"
-echo "Uploader:$na">$st
+st="$hos/up/$mu"
 cat >>$st
-echo "${mu%.txt}.txt saved."
+echo "${mu}saved."
 ;;
 m8v)
 sel="0"
