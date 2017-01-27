@@ -1167,7 +1167,7 @@ nu="${fnm#\"*}"
 mu="${nu%\"*}"
 st="$hos/up/$mu"
 cat >>$st
-echo "${mu}saved."
+echo "$mu saved."
 ;;
 m8v)
 sel="0"
