@@ -14,9 +14,15 @@ fgx="============"
 glp(){
 [ "$na" == "guest" ]
 }
+cpd(){
+[ "$wjs" -ge "$(($sel+10))" ]
+}
 uck(){
 vv="`cat /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
+}
+ypd(){
+[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]
 }
 bfx(){
 [ -n "$ry" ]&&{
@@ -115,10 +121,12 @@ slp(){
 [ "$na" == "$gly" ]
 }
 fy(){
-[ `ls "$1"|wcl` -ge 10 ]&&sel="$(($sel+10))" 
+wjs="`ls "$1"|wcl`"
+cpd&&sel="$(($sel+10))" 
 }
 fyx(){
-[ `ls "$1"|wcl` -ge 10 ]&&echo c.Next page
+wjs="`ls "$1"|wcl`"
+cpd&&echo c.Next page
 }
 wblg(){
 clear
@@ -218,7 +226,7 @@ pxcx(){
 while read nr
 do
 co=$(($co+1))
-[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]&&echo "$1$co.$nr"
+ypd&&echo "$1$co.$nr"
 done
 }
 cc(){
@@ -639,7 +647,7 @@ do
 co=$(($co+1))
 txc="$co.$bm(`ls "$hos/main/$bm/"|wcl`)"
 [ $1 == 1 ]&&{
-clj "m2k=$co" "$txc"
+clj "m2k=$co=0" "$txc"
 $hc
 }||echo "<item><title>$txc</title><link>${wsf}?m2k=$co</link></item>"
 done
@@ -683,6 +691,7 @@ hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
 tbo="</tr></table>"
+thq="</td><td>"
 ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
@@ -771,7 +780,7 @@ clj "${qus%&m2kk=*}" "Press there to back"
 cc(){
 for lop in `ls "$rmk/opt/"`
 do
-clj "$qus&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
+clj "${qus%=0}&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
 $hc
 shift
 done
@@ -810,12 +819,15 @@ bfx
 }
 wpxc(){
 echo "$tb"
-[ "$2" == "1" ]&&echo "<td>Post</td><td>Reply</td><td>Sender</td><td>Send Time</td>"
+[ "$2" == "1" ]&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"
+sel="${qus##*=}"
 while read nr
 do
 co=$(($co+1))
+ypd&&{
 echo "<tr><td>"
-clj "$1=$co" "$co.$nr"
+[ "$2" == "1" ]&&a="=0"
+clj "$1=$co$a" "$co.$nr"
 echo "</td>"
 [ "$2" == "1" ]&&{
 [ -f "$pcz/$nr" ]&&{
@@ -833,14 +845,17 @@ mo=$(($mo+1))
 [ $mo == 3 ]&&{
 ni="${nc#*:}"
 nl="${ni#* }"
-echo "<td>${ni%% *}</td><td>${nl%%#*}</td>"
+echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 }
 done
 }
 echo "</tr>"
+}
 done
 echo "$tbo"
+cpd&&clj "${qus%=*}=$(($sel+10))" "Next page"
+$hc
 }
 echo "$tb<td>"
 [ -e "$hos/" ]&&{
@@ -866,19 +881,19 @@ fom post "$0?m1j" "$ent"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
 echo "$tb"
-echo "<td>$bsn</td><td>"
+echo "<td>$bsn$thq"
 rxh 1
-echo "${thc}Other</td><td>"
+echo "${thc}Other$thq"
 glp&&wblg||{
 clj "m4" "1.Make a new entry"
 $hc
-clj "m5" "2.Diary"
+clj "m5=0" "2.Diary"
 $hc
 clj "m6" "3.Reset your password"
 $hc
 clj "m7" "4.Chat Room"
 $hc
-clj "m8" "5.File Explorer"
+clj "m8=0" "5.File Explorer"
 }
 echo "</td>$tbo"
 ;;
@@ -891,7 +906,7 @@ kw=${kk%?}
 pkc(){
 [ -n "`echo "$mr"|grp "$kw"`" ]
 }
-echo "Result$thc$tb<td>Entry</td><td>User</td><td>Post</td><td>File$thc"
+echo "Result$thc$tb<td>Entry${thq}User${thq}Post${thq}File$thc"
 ls "$whk"|while read mr
 do
 eo=$(($eo+1))
@@ -900,12 +915,12 @@ clj "m1g=$eo" "${mr%%+*}"
 $hc
 }
 done
-echo "</td><td>"
+echo "$thq"
 ls "$hos/user"|grp "$kw"|while read nr
 do
 usg
 done
-echo "</td><td>"
+echo "$thq"
 co=0
 ls "$hos/main"|while read nr
 do
@@ -915,12 +930,12 @@ ls "$hos/main/$nr"|while read mr
 do
 eo=$(($eo+1))
 pkc&&{
-clj "m2k=$co&m2kk=$eo" "$mr"
+clj "m2k=$co&m2kk=$eo=0" "$mr"
 $hc
 }
 done
 done
-echo "</td><td>"
+echo "$thq"
 ls "$hos/up"|while read mr
 do
 eo=$(($eo+1))
@@ -941,28 +956,30 @@ fid
 }
 ;;
 m2k=*)
-ind="${qus#*=}"
-int="${ind%&m2kk=*}"
+ind="${qus#m2k=*}"
+ine="${ind%=*}"
+int="${ine%&m2kk=*}"
 pac="`ls "$hos/main"|pdg`"
 [ -n "$pac" ]&&{
 sel="0"
 pcz="$hos/main/$pac"
 cze="${qus#*&m2kk=}"
-cse=${cze%&hfz}
-cse=${cse%&tpa}
+cse=${cze%&tpa}
 [ "$cse" == "$qus" ]&&{
 eco "`gaen`   Part:$pac"
+wjs=`ls "$pcz"|wcl`
 co="0"
-ls "$pcz"|wpxc "$qus&m2kk" "1"
-clj "$qus&m2kk=a" "Make a new post"
+ls "$pcz"|wpxc "m2k=$int&m2kk" "1"
+clj "m2k=$int&m2kk=a=0" "Make a new post"
 $hc
 bk
 }
+cse=${cse%=0}
 }
 case $cse in
 a)
 glp&&wblg||{
-fom post "$0?m2k=$int&m2kk=as" "$ent"
+fom post "$0?m2k=$int&m2kk=as=0" "$ent"
 echo Input the title:
 ipt tit
 echo Word:
@@ -1054,11 +1071,12 @@ cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
 case $qus in
-m5)
+m5=*)
 sel="0"
 gaen
 $hc
 co="0"
+wjs=`ls "$cfd"|wcl`
 ls "$cfd"|wpxc "m5d"
 clj "m5w" "Write diary"
 $hc
@@ -1127,8 +1145,7 @@ bk
 ;;
 m7k=*)
 cfd="$usv/chat"
-ind="${qus#*=}"
-int="${ind%&hfz}"
+int="${qus#*=}"
 wwn="`cat "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
@@ -1143,13 +1160,13 @@ $hc
 clj "m7" "Press there to back"
 }
 ;;
-m8)
-sel="0"
+m8=*)
 eco "File Explorer"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
 co="0"
+wjs=`ls "$hos/up"|wcl`
 ls "$hos/up"|wpxc "m8d"
 eco "Upload File:"
 fom post "$0?m8u" "$ent" 
