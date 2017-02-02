@@ -772,10 +772,11 @@ $hc
 int="$(($int+1))"
 wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
-clj "${qus%=*}=$int" "Next Post $wbn"
+qhn="${qus%=*}"
+clj "${qhn%=*}=$int=0" "Next Post $wbn"
 $hc
 }
-clj "${qus%&m2kk=*}" "Press there to back"
+clj "${qus%&m2kk=*}=0" "Back"
 }
 cc(){
 for lop in `ls "$rmk/opt/"`
@@ -1157,7 +1158,7 @@ echo "Input reply:"
 ipt ry
 fmj
 $hc
-clj "m7" "Press there to back"
+clj "m7" "Back"
 }
 ;;
 m8=*)
