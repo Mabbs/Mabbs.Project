@@ -93,13 +93,9 @@ glp&&wblg||{
 vck="`cat "$wbb/opt/$1"|grp "$na"`"
 [ "$na" == "$vck" ]||{
 echo $na >> "$wbb/opt/$1"
-[ -z "$HTTP_HOST" ]&&{
+}
 cat "$wbb/opt/$1"
-}||{
-cat "$wbb/opt/$1"|hcs
-}
 echo "selected it."
-}
 }
 }
 [ -z "$REMOTE_ADDR" ]&&{
@@ -649,7 +645,7 @@ txc="$co.$bm(`ls "$hos/main/$bm/"|wcl`)"
 [ $1 == 1 ]&&{
 clj "m2k=$co=0" "$txc"
 $hc
-}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co</link></item>"
+}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=0</link></item>"
 done
 } 
 qus="$QUERY_STRING"
@@ -1010,7 +1006,7 @@ wbn="`ls "$pcz"|pdg`"
 ry="${cse#*=}"
 [ -n "$wbn" ]&&{
 wbb="$pcz/$wbn"
-[ -e "$wbb/opt/$ry" ]&&chse $ry
+[ -e "$wbb/opt/$ry" ]&&chse "$ry"|hcs
 }
 }
 }||{
@@ -1197,18 +1193,17 @@ ls "$hos/up/"|while read nr
 do
 co=$(($co+1))
 [ "${nr##*.}" == "jpg" ]&&{
-mo=$(($mo+1))
 echo "<td>"
 clj "m8x=$co" "<img src=$0?m8d=$co width=80px height=60px />"
 echo "</td>"
-[ "$mo" == "3" ]&&{
+[ "$((${co}%3))" == "0" ]&&{
 echo "</tr><tr>"
 mo="0"
 }
 }
 done
 echo "$tbo"
-clj "m8" "Back"
+clj "m8=0" "Back"
 ;;
 m8x=*)
 int="${qus#*=}" 
