@@ -11,6 +11,7 @@ wnc="Please input verifcation code:"
 gly="SYSOP"
 err="echo Error!"
 fgx="============"
+rip="$REMOTE_ADDR"
 glp(){
 [ "$na" == "guest" ]
 }
@@ -59,7 +60,7 @@ grp(){
 while read nr
 do
 case $nr in
-*${1}*)
+*"${1}"*)
 echo $nr
 ;;
 esac
@@ -98,7 +99,7 @@ cat "$wbb/opt/$1"
 echo "selected it."
 }
 }
-[ -z "$REMOTE_ADDR" ]&&{
+[ -z "$rip" ]&&{
 inc="echo Input number or command:"
 [ -e "$hos/" ]&&echo "$wcm"||{
 echo Installing...
@@ -1273,8 +1274,7 @@ echo OK
 ;;
 esac
 $hc
-rip="${REMOTE_ADDR##*:}"
-[ -z `cat "$hos/ip"|grp "$rip"` ]&&echo "$rip">>$hos/ip
+[ -n "`cat "$hos/ip"|grp "$rip"`" ]||echo "$rip">>$hos/ip
 eco "${thc}Counter:`cat "$hos/ip"|wcl`"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) `date +%Y` by Mayx</td>$tbo"
