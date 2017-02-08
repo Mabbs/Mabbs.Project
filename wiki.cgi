@@ -1,4 +1,4 @@
-#!/system/bin/ash
+#!/system/bin/ash -x
 hos="/sdcard/ba"
 bsn="MaBBS"
 wsn="MaWiki"
@@ -16,14 +16,17 @@ glp(){
 [ "$na" == "guest" ]
 }
 cpd(){
-[ "$wjs" -ge "$(($sel+10))" ]
+[ "$sel" -gt "0" ]
 }
 uck(){
 vv="`cat /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
 }
 ypd(){
-[ "$sel" -le "$co" -a "$(($sel+10))" -ge "$co" ]
+[ "$sel" -le "$co" -a "$(($sel+10))" -gt "$co" ]
+}
+wjw(){
+sel="$((`ls "$1"|wcl`-9))"
 }
 bfx(){
 [ -n "$ry" ]&&{
@@ -118,11 +121,9 @@ slp(){
 [ "$na" == "$gly" ]
 }
 fy(){
-wjs="`ls "$1"|wcl`"
-cpd&&sel="$(($sel+10))" 
+cpd&&sel="$(($sel-10))" 
 }
 fyx(){
-wjs="`ls "$1"|wcl`"
 cpd&&echo c.Next page
 }
 wblg(){
@@ -354,10 +355,10 @@ echo "$bul">$hos/bul
 int="$pac"
 pac="`ls "$hos/main"|pdg`"
 [ -n "$pac" ]&&{
-sel="0"
+pcz="$hos/main/$pac"
+wjw "$pcz"
 while true
 do
-pcz="$hos/main/$pac"
 clear
 echo "`gaen`   Part:$pac
 $fgx"
@@ -466,7 +467,7 @@ done
 ;;
 5)
 cfd="$hos/up"
-sel="0"
+wjw "$cfd"
 while true
 do
 clear
@@ -529,7 +530,7 @@ fid
 7)
 glp&&wblg||{
 cfd="$usv/diary"
-sel="0"
+wjw "$cfd"
 while true
 do
 clear
@@ -585,7 +586,6 @@ read nrd
 9)
 glp&&wblg||{
 cfd="$usv/chat"
-sel="0"
 while true
 do
 clear
@@ -642,11 +642,13 @@ co=0
 ls "$hos/main"|while read bm
 do
 co=$(($co+1))
-txc="$co.$bm(`ls "$hos/main/$bm/"|wcl`)"
+eu=""$hos/main/$bm""
+wjw "$eu"
+txc="$co.$bm(`ls "$eu"|wcl`)"
 [ $1 == 1 ]&&{
-clj "m2k=$co=0" "$txc"
+clj "m2k=$co=$sel" "$txc"
 $hc
-}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=0</link></item>"
+}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=$sel</link></item>"
 done
 } 
 qus="$QUERY_STRING"
@@ -699,6 +701,7 @@ pa="${HTTP_COOKIE#*pw=}"
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
 usv="$hos/user/$na"
+cfd="$usv/diary"
 }||na="guest"
 fom(){
 echo "<form method=$1 action=$2 $3>"
@@ -773,7 +776,8 @@ qhn="${qus%=*}"
 clj "${qhn%=*}=$int=0" "Next Post $wbn"
 $hc
 }
-clj "${qus%&m2kk=*}=0" "Back"
+wjw "$pcz"
+clj "${qus%&m2kk=*}=$sel" "Back"
 }
 cc(){
 for lop in `ls "$rmk/opt/"`
@@ -885,13 +889,15 @@ echo "${thc}Other$thq"
 glp&&wblg||{
 clj "m4" "1.Make a new entry"
 $hc
-clj "m5=0" "2.Diary"
+wjw "$cfd"
+clj "m5=$sel" "$hos/main/$bm"`" "2.Diary"
 $hc
 clj "m6" "3.Reset your password"
 $hc
 clj "m7" "4.Chat Room"
 $hc
-clj "m8=0" "5.File Explorer"
+wjw "$hos/up"
+clj "m8=$sel" "5.File Explorer"
 }
 echo "</td>$tbo"
 ;;
@@ -1065,7 +1071,6 @@ fid
 ;;
 m5*)
 glp&&wblg||{
-cfd="$usv/diary"
 mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
 case $qus in
@@ -1074,7 +1079,6 @@ sel="0"
 gaen
 $hc
 co="0"
-wjs=`ls "$cfd"|wcl`
 ls "$cfd"|wpxc "m5d"
 clj "m5w" "Write diary"
 $hc
@@ -1164,7 +1168,6 @@ gaen
 clj "m8v" "Photo Viewer"
 $hc
 co="0"
-wjs=`ls "$hos/up"|wcl`
 ls "$hos/up"|wpxc "m8d"
 eco "Upload File:"
 fom post "$0?m8u" "$ent" 
