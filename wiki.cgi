@@ -1,4 +1,4 @@
-#!/system/bin/ash -x
+#!/system/bin/ash
 hos="/sdcard/ba"
 bsn="MaBBS"
 wsn="MaWiki"
@@ -642,7 +642,7 @@ co=0
 ls "$hos/main"|while read bm
 do
 co=$(($co+1))
-eu=""$hos/main/$bm""
+eu="$hos/main/$bm"
 wjw "$eu"
 txc="$co.$bm(`ls "$eu"|wcl`)"
 [ $1 == 1 ]&&{
@@ -856,7 +856,7 @@ echo "</tr>"
 }
 done
 echo "$tbo"
-cpd&&clj "${qus%=*}=$(($sel+10))" "Next page"
+cpd&&clj "${qus%=*}=$(($sel-10))" "Next page"
 $hc
 }
 echo "$tb<td>"
@@ -890,7 +890,7 @@ glp&&wblg||{
 clj "m4" "1.Make a new entry"
 $hc
 wjw "$cfd"
-clj "m5=$sel" "$hos/main/$bm"`" "2.Diary"
+clj "m5=$sel" "2.Diary"
 $hc
 clj "m6" "3.Reset your password"
 $hc
