@@ -18,6 +18,9 @@ glp(){
 cpd(){
 [ "$sel" -gt "0" ]
 }
+rck(){
+[ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o "$nep" = "" ]
+}
 uck(){
 vv="`cat /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
@@ -149,7 +152,7 @@ read nep
 echo $wnb
 read npd
 chk="`ls "$hos/user"|grp "$nep"`"
-[ "$chk" == "$nep" -o "$nep" = "" ]||{
+rck||{
 echo $wnc
 uck
 echo $vv
@@ -1269,7 +1272,7 @@ nep="${tid#*=}"
 vv="${tl##*=}"
 [ "$vv" == "$vs" ]&&{
 chk="`ls "$hos/user"|grp "$nep"`"
-[ "$chk" == "$nep" -o "$nep" = "" ]||{
+rck||{
 zcc
 echo OK
 }
