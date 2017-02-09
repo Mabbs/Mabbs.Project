@@ -19,7 +19,7 @@ cpd(){
 [ "$sel" -gt "0" ]
 }
 rck(){
-[ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o "$nep" = "" ]
+[ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o -z "$nep" ]
 }
 uck(){
 vv="`cat /proc/sys/kernel/random/uuid`"
