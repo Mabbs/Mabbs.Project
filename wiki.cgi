@@ -17,8 +17,9 @@ glp(){
 }
 hpd(){
 [ "$1" == "1" ]
+}
 cpd(){
-[ "$sel" -gt "0" ]
+[ "$sel" -gt "1" ]
 }
 rck(){
 [ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o -z "$nep" ]
@@ -39,14 +40,21 @@ glp&&wblg||{
 echo "$na  `date` #$((`cat "$wbb"|wcl`/3+1))
 $ry
 ">>$wbb
+cat "$wbb"|while read nc
+do
+ni="${nc#*:}"
+echo "$na reply you on $wbn">>$hos/user/${ni%% *}/noce
+break 1
+done
 }
 }
 }
 plx(){
+wbn="$tit"
 wbb="$pcz/$tit"
 echo "Post master:$na  `date` #1
 $wod
-">>"$wbb"
+">>$wbb
 zxth
 }
 nwe(){
@@ -199,14 +207,14 @@ zxth(){
 while true
 do
 clear
-hpd||{
+hpd $1||{
 echo "$wbn
 $fgx"
 }
 cat "$wbb"
 echo 'Input reply(Input e go back):'
 slp&&echo Input d delete the post
-hpd&&echo "Input a to add friend:"
+hpd $1&&echo "Input a to add friend:"
 read ry
 case $ry in
 e)
@@ -216,7 +224,7 @@ d)
 slp&&rm -rf "$wbb"&break 1
 ;;
 a)
-[ "$1" == "1" ]&&{
+hpd $1&&{
 clear
 echo Input friend name:
 read fnm
@@ -258,7 +266,7 @@ $fgx
 5.Novel Viewer"
 glp&&echo 6.Login||{
 echo "6.Make a new entry
-7.Diary 
+7.Diary
 8.Reset your password
 9.Chat Room"
 }
@@ -412,9 +420,7 @@ echo 'Use talking?[Y/N]:'
 read utk
 tsm="$pcz/$tit"
 mkdir "$tsm"
-echo "$tit
-$fgx
-Vote master:$na  `date`
+echo "Vote master:$na  `date`
 $wod">>$tsm/main
 echo $opt>>$tsm/data
 mkdir "$tsm/opt" 
@@ -422,10 +428,7 @@ for sle in $oph
 do
 >"$tsm/opt/$sle"
 done
-[ "$utk" == "y" ]&&{
-echo "Talk
-$fgx" >>"$tsm/talk"
-}
+[ "$utk" == "y" ]&&>"$tsm/talk"
 }
 ;; 
 esac
@@ -654,7 +657,7 @@ co=$(($co+1))
 eu="$hos/main/$bm"
 wjw "$eu"
 txc="$co.$bm(`ls "$eu"|wcl`)"
-hpd&&{
+hpd $1&&{
 clj "m2k=$co=$sel" "$txc"
 $hc
 }||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=$sel</link></item>"
@@ -778,14 +781,14 @@ read ry
 ry="${ry%?}"
 bfx
 }
-hpd||{
+hpd $1||{
 eco "$wbn"
-eco "$fgx"
+echo "$thc"
 }
 cat "$wbb"|hcs
 [ "$cse" == "as" ]||{
 glp&&eco "<a href=$0?m4>Login</a>"||{
-hpd&&hyt="$0?m7k=$int"||hyt="$0?$qus"
+hpd $1&&hyt="$0?m7k=$int"||hyt="$0?$qus"
 fom post "$hyt" "$ent"
 echo Input reply:
 ipt ry
@@ -793,7 +796,7 @@ fmj
 $hc
 }
 }
-hpd&&bkz="m7"||{
+hpd $1&&bkz="m7"||{
 int="$(($int+1))"
 wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
@@ -830,25 +833,26 @@ eo=$(($eo+1))
 clj "m1g=$eo" "$nr"
 }
 done
-hpd&&clj "cop" "Rewrite"
+hpd $1&&clj "cop" "Rewrite"
 else
-hpd&&clj "cop" "$na"||echo "$nr"
+hpd $1&&clj "cop" "$na"||echo "$nr"
 fi
+glp||clj "ntf" "Notice"
 $hc
 }
 wpxc(){
 echo "$tb"
-[ "$2" == "1" ]&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"
+hpd "$2"&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"
 sel="${qus##*=}"
 while read nr
 do
 co=$(($co+1))
 ypd&&{
 echo "<tr><td>"
-[ "$2" == "1" ]&&a="=0"
+hpd "$2"&&a="=0"
 clj "$1=$co$a" "$co.$nr"
 echo "</td>"
-[ "$2" == "1" ]&&{
+hpd "$2" &&{
 [ -f "$pcz/$nr" ]&&{
 ift="$pcz/$nr"
 ifo="$ift"
@@ -1035,9 +1039,9 @@ wbn="`ls "$pcz"|pdg`"
 wbb="$pcz/$wbn"
 [ -f "$wbb" ]&&zxth||{
 cat "$wbb/main"|hcs
-eco $fgx
+echo $thc
 cc `cat "$wbb/data"`
-eco $fgx
+echo $thc
 [ -e "$wbb/talk" ]&&{
 wbb="$wbb/talk"
 zxth
@@ -1250,6 +1254,10 @@ nwe
 rmk="$mwt"
 fid
 }
+;;
+ntf)
+cat "$usv/noce"|hcs
+bk
 ;;
 zc)
 uck
