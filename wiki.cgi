@@ -15,6 +15,8 @@ rip="$REMOTE_ADDR"
 glp(){
 [ "$na" == "guest" ]
 }
+hpd(){
+[ "$1" == "1" ]
 cpd(){
 [ "$sel" -gt "0" ]
 }
@@ -34,18 +36,18 @@ sel="$((`ls "$1"|wcl`-9))"
 bfx(){
 [ -n "$ry" ]&&{
 glp&&wblg||{
-echo "$na  `date` #$(((`cat "$wbb"|wcl`-2)/3+1))
+echo "$na  `date` #$((`cat "$wbb"|wcl`/3+1))
 $ry
 ">>$wbb
 }
 }
 }
 plx(){
-echo "$tit
-$fgx
-Post master:$na  `date` #1
+wbb="$pcz/$tit"
+echo "Post master:$na  `date` #1
 $wod
-">>"$pcz/$tit"
+">>"$wbb"
+zxth
 }
 nwe(){
 echo "$mt
@@ -74,7 +76,7 @@ done
 }
 zcc(){
 usk="$hos/user/$nep"
-mkdir -p "$usk/diary" "$usk/mail"
+mkdir "$usk/diary"
 >"$usk/chat"
 echo $npd>>$usk/pwd
 }
@@ -197,10 +199,14 @@ zxth(){
 while true
 do
 clear
+hpd||{
+echo "$wbn
+$fgx"
+}
 cat "$wbb"
 echo 'Input reply(Input e go back):'
 slp&&echo Input d delete the post
-[ "$1" == "1" ]&&echo "Input a to add friend:"
+hpd&&echo "Input a to add friend:"
 read ry
 case $ry in
 e)
@@ -417,8 +423,8 @@ do
 >"$tsm/opt/$sle"
 done
 [ "$utk" == "y" ]&&{
-echo Talk>>"$tsm/talk"
-echo $fgx >>"$tsm/talk"
+echo "Talk
+$fgx" >>"$tsm/talk"
 }
 }
 ;; 
@@ -648,7 +654,7 @@ co=$(($co+1))
 eu="$hos/main/$bm"
 wjw "$eu"
 txc="$co.$bm(`ls "$eu"|wcl`)"
-[ $1 == 1 ]&&{
+hpd&&{
 clj "m2k=$co=$sel" "$txc"
 $hc
 }||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=$sel</link></item>"
@@ -764,14 +770,30 @@ $hc
 bk
 }
 zxth(){
-cat "$rmk"|hcs
+[ "$REQUEST_METHOD" == "POST" ]&&{
+[ -f "$wbb" ]||wbb="$pcz/$wbn/talk"
+read b
+read c
+read ry
+ry="${ry%?}"
+bfx
+}
+hpd||{
+eco "$wbn"
+eco "$fgx"
+}
+cat "$wbb"|hcs
+[ "$cse" == "as" ]||{
 glp&&eco "<a href=$0?m4>Login</a>"||{
-fom post "$0?$qus" "$ent"
+hpd&&hyt="$0?m7k=$int"||hyt="$0?$qus"
+fom post "$hyt" "$ent"
 echo Input reply:
 ipt ry
 fmj
 $hc
 }
+}
+hpd&&bkz="m7"||{
 int="$(($int+1))"
 wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
@@ -780,12 +802,14 @@ clj "${qhn%=*}=$int=0" "Next Post $wbn"
 $hc
 }
 wjw "$pcz"
-clj "${qus%&m2kk=*}=$sel" "Back"
+bkz="${qus%&m2kk=*}=$sel"
+}
+clj "$bkz" "Back"
 }
 cc(){
-for lop in `ls "$rmk/opt/"`
+for lop in `ls "$wbb/opt/"`
 do
-clj "${qus%=0}&jg=$lop&tpa" "$lop.$1 (`cat "$rmk/opt/$lop"|wcl`)"
+clj "${qus%=0}&jg=$lop&tpa" "$lop.$1 (`cat "$wbb/opt/$lop"|wcl`)"
 $hc
 shift
 done
@@ -806,21 +830,11 @@ eo=$(($eo+1))
 clj "m1g=$eo" "$nr"
 }
 done
-[ "$1" == "1" ]&&clj "cop" "Rewrite"
+hpd&&clj "cop" "Rewrite"
 else
-[ "$1" == "1" ]&&clj "cop" "$na"||echo "$nr"
+hpd&&clj "cop" "$na"||echo "$nr"
 fi
 $hc
-}
-wfx(){
-[ "$REQUEST_METHOD" == "POST" ]&&{
-[ -f "$wbb" ]||wbb="$pcz/$wbn/talk"
-read b
-read c
-read ry
-ry="${ry%?}"
-bfx
-}
 }
 wpxc(){
 echo "$tb"
@@ -842,17 +856,13 @@ ifo="$ift"
 ift="$pcz/$nr/talk"
 ifo="$pcz/$nr/main"
 }
-echo "<td>$(((`cat "$ift"|wcl`-2)/3))</td>"
-mo=0
+echo "<td>$((`cat "$ift"|wcl`/3))</td>"
 cat "$ifo"|while read nc
 do
-mo=$(($mo+1))
-[ $mo == 3 ]&&{
 ni="${nc#*:}"
 nl="${ni#* }"
 echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
-}
 done
 }
 echo "</tr>"
@@ -1004,7 +1014,6 @@ read wod
 tit="${tit%?}"
 [ -n "`ls "$pcz"|grp "$tit"`" ]||{
 plx
-echo "OK!"
 }
 }
 ;;
@@ -1024,15 +1033,13 @@ int="$cse"
 wbn="`ls "$pcz"|pdg`"
 [ -n "$wbn" ]&&{
 wbb="$pcz/$wbn"
-wfx
-rmk="$wbb"
 [ -f "$wbb" ]&&zxth||{
 cat "$wbb/main"|hcs
 eco $fgx
 cc `cat "$wbb/data"`
 eco $fgx
 [ -e "$wbb/talk" ]&&{
-rmk="$wbb/talk"
+wbb="$wbb/talk"
 zxth
 }
 }
@@ -1155,14 +1162,7 @@ wwn="`cat "$cfd"|pdg`"
 wbn="${wwn%%,*}"
 [ -n "$wbn" ]&&{
 wbb="$hos/room/$wbn"
-wfx
-cat "$wbb"|hcs
-fom post "$0?m7k=$int" "$ent"
-echo "Input reply:"
-ipt ry
-fmj
-$hc
-clj "m7" "Back"
+zxth 1
 }
 ;;
 m8=*)
