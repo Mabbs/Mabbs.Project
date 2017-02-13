@@ -42,7 +42,7 @@ $ry
 ">>$wbb
 cat "$wbb"|while read nc
 do
-ni="${nc#*:}"
+ni="${nc#*r:}"
 echo "$na reply you on $wbn">>$hos/user/${ni%% *}/noce
 break 1
 done
