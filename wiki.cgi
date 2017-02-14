@@ -12,6 +12,9 @@ gly="SYSOP"
 err="echo Error!"
 fgx="============"
 rip="$REMOTE_ADDR"
+pbz(){
+[ -n "`ls "$pcz"|grp "$tit"`" ]
+}
 glp(){
 [ "$na" == "guest" ]
 }
@@ -43,7 +46,8 @@ $ry
 cat "$wbb"|while read nc
 do
 ni="${nc#*r:}"
-echo "$na reply you on $wbn">>$hos/user/${ni%% *}/noce
+[ -n "$qus" ]&&zlj="`clj "$qus" "$wbn"`"||zlj="$wbn"
+echo "$na reply you on $zlj">>$hos/user/${ni%% *}/noce
 break 1
 done
 }
@@ -399,7 +403,7 @@ case $cht in
 clear
 echo Input the title:
 read tit
-[ -n "`ls "$pcz"|grp "$tit"`" ]||{
+pbz||{
 echo Word:
 read wod
 plx
@@ -409,7 +413,7 @@ plx
 clear
 echo Input the title:
 read tit
-[ -n "`ls "$pcz"|grp "$tit"`" ]||{
+pbz||{
 echo Main word:
 read wod
 echo "Option head:"
@@ -483,12 +487,12 @@ wjw "$cfd"
 while true
 do
 clear
-echo Novel Viewer
-echo $fgx
+echo "Novel Viewer
+$fgx"
 co="0"
 ls "$cfd"|grp ".txt"|pxcx
-echo $fgx
-echo You can Upload novel on Web
+echo "$fgx
+You can Upload novel on Web"
 bk
 fyx "$cfd"
 $inc
@@ -1016,9 +1020,7 @@ read tit
 fgy
 read wod
 tit="${tit%?}"
-[ -n "`ls "$pcz"|grp "$tit"`" ]||{
-plx
-}
+pbz||plx
 }
 ;;
 *)
@@ -1076,7 +1078,7 @@ read wd
 mt="${mt%?}"
 tgs="${tgs%?}"
 mwt="$whk/$mt+$tgs"
-[ -z "`ls "$whk"|grp "$mt"`" ]&&{
+[ -z "`ls "$whk"|grp "$mt"`" ]&&{ 
 nwe
 rmk="$mwt"
 fid
