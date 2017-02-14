@@ -351,18 +351,25 @@ echo $co.$bm \(`ls "$hos/main/$bm/"|wcl`\)
 done
 echo "$fgx
 a.Back to $wsn"
+glp||echo "b.Notice"
 slp&&{
-echo b.Make a part
-echo c.Release bulletin
+echo c.Make a part
+echo d.Release bulletin
 }
 $inc
 read pac
-[ -n "$pac" ]||pac="#"
 case $pac in
 a)
 break 1
 ;;
 b)
+glp&&wblg||{
+clear
+cat "$usv/noce"
+read nul
+}
+;;
+c)
 clear
 slp&&{
 echo New part name:
@@ -370,7 +377,7 @@ read npn
 mkdir "$hos/main/$npn"
 }
 ;;
-c)
+d)
 slp&&{
 clear
 echo Input bulletin:
@@ -720,6 +727,7 @@ tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
 tbo="</tr></table>"
 thq="</td><td>"
+spa="echo <input type=password name=pw><br>"
 ent="enctype=multipart/form-data"
 uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
@@ -1144,7 +1152,7 @@ m6)
 glp&&wblg||{
 fom post "m6e"
 echo Input your new password:
-echo "<input type=password name=pw><br>"
+$spa
 fmj
 }
 ;;
@@ -1204,7 +1212,7 @@ fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
 st="$hos/up/$mu"
-cat >>$st
+cat >$st
 echo "$mu saved."
 ;;
 m8v)
@@ -1278,7 +1286,7 @@ fom post "zct&vv=$vv"
 echo $wna
 ipt name
 echo $wnb
-echo "<input type=password name=pw><br>"
+$spa
 eco "$wnc"
 eco $vv
 ipt vv
