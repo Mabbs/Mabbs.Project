@@ -16,6 +16,9 @@ rip="$REMOTE_ADDR"
 pbz(){
 [ -n "`ls "$pcz"|grp "$tit"`" ]
 }
+cpo(){
+co=$(($co+1))
+}
 clj(){
 echo "<a href=$j?$1>$2</a>"
 }
@@ -105,10 +108,10 @@ echo "$nb"
 }
 pdg(){
 wbn=""
-co="0"
+co=0
 while read nr
 do
-co=$(($co+1))
+cpo
 [ "$int" == "$co" ]&&echo "$nr"
 done
 }
@@ -247,7 +250,7 @@ done
 pxcx(){
 while read nr
 do
-co=$(($co+1))
+cpo
 ypd&&echo "$1$co.$nr"
 done
 }
@@ -290,10 +293,10 @@ echo "Result
 $fgx$fgx
 Entry
 $fgx"
-co="0"
+co=0
 ls "$whk"|grp "$kw"|while read jg
 do
-co=$(($co+1))
+cpo
 echo a$co.${jg%%+*}
 done
 echo "User
@@ -343,7 +346,7 @@ echo $fgx
 co=0
 ls "$hos/main"|while read bm
 do
-co=$(($co+1))
+cpo
 echo $co.$bm \(`ls "$hos/main/$bm/"|wcl`\)
 done
 echo "$fgx
@@ -387,7 +390,7 @@ do
 clear
 echo "`gaen`   Part:$pac
 $fgx"
-co="0"
+co=0
 ls "$pcz"|pxcx
 echo "$fgx
 a.Make a new post"
@@ -493,7 +496,7 @@ do
 clear
 echo "Novel Viewer
 $fgx"
-co="0"
+co=0
 ls "$cfd"|grp ".txt"|pxcx
 echo "$fgx
 You can Upload novel on Web"
@@ -556,7 +559,7 @@ do
 clear
 gaen
 echo $fgx
-co="0"
+co=0
 ls "$cfd"|pxcx
 echo "$fgx
 a.Write diary"
@@ -612,10 +615,10 @@ clear
 echo Chat Room
 gaen
 echo $fgx
-co="0"
+co=0
 cat "$cfd"|while read nr
 do
-co=$(($co+1))
+cpo
 echo $co.${nr#*,}
 done
 echo $fgx
@@ -661,7 +664,7 @@ rxh(){
 co=0
 ls "$hos/main"|while read bm
 do
-co=$(($co+1))
+cpo
 eu="$hos/main/$bm"
 wjw "$eu"
 txc="$co.$bm(`ls "$eu"|wcl`)"
@@ -679,8 +682,14 @@ cfd="$hos/up"
 wbn="`ls "$cfd"|pdg`"
 [ -f "$cfd/$wbn" ]&&{
 ctj "application/octet-stream"
-echo "Content-Disposition:attachment;filename=$wbn
+co=0
+for fcl in `ls -l "$cfd/$wbn"`
+do
+cpo
+[ $co == 4 ]&&echo "Content-length:$fcl
+Content-Disposition:attachment;filename=\"$wbn\"
 "
+done
 [ -n "$wbn" ]&&cat "$cfd/$wbn"
 }
 ;;
@@ -851,7 +860,7 @@ hpd "$2"&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"
 sel="${qus##*=}"
 while read nr
 do
-co=$(($co+1))
+cpo
 ypd&&{
 echo "<tr><td>"
 hpd "$2"&&a="=0"
@@ -950,7 +959,7 @@ echo "$thq"
 co=0
 ls "$hos/main"|while read nr
 do
-co=$(($co+1))
+cpo
 eo=0
 ls "$hos/main/$nr"|while read mr
 do
@@ -995,7 +1004,7 @@ cse=${cze%&tpa}
 [ "$cse" == "$qus" ]&&{
 eco "`gaen`   Part:$pac"
 wjs=`ls "$pcz"|wcl`
-co="0"
+co=0
 ls "$pcz"|wpxc "m2k=$int&m2kk" "1"
 clj "m2k=$int&m2kk=a=0" "Make a new post"
 $hc
@@ -1096,7 +1105,7 @@ m5=*)
 sel="0"
 gaen
 $hc
-co="0"
+co=0
 ls "$cfd"|wpxc "m5d"
 clj "m5w" "Write diary"
 $hc
@@ -1152,10 +1161,10 @@ eco "Chat Room"
 gaen
 $hc
 echo $thc
-co="0"
+co=0
 cat "$cfd"|while read nr
 do
-co=$(($co+1))
+cpo
 clj "m7k=$co" "$co.${nr#*,}"
 $hc
 done
@@ -1178,7 +1187,7 @@ eco "File Explorer"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
-co="0"
+co=0
 ls "$hos/up"|wpxc "m8d"
 eco "Upload File:"
 fom post "m8u" "$ent" 
@@ -1202,11 +1211,11 @@ m8v)
 sel="0"
 eco "Photo Viewer"
 echo "$tb"
-co="0"
+co=0
 mo="0"
 ls "$hos/up/"|while read nr
 do
-co=$(($co+1))
+cpo
 [ "${nr##*.}" == "jpg" ]&&{
 echo "<td>"
 clj "m8x=$co" "<img src=$j?m8d=$co width=80px height=60px />"
