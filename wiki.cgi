@@ -9,11 +9,15 @@ wna="Please input your name:"
 wnb="Please input new password:"
 wnc="Please input verifcation code:"
 gly="SYSOP"
+j="${0##*/}"
 err="echo Error!"
 fgx="============"
 rip="$REMOTE_ADDR"
 pbz(){
 [ -n "`ls "$pcz"|grp "$tit"`" ]
+}
+clj(){
+echo "<a href=$j?$1>$2</a>"
 }
 glp(){
 [ "$na" == "guest" ]
@@ -46,8 +50,7 @@ $ry
 cat "$wbb"|while read nc
 do
 ni="${nc#*r:}"
-[ -n "$qus" ]&&zlj="`clj "$qus" "$wbn"`"||zlj="$wbn"
-echo "$na reply you on $zlj">>$hos/user/${ni%% *}/noce
+echo "$na reply you on `clj "m2k=$inu&m2kk=$int=0" "$wbn"`">>$hos/user/${ni%% *}/noce
 break 1
 done
 }
@@ -373,6 +376,7 @@ echo "$bul">$hos/bul
 }
 ;;
 *)
+inu="$pac"
 int="$pac"
 pac="`ls "$hos/main"|pdg`"
 [ -n "$pac" ]&&{
@@ -682,7 +686,7 @@ echo "Content-Disposition:attachment;filename=$wbn
 ;;
 rss)
 ctj "text/xml"
-wsf="http://$HTTP_HOST/cgi-bin/$0"
+wsf="http://$HTTP_HOST/cgi-bin/$j"
 echo '
 <?xml version="1.0"?><rss version="2.0"><channel><title>'
 echo "$bsn</title><link>${wsf}?main</link>"
@@ -693,7 +697,7 @@ echo "</channel></rss>"
 read tl
 [ "${tl%%=*}" == "lon" ]&&{
 echo "HTTP/1.1 302 Found
-Location:$0?main
+Location:$j?main
 Set-Cookie:$tl;PATH=/"
 }||{
 echo "Content-Encoding:gzip"
@@ -701,7 +705,7 @@ ctj "text/html"
 }
 echo ""
 {
-echo "<title>$zsn</title><link rel="alternate" type="application/rss+xml" title="$bsn" href="$0?rss" >"
+echo "<title>$zsn</title><link rel="alternate" type="application/rss+xml" title="$bsn" href="$j?rss" >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -720,7 +724,7 @@ usv="$hos/user/$na"
 cfd="$usv/diary"
 }||na="guest"
 fom(){
-echo "<form method=$1 action=$2 $3>"
+echo "<form method=$1 action=$j?$2 $3>"
 }
 hcs(){
 while read pd
@@ -739,7 +743,7 @@ echo "<input type=submit value=Submit>"
 echo "</form>"
 }
 wblg(){
-fom post "$0"
+fom post
 echo Login:
 ipt lon
 echo Password:
@@ -747,13 +751,10 @@ eco "<input type=password name=pw>"
 fmj
 $hc
 $hc
-echo "Dont have?<a href=$0?zc>Join us</a>"
+echo "Dont have?`clj "zc" "Join us"`"
 }
 bk(){
 clj "main" "Back"
-}
-clj(){
-echo "<a href=$0?$1>$2</a>"
 }
 fid(){
 [ "$REQUEST_METHOD" == "POST" ]&&{
@@ -766,13 +767,13 @@ echo "$ry" >>$rmk
 }
 cat "$rmk"|hcs
 [ "${qus##*w}" == "s" ]||{
-glp&&eco "<a href=$0?m4>Login</a>"||{
-fom post "$0?$qus" "$ent"
+glp&&clj "m4" "Login"||{
+fom post "$qus" "$ent"
 echo Word:
 ipt ry
 fmj
-$hc
 }
+$hc
 }
 bk
 }
@@ -791,14 +792,14 @@ echo "$thc"
 }
 cat "$wbb"|hcs
 [ "$cse" == "as" ]||{
-glp&&eco "<a href=$0?m4>Login</a>"||{
-hpd $1&&hyt="$0?m7k=$int"||hyt="$0?$qus"
+glp&&clj "m4" "Login"||{
+hpd $1&&hyt="m7k=$int"||hyt="$qus"
 fom post "$hyt" "$ent"
 echo Input reply:
 ipt ry
 fmj
-$hc
 }
+$hc
 }
 hpd $1&&bkz="m7"||{
 int="$(($int+1))"
@@ -900,7 +901,7 @@ jld="`ls "$whk"|wcl`"
 int=$((`date +%s`%$jld+1))
 sjs="`ls "$whk"|pdg`"
 }
-fom post "$0?m1j" "$ent"
+fom post "m1j" "$ent"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
 echo "$tb"
@@ -984,6 +985,7 @@ m2k=*)
 ind="${qus#m2k=*}"
 ine="${ind%=*}"
 int="${ine%&m2kk=*}"
+inu="$int"
 pac="`ls "$hos/main"|pdg`"
 [ -n "$pac" ]&&{
 sel="0"
@@ -1004,7 +1006,7 @@ cse=${cse%=0}
 case $cse in
 a)
 glp&&wblg||{
-fom post "$0?m2k=$int&m2kk=as=0" "$ent"
+fom post "m2k=$int&m2kk=as=0" "$ent"
 echo Input the title:
 ipt tit
 echo Word:
@@ -1056,7 +1058,7 @@ esac
 ;;
 m4)
 glp&&wblg||{
-fom post "$0?m4ws" "$ent"
+fom post "m4ws" "$ent"
 echo Input Main title:
 ipt tit
 echo Tags:
@@ -1103,7 +1105,7 @@ $hc
 ;;
 m5w)
 [ -n "`ls "$cfd"|grp "$mt"`" ]&&fid||{
-fom post "$0?m5ws" "$ent"
+fom post "m5ws" "$ent"
 echo "Word:"
 ipt wd
 fmj
@@ -1131,7 +1133,7 @@ esac
 ;;
 m6)
 glp&&wblg||{
-fom post "$0?m6e"
+fom post "m6e"
 echo Input your new password:
 echo "<input type=password name=pw><br>"
 fmj
@@ -1179,7 +1181,7 @@ $hc
 co="0"
 ls "$hos/up"|wpxc "m8d"
 eco "Upload File:"
-fom post "$0?m8u" "$ent" 
+fom post "m8u" "$ent" 
 echo "<input type=file name=file>"
 fmj
 $hc
@@ -1207,7 +1209,7 @@ do
 co=$(($co+1))
 [ "${nr##*.}" == "jpg" ]&&{
 echo "<td>"
-clj "m8x=$co" "<img src=$0?m8d=$co width=80px height=60px />"
+clj "m8x=$co" "<img src=$j?m8d=$co width=80px height=60px />"
 echo "</td>"
 [ "$((${co}%3))" == "0" ]&&{
 echo "</tr><tr>"
@@ -1221,7 +1223,7 @@ clj "m8=0" "Back"
 m8x=*)
 int="${qus#*=}" 
 cfd="$hos/up"
-eco "<img src=$0?m8d=$int />"
+eco "<img src=$j?m8d=$int />"
 while [ "${wbn##*.}" != "jpg" ]
 do
 int=$(($int+1))
@@ -1238,7 +1240,7 @@ clj "m8v" "Back"
 ;;
 cop)
 glp&&wblg||{
-fom post "$0?cows" "$ent"
+fom post "cows" "$ent"
 echo Word:
 ipt wd
 fmj
@@ -1263,7 +1265,7 @@ bk
 ;;
 zc)
 uck
-fom post "$0?zct&vv=$vv"
+fom post "zct&vv=$vv"
 echo $wna
 ipt name
 echo $wnb
