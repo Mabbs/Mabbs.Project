@@ -12,6 +12,9 @@ gly="SYSOP"
 j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
+fsc(){
+echo "$4"
+}
 pbz(){
 [ -n "`ls "$pcz"|grp "$tit"`" ]
 }
@@ -720,14 +723,9 @@ cfd="$m/up"
 w="`ls "$cfd"|pdg`"
 [ -f "$cfd/$w" ]&&{
 ctj "application/octet-stream"
-co=0
-for fcl in `ls -l "$cfd/$w"`
-do
-cpo
-[ $co == 4 ]&&echo "Content-length:$fcl
+echo "Content-length:$(fsc `ls -l "$cfd/$w"`)
 Content-Disposition:attachment;filename=\"$w\"
 "
-done
 [ -n "$w" ]&&cat "$cfd/$w"
 }
 ;;
@@ -921,14 +919,7 @@ nl="${ni#* }"
 echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 done
-}||{
-ei=0
-for fcl in `ls -l "$cfd/$nr"`
-do
-ei="$(($ei+1))"
-[ $ei == 4 ]&&echo "<td>$fcl</td>"
-done
-} 
+}||echo "<td>$(fsc `ls -l "$cfd/$nr"`)</td>"
 echo "</tr>"
 }
 done
