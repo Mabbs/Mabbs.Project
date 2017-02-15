@@ -895,7 +895,7 @@ $hc
 }
 wpxc(){
 echo "$tb"
-hpd "$2"&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"
+hpd "$2"&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"||echo "<td>File${thq}Size</td>"
 p="${qus##*=}"
 while read nr
 do
@@ -921,7 +921,14 @@ nl="${ni#* }"
 echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 done
-}
+}||{
+ei=0
+for fcl in `ls -l "$cfd/$nr"`
+do
+ei="$(($ei+1))"
+[ $ei == 4 ]&&echo "<td>$fcl</td>"
+done
+} 
 echo "</tr>"
 }
 done
@@ -1222,12 +1229,13 @@ zxth 1
 }
 ;;
 m8=*)
+cfd="$m/up"
 eco "File Explorer"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
 co=0
-ls "$m/up"|wpxc "m8d"
+ls "$cfd"|wpxc "m8d"
 eco "Upload File:"
 fom post "m8u" "$ent" 
 echo "<input type=file name=file>"
