@@ -1,16 +1,15 @@
 #!/system/bin/ash
-hos="/sdcard/ba"
-bsn="MaBBS"
-wsn="MaWiki"
-zsn="$bsn&Wiki"
+m="/sdcard/ba"
+n="MaBBS"
+t="MaWiki"
+zsn="$n&Wiki"
 wcm="Welecome to use $zsn"
-whk="$hos/wiki"
+s="$m/wiki"
 wna="Please input your name:"
 wnb="Please input new password:"
 wnc="Please input verifcation code:"
 gly="SYSOP"
 j="${0##*/}"
-err="echo Error!"
 fgx="============"
 rip="$REMOTE_ADDR"
 pbz(){
@@ -22,14 +21,14 @@ co=$(($co+1))
 clj(){
 echo "<a href=$j?$1>$2</a>"
 }
-glp(){
+l(){
 [ "$na" == "guest" ]
 }
 hpd(){
 [ "$1" == "1" ]
 }
 cpd(){
-[ "$sel" -gt "1" ]
+[ "$p" -gt "1" ]
 }
 rck(){
 [ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o -z "$nep" ]
@@ -39,32 +38,38 @@ vv="`cat /proc/sys/kernel/random/uuid`"
 vv="${vv%%-*}"
 }
 ypd(){
-[ "$sel" -le "$co" -a "$(($sel+10))" -gt "$co" ]
+[ "$p" -le "$co" -a "$(($p+10))" -gt "$co" ]
 }
 wjw(){
-sel="$((`ls "$1"|wcl`-9))"
+p="$((`ls "$1"|wcl`-9))"
+}
+nef(){
+nsz="${nr%%-*}"
+iao="${nsz% *}"
+iob="${nsz#* }"
+yti="${nr#*-}"
 }
 bfx(){
 [ -n "$ry" ]&&{
-glp&&wblg||{
-echo "$na  `date` #$((`cat "$wbb"|wcl`/3+1))
+l&&u||{
+echo "$na  `date` #$((`cat "$r"|wcl`/3+1))
 $ry
-">>$wbb
-cat "$wbb"|while read nc
+">>$r
+cat "$r"|while read nc
 do
 ni="${nc#*r:}"
-echo "$na reply you on `clj "m2k=$inu&m2kk=$int=0" "$wbn"`">>$hos/user/${ni%% *}/noce
+echo "$inu $int-$na reply you on $w">>$m/user/${ni%% *}/noce
 break 1
 done
 }
 }
 }
 plx(){
-wbn="$tit"
-wbb="$pcz/$tit"
+w="$tit"
+r="$pcz/$tit"
 echo "Post master:$na  `date` #1
 $wod
-">>$wbb
+">>$r
 zxth
 }
 nwe(){
@@ -93,7 +98,7 @@ esac
 done
 }
 zcc(){
-usk="$hos/user/$nep"
+usk="$m/user/$nep"
 mkdir "$usk/diary"
 >"$usk/chat"
 echo $npd>>$usk/pwd
@@ -107,7 +112,7 @@ done
 echo "$nb"
 }
 pdg(){
-wbn=""
+w=""
 co=0
 while read nr
 do
@@ -116,21 +121,21 @@ cpo
 done
 }
 chse(){
-glp&&wblg||{
-vck="`cat "$wbb/opt/$1"|grp "$na"`"
+l&&u||{
+vck="`cat "$r/opt/$1"|grp "$na"`"
 [ "$na" == "$vck" ]||{
-echo $na >> "$wbb/opt/$1"
+echo $na >> "$r/opt/$1"
 }
-cat "$wbb/opt/$1"
+cat "$r/opt/$1"
 echo "selected it."
 }
 }
 [ -z "$rip" ]&&{
 inc="echo Input number or command:"
-[ -e "$hos/" ]&&echo "$wcm"||{
+[ -e "$m/" ]&&echo "$wcm"||{
 echo Installing...
-mkdir -p "$hos/main" "$hos/user" "$whk" "$hos/room" "$hos/up"
->"$hos/ip"
+mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up"
+>"$m/ip"
 nep="$gly"
 echo "Master name:$gly"
 echo "New password:"
@@ -144,25 +149,25 @@ slp(){
 [ "$na" == "$gly" ]
 }
 fy(){
-cpd&&sel="$(($sel-10))" 
+cpd&&p="$(($p-10))" 
 }
 fyx(){
 cpd&&echo c.Next page
 }
-wblg(){
+u(){
 clear
 echo Login:
 read ua
 echo Password:
 read pa
 [ -z "$ua" ]&&np=0||{
-[ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
+[ -e "$m/user/$ua" ]&&np="`cat "$m/user/$ua/pwd"`ck"
 }
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
-usv="$hos/user/$na"
+usv="$m/user/$na"
 }||{
-$err
+echo Error!
 echo Join us?[Y/N]:
 read ju
 case $ju in
@@ -171,7 +176,7 @@ echo $wna
 read nep
 echo $wnb
 read npd
-chk="`ls "$hos/user"|grp "$nep"`"
+chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 echo $wnc
 uck
@@ -194,7 +199,7 @@ do
 clear
 cat "$rmk"
 echo Press enter to back
-glp&&{
+l&&{
 read nul
 break 1
 }||{
@@ -218,10 +223,10 @@ while true
 do
 clear
 hpd $1||{
-echo "$wbn
+echo "$w
 $fgx"
 }
-cat "$wbb"
+cat "$r"
 echo 'Input reply(Input e go back):'
 slp&&echo Input d delete the post
 hpd $1&&echo "Input a to add friend:"
@@ -231,14 +236,14 @@ e)
 break 1
 ;;
 d)
-slp&&rm -rf "$wbb"&break 1
+slp&&rm -rf "$r"&break 1
 ;;
 a)
 hpd $1&&{
 clear
 echo Input friend name:
 read fnm
-[ -n "$fnm" -a -e "$hos/user/$fnm" ]&&echo "$wbn,$qmz">>"$hos/user/$fnm/chat"
+[ -n "$fnm" -a -e "$m/user/$fnm" ]&&echo "$w,$qmz">>"$m/user/$fnm/chat"
 }
 ;;
 *)
@@ -255,9 +260,9 @@ ypd&&echo "$1$co.$nr"
 done
 }
 cc(){
-for lop in `ls "$wbb/opt/"`
+for lop in `ls "$r/opt/"`
 do
-echo $lop.$1 \(`cat "$wbb/opt/$lop"|wcl`\)
+echo $lop.$1 \(`cat "$r/opt/$lop"|wcl`\)
 shift
 done
 }
@@ -266,15 +271,15 @@ sleep 1
 until [ "$cmd" == "2" ]
 do
 clear
-echo "$wsn User:$na
-Total entry:`ls "$whk"|wcl`
+echo "$t User:$na
+Total entry:`ls "$s"|wcl`
 $fgx
 1.Search
 2.Exit
-3.Go to $bsn
+3.Go to $n
 4.Random
 5.Novel Viewer"
-glp&&echo 6.Login||{
+l&&echo 6.Login||{
 echo "6.Make a new entry
 7.Diary
 8.Reset your password
@@ -294,41 +299,41 @@ $fgx$fgx
 Entry
 $fgx"
 co=0
-ls "$whk"|grp "$kw"|while read jg
+ls "$s"|grp "$kw"|while read jg
 do
 cpo
 echo a$co.${jg%%+*}
 done
 echo "User
 $fgx"
-ls "$hos/user"|grp "$kw"
+ls "$m/user"|grp "$kw"
 echo "Post
 $fgx"
-ls "$hos/main"|while read nr
+ls "$m/main"|while read nr
 do
-ls "$hos/main/$nr"|grp "$kw"
+ls "$m/main/$nr"|grp "$kw"
 done
 echo "Novel
 $fgx"
-sel="0"
-ls "$hos/up"|grp ".txt"|grp "$kw"|pxcx "b"
+p="0"
+ls "$m/up"|grp ".txt"|grp "$kw"|pxcx "b"
 echo Which one:
 read mtt
 case $mtt in
 a*)
 int="${mtt#a}"
-tkw="`ls "$whk"|grp "$kw"|pdg`"
+tkw="`ls "$s"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
-rmk="$whk/$tkw"
+rmk="$s/$tkw"
 fid
 }
 ;;
 b*)
 int="${mtt#b}"
-tkw="`ls "$hos/up"|grp "$kw"|pdg`"
+tkw="`ls "$m/up"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
 clear
-more "$hos/up/$tkw"
+more "$m/up/$tkw"
 read nul
 }
 ;;
@@ -341,17 +346,17 @@ do
 clear
 gaen
 date
-[ -e "$hos/bul" ]&&echo Bulletin:`cat "$hos/bul"`
+[ -e "$m/bul" ]&&echo Bulletin:`cat "$m/bul"`
 echo $fgx
 co=0
-ls "$hos/main"|while read bm
+ls "$m/main"|while read bm
 do
 cpo
-echo $co.$bm \(`ls "$hos/main/$bm/"|wcl`\)
+echo $co.$bm \(`ls "$m/main/$bm/"|wcl`\)
 done
 echo "$fgx
-a.Back to $wsn"
-glp||echo "b.Notice"
+a.Back to $t"
+l||echo "b.Notice"
 slp&&{
 echo c.Make a part
 echo d.Release bulletin
@@ -363,10 +368,36 @@ a)
 break 1
 ;;
 b)
-glp&&wblg||{
+l&&u||{
+[ -e "$usv/noce" ]&&{
 clear
-cat "$usv/noce"
-read nul
+co=0
+cat "$usv/noce"|while read nr
+do
+cpo
+echo "$co.${nr#*-}"
+done
+$inc
+read int
+[ -n "$int" ]&&{
+nr="`cat "$usv/noce"|pdg`"
+[ -n "$nr" ]&&{
+nef
+inu="$iao"
+int="$iao"
+pac="`ls "$m/main"|pdg`"
+[ -n "$pac" ]&&{
+pcz="$m/main/$pac"
+int="$iob"
+w="`ls "$pcz"|pdg`"
+[ -n "$w" ]&&{
+r="$pcz/$w"
+[ -f "$r" ]&&zxth
+}
+}
+}
+}
+}
 }
 ;;
 c)
@@ -374,7 +405,7 @@ clear
 slp&&{
 echo New part name:
 read npn
-mkdir "$hos/main/$npn"
+mkdir "$m/main/$npn"
 }
 ;;
 d)
@@ -382,15 +413,15 @@ slp&&{
 clear
 echo Input bulletin:
 read bul
-echo "$bul">$hos/bul
+echo "$bul">$m/bul
 }
 ;;
 *)
 inu="$pac"
 int="$pac"
-pac="`ls "$hos/main"|pdg`"
+pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
-pcz="$hos/main/$pac"
+pcz="$m/main/$pac"
 wjw "$pcz"
 while true
 do
@@ -408,7 +439,7 @@ $inc
 read int
 case $int in
 a)
-glp&&wblg||{
+l&&u||{
 clear
 echo 'This is a [1.Post 2.Vote]:'
 read cht
@@ -462,26 +493,26 @@ d)
 slp&&rm -rf "$pcz"&break 1
 ;;
 *)
-wbn="`ls "$pcz"|pdg`"
-[ -n "$wbn" ]&&{
-wbb="$pcz/$wbn"
-[ -f "$wbb" ]&&zxth||{
+w="`ls "$pcz"|pdg`"
+[ -n "$w" ]&&{
+r="$pcz/$w"
+[ -f "$r" ]&&zxth||{
 clear
-cat "$wbb/main"
+cat "$r/main"
 echo $fgx
-cc `cat "$wbb/data"`
-[ -e "$wbb/talk" ]&&echo Input t to talk,or
+cc `cat "$r/data"`
+[ -e "$r/talk" ]&&echo Input t to talk,or
 echo 'Choose one:'
 read ry
 [ -n "$ry" ]&&{
 [ "$ry" == "t" ]&&{
-[ -e "$wbb/talk" ]&&{
-wbb="$wbb/talk"
+[ -e "$r/talk" ]&&{
+r="$r/talk"
 zxth
 }
 }||{
 clear
-[ -e "$wbb/opt/$ry" ]&&chse $ry
+[ -e "$r/opt/$ry" ]&&chse $ry
 sleep 3
 }
 }
@@ -496,7 +527,7 @@ esac
 done
 ;;
 5)
-cfd="$hos/up"
+cfd="$m/up"
 wjw "$cfd"
 while true
 do
@@ -519,10 +550,10 @@ c)
 fy "$cfd"
 ;;
 *)
-wbn="`ls "$cfd"|grp ".txt"|pdg`"
-[ -n "$wbn" ]&&{
+w="`ls "$cfd"|grp ".txt"|pdg`"
+[ -n "$w" ]&&{
 clear
-more "$cfd/$wbn"
+more "$cfd/$w"
 read nul
 }
 ;;
@@ -530,16 +561,16 @@ esac
 done
 ;;
 6)
-glp&&wblg||{
+l&&u||{
 clear
 echo Input Main title:
 read mt
-[ -z "`ls "$whk"|grp "$mt"`" ]&&{
+[ -z "`ls "$s"|grp "$mt"`" ]&&{
 echo Tags:
 read tgs
 echo Word:
 read wd
-mwt="$whk/$mt+$tgs"
+mwt="$s/$mt+$tgs"
 nwe
 rmk="$mwt"
 fid
@@ -547,18 +578,18 @@ fid
 }
 ;;
 4)
-jld="`ls "$whk"|wcl`"
+jld="`ls "$s"|wcl`"
 [ "$jld" == "0" ]&&{
 echo Not found...
 sleep 1
 }||{
 int=$((`date +%s`%$jld+1))
-rmk="$whk/`ls "$whk"|pdg`"
+rmk="$s/`ls "$s"|pdg`"
 fid
 }
 ;;
 7)
-glp&&wblg||{
+l&&u||{
 cfd="$usv/diary"
 wjw "$cfd"
 while true
@@ -595,9 +626,9 @@ c)
 fy "$cfd"
 ;;
 *)
-wbn="`ls "$cfd"|pdg`"
-[ -n "$wbn" ]&&{
-rmk="$cfd/$wbn"
+w="`ls "$cfd"|pdg`"
+[ -n "$w" ]&&{
+rmk="$cfd/$w"
 fid
 }
 ;;
@@ -606,7 +637,7 @@ done
 }
 ;;
 8)
-glp&&wblg||{
+l&&u||{
 clear
 echo Input your new password:
 read nrd
@@ -614,7 +645,7 @@ read nrd
 }
 ;;
 9)
-glp&&wblg||{
+l&&u||{
 cfd="$usv/chat"
 while true
 do
@@ -638,11 +669,11 @@ a)
 clear
 echo Input Chat room name:
 read qmz
-wbn="$((`ls "$hos/room"|wcl`+1))"
-wbb="$hos/room/$wbn"
-echo "Chat Room #$wbn">$wbb
-echo "$fgx">>$wbb
-echo "$wbn,$qmz">>$cfd
+w="$((`ls "$m/room"|wcl`+1))"
+r="$m/room/$w"
+echo "Chat Room #$w">$r
+echo "$fgx">>$r
+echo "$w,$qmz">>$cfd
 zxth "1"
 ;;
 b)
@@ -650,10 +681,10 @@ break 1
 ;;
 *)
 wwn="`cat "$cfd"|pdg`"
-wbn="${wwn%%,*}"
+w="${wwn%%,*}"
 qmz="${wwn#*,}" 
-[ -n "$wbn" ]&&{
-wbb="$hos/room/$wbn"
+[ -n "$w" ]&&{
+r="$m/room/$w"
 zxth "1"
 }
 ;;
@@ -669,35 +700,35 @@ echo "Content-type:$1;charset=utf-8"
 }
 rxh(){
 co=0
-ls "$hos/main"|while read bm
+ls "$m/main"|while read bm
 do
 cpo
-eu="$hos/main/$bm"
+eu="$m/main/$bm"
 wjw "$eu"
 txc="$co.$bm(`ls "$eu"|wcl`)"
 hpd $1&&{
-clj "m2k=$co=$sel" "$txc"
+clj "m2k=$co=$p" "$txc"
 $hc
-}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=$sel</link></item>"
+}||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=$p</link></item>"
 done
 } 
 qus="$QUERY_STRING"
 case $qus in
 m8d=*)
 int="${qus#*=}" 
-cfd="$hos/up"
-wbn="`ls "$cfd"|pdg`"
-[ -f "$cfd/$wbn" ]&&{
+cfd="$m/up"
+w="`ls "$cfd"|pdg`"
+[ -f "$cfd/$w" ]&&{
 ctj "application/octet-stream"
 co=0
-for fcl in `ls -l "$cfd/$wbn"`
+for fcl in `ls -l "$cfd/$w"`
 do
 cpo
 [ $co == 4 ]&&echo "Content-length:$fcl
-Content-Disposition:attachment;filename=\"$wbn\"
+Content-Disposition:attachment;filename=\"$w\"
 "
 done
-[ -n "$wbn" ]&&cat "$cfd/$wbn"
+[ -n "$w" ]&&cat "$cfd/$w"
 }
 ;;
 rss)
@@ -705,7 +736,7 @@ ctj "text/xml"
 wsf="http://$HTTP_HOST/cgi-bin/$j"
 echo '
 <?xml version="1.0"?><rss version="2.0"><channel><title>'
-echo "$bsn</title><link>${wsf}?main</link>"
+echo "$n</title><link>${wsf}?main</link>"
 rxh
 echo "</channel></rss>"
 ;;
@@ -721,7 +752,7 @@ ctj "text/html"
 }
 echo ""
 {
-echo "<title>$zsn</title><link rel="alternate" type="application/rss+xml" title="$bsn" href="$j?rss" >"
+echo "<title>$zsn</title><link rel="alternate" type="application/rss+xml" title="$n" href="$j?rss" >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -733,11 +764,11 @@ uma="${HTTP_COOKIE%&pw*}"
 ua="${uma#*=}"
 pa="${HTTP_COOKIE#*pw=}"
 [ -z "$ua" ]&&np=0||{
-[ -e "$hos/user/$ua" ]&&np="`cat "$hos/user/$ua/pwd"`ck"
+[ -e "$m/user/$ua" ]&&np="`cat "$m/user/$ua/pwd"`ck"
 }
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
-usv="$hos/user/$na"
+usv="$m/user/$na"
 cfd="$usv/diary"
 }||na="guest"
 fom(){
@@ -759,7 +790,7 @@ fmj(){
 echo "<input type=submit value=Submit>"
 echo "</form>"
 }
-wblg(){
+u(){
 fom post
 echo Login:
 ipt lon
@@ -775,7 +806,7 @@ clj "main" "Back"
 }
 fid(){
 [ "$REQUEST_METHOD" == "POST" ]&&{
-glp&&wblg||{
+l&&u||{
 read b
 read c
 read ry
@@ -784,7 +815,7 @@ echo "$ry" >>$rmk
 }
 cat "$rmk"|hcs
 [ "${qus##*w}" == "s" ]||{
-glp&&clj "m4" "Login"||{
+l&&clj "m4" "Login"||{
 fom post "$qus" "$ent"
 echo Word:
 ipt ry
@@ -796,7 +827,7 @@ bk
 }
 zxth(){
 [ "$REQUEST_METHOD" == "POST" ]&&{
-[ -f "$wbb" ]||wbb="$pcz/$wbn/talk"
+[ -f "$r" ]||r="$pcz/$w/talk"
 read b
 read c
 read ry
@@ -804,12 +835,12 @@ ry="${ry%?}"
 bfx
 }
 hpd $1||{
-eco "$wbn"
+eco "$w"
 echo "$thc"
 }
-cat "$wbb"|hcs
+cat "$r"|hcs
 [ "$cse" == "as" ]||{
-glp&&clj "m4" "Login"||{
+l&&clj "m4" "Login"||{
 hpd $1&&hyt="m7k=$int"||hyt="$qus"
 fom post "$hyt" "$ent"
 echo Input reply:
@@ -820,21 +851,21 @@ $hc
 }
 hpd $1&&bkz="m7"||{
 int="$(($int+1))"
-wbn="`ls "$pcz"|pdg`"
-[ -n "$wbn" ]&&{
+w="`ls "$pcz"|pdg`"
+[ -n "$w" ]&&{
 qhn="${qus%=*}"
-clj "${qhn%=*}=$int=0" "Next Post $wbn"
+clj "${qhn%=*}=$int=0" "Next Post $w"
 $hc
 }
 wjw "$pcz"
-bkz="${qus%&m2kk=*}=$sel"
+bkz="${qus%&m2kk=*}=$p"
 }
 clj "$bkz" "Back"
 }
 cc(){
-for lop in `ls "$wbb/opt/"`
+for lop in `ls "$r/opt/"`
 do
-clj "${qus%=0}&jg=$lop&tpa" "$lop.$1 (`cat "$wbb/opt/$lop"|wcl`)"
+clj "${qus%=0}&jg=$lop&tpa" "$lop.$1 (`cat "$r/opt/$lop"|wcl`)"
 $hc
 shift
 done
@@ -846,9 +877,9 @@ read c
 }
 usg(){
 fne="User-$nr+User space"
-if [ -e "$whk/$fne" ]
+if [ -e "$s/$fne" ]
 then
-ls "$whk"|while read mr
+ls "$s"|while read mr
 do
 eo=$(($eo+1))
 [ "$mr" == "$fne" ]&&{
@@ -859,13 +890,13 @@ hpd $1&&clj "cop" "Rewrite"
 else
 hpd $1&&clj "cop" "$na"||echo "$nr"
 fi
-glp||clj "ntf" "Notice"
+l||clj "ntf" "Notice"
 $hc
 }
 wpxc(){
 echo "$tb"
 hpd "$2"&&echo "<td>Post${thq}Reply${thq}Sender${thq}Send Time</td>"
-sel="${qus##*=}"
+p="${qus##*=}"
 while read nr
 do
 cpo
@@ -895,11 +926,11 @@ echo "</tr>"
 }
 done
 echo "$tbo"
-cpd&&clj "${qus%=*}=$(($sel-10))" "Next page"
+cpd&&clj "${qus%=*}=$(($p-10))" "Next page"
 $hc
 }
 echo "$tb<td>"
-[ -e "$hos/" ]&&{
+[ -e "$m/" ]&&{
 clj "main" "$wcm"
 $hc
 }||{
@@ -908,35 +939,35 @@ echo "Please run it on shell"
 echo "$thc"
 case $qus in
 main)
-echo "$wsn User:"
+echo "$t User:"
 nr="$na"
 usg 1
-eco "Total entry:`ls "$whk"|wcl`"
-[ -e "$hos/bul" ]&&eco "Bulletin:`cat "$hos/bul"`"
-jld="`ls "$whk"|wcl`"
+eco "Total entry:`ls "$s"|wcl`"
+[ -e "$m/bul" ]&&eco "Bulletin:`cat "$m/bul"`"
+jld="`ls "$s"|wcl`"
 [ "$jld" == "0" ]||{
 int=$((`date +%s`%$jld+1))
-sjs="`ls "$whk"|pdg`"
+sjs="`ls "$s"|pdg`"
 }
 fom post "m1j" "$ent"
 echo "<input type=text name=kw value=${sjs%%+*}>"
 fmj
 echo "$tb"
-echo "<td>$bsn$thq"
+echo "<td>$n$thq"
 rxh 1
 echo "${thc}Other$thq"
-glp&&wblg||{
+l&&u||{
 clj "m4" "1.Make a new entry"
 $hc
 wjw "$cfd"
-clj "m5=$sel" "2.Diary"
+clj "m5=$p" "2.Diary"
 $hc
 clj "m6" "3.Reset your password"
 $hc
 clj "m7" "4.Chat Room"
 $hc
-wjw "$hos/up"
-clj "m8=$sel" "5.File Explorer"
+wjw "$m/up"
+clj "m8=$p" "5.File Explorer"
 }
 echo "</td>$tbo"
 ;;
@@ -950,7 +981,7 @@ pkc(){
 [ -n "`echo "$mr"|grp "$kw"`" ]
 }
 echo "Result$thc$tb<td>Entry${thq}User${thq}Post${thq}File$thc"
-ls "$whk"|while read mr
+ls "$s"|while read mr
 do
 eo=$(($eo+1))
 pkc&&{
@@ -959,17 +990,17 @@ $hc
 }
 done
 echo "$thq"
-ls "$hos/user"|grp "$kw"|while read nr
+ls "$m/user"|grp "$kw"|while read nr
 do
 usg
 done
 echo "$thq"
 co=0
-ls "$hos/main"|while read nr
+ls "$m/main"|while read nr
 do
 cpo
 eo=0
-ls "$hos/main/$nr"|while read mr
+ls "$m/main/$nr"|while read mr
 do
 eo=$(($eo+1))
 pkc&&{
@@ -979,7 +1010,7 @@ $hc
 done
 done
 echo "$thq"
-ls "$hos/up"|while read mr
+ls "$m/up"|while read mr
 do
 eo=$(($eo+1))
 pkc&&{
@@ -992,9 +1023,9 @@ echo "</td>$tbo"
 ;;
 m1g=*)
 int="${qus#*=}"
-tkw="`ls "$whk"|pdg`"
+tkw="`ls "$s"|pdg`"
 [ -n "$tkw" ]&&{
-rmk="$whk/$tkw"
+rmk="$s/$tkw"
 fid
 }
 ;;
@@ -1003,10 +1034,10 @@ ind="${qus#m2k=*}"
 ine="${ind%=*}"
 int="${ine%&m2kk=*}"
 inu="$int"
-pac="`ls "$hos/main"|pdg`"
+pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
-sel="0"
-pcz="$hos/main/$pac"
+p="0"
+pcz="$m/main/$pac"
 cze="${qus#*&m2kk=}"
 cse=${cze%&tpa}
 [ "$cse" == "$qus" ]&&{
@@ -1022,7 +1053,7 @@ cse=${cse%=0}
 }
 case $cse in
 a)
-glp&&wblg||{
+l&&u||{
 fom post "m2k=$int&m2kk=as=0" "$ent"
 echo Input the title:
 ipt tit
@@ -1032,7 +1063,7 @@ fmj
 }
 ;;
 as)
-glp&&wblg||{
+l&&u||{
 read b
 read c
 read tit
@@ -1044,27 +1075,27 @@ pbz||plx
 ;;
 *)
 [ "${qus##*&}" == "tpa" ]&&{
-glp&&wblg||{
+l&&u||{
 int="${cse%&jg=*}"
-wbn="`ls "$pcz"|pdg`"
+w="`ls "$pcz"|pdg`"
 ry="${cse#*=}"
-[ -n "$wbn" ]&&{
-wbb="$pcz/$wbn"
-[ -e "$wbb/opt/$ry" ]&&chse "$ry"|hcs
+[ -n "$w" ]&&{
+r="$pcz/$w"
+[ -e "$r/opt/$ry" ]&&chse "$ry"|hcs
 }
 }
 }||{
 int="$cse"
-wbn="`ls "$pcz"|pdg`"
-[ -n "$wbn" ]&&{
-wbb="$pcz/$wbn"
-[ -f "$wbb" ]&&zxth||{
-cat "$wbb/main"|hcs
+w="`ls "$pcz"|pdg`"
+[ -n "$w" ]&&{
+r="$pcz/$w"
+[ -f "$r" ]&&zxth||{
+cat "$r/main"|hcs
 echo $thc
-cc `cat "$wbb/data"`
+cc `cat "$r/data"`
 echo $thc
-[ -e "$wbb/talk" ]&&{
-wbb="$wbb/talk"
+[ -e "$r/talk" ]&&{
+r="$r/talk"
 zxth
 }
 }
@@ -1074,7 +1105,7 @@ zxth
 esac
 ;;
 m4)
-glp&&wblg||{
+l&&u||{
 fom post "m4ws" "$ent"
 echo Input Main title:
 ipt tit
@@ -1086,7 +1117,7 @@ fmj
 }
 ;;
 m4ws)
-glp&&wblg||{
+l&&u||{
 read b
 read c
 read mt
@@ -1096,8 +1127,8 @@ fgy
 read wd
 mt="${mt%?}"
 tgs="${tgs%?}"
-mwt="$whk/$mt+$tgs"
-[ -z "`ls "$whk"|grp "$mt"`" ]&&{ 
+mwt="$s/$mt+$tgs"
+[ -z "`ls "$s"|grp "$mt"`" ]&&{ 
 nwe
 rmk="$mwt"
 fid
@@ -1105,12 +1136,12 @@ fid
 }
 ;;
 m5*)
-glp&&wblg||{
+l&&u||{
 mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
 case $qus in
 m5=*)
-sel="0"
+p="0"
 gaen
 $hc
 co=0
@@ -1139,9 +1170,9 @@ fid
 m5d=*)
 int="${qus#*=}" 
 cfd="$usv/diary"
-wbn="`ls "$cfd"|pdg`"
-[ -n "$wbn" ]&&{
-rmk="$cfd/$wbn"
+w="`ls "$cfd"|pdg`"
+[ -n "$w" ]&&{
+rmk="$cfd/$w"
 fid
 }
 ;;
@@ -1149,7 +1180,7 @@ esac
 }
 ;;
 m6)
-glp&&wblg||{
+l&&u||{
 fom post "m6e"
 echo Input your new password:
 $spa
@@ -1162,9 +1193,9 @@ nrd="${tl#*=}"
 echo OK
 ;;
 m7)
-glp&&wblg||{
+l&&u||{
 cfd="$usv/chat"
-sel="0"
+p="0"
 eco "Chat Room"
 gaen
 $hc
@@ -1184,9 +1215,9 @@ m7k=*)
 cfd="$usv/chat"
 int="${qus#*=}"
 wwn="`cat "$cfd"|pdg`"
-wbn="${wwn%%,*}"
-[ -n "$wbn" ]&&{
-wbb="$hos/room/$wbn"
+w="${wwn%%,*}"
+[ -n "$w" ]&&{
+r="$m/room/$w"
 zxth 1
 }
 ;;
@@ -1196,7 +1227,7 @@ gaen
 clj "m8v" "Photo Viewer"
 $hc
 co=0
-ls "$hos/up"|wpxc "m8d"
+ls "$m/up"|wpxc "m8d"
 eco "Upload File:"
 fom post "m8u" "$ent" 
 echo "<input type=file name=file>"
@@ -1211,17 +1242,17 @@ read b
 fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
-st="$hos/up/$mu"
+st="$m/up/$mu"
 cat >$st
 echo "$mu saved."
 ;;
 m8v)
-sel="0"
+p="0"
 eco "Photo Viewer"
 echo "$tb"
 co=0
 mo="0"
-ls "$hos/up/"|while read nr
+ls "$m/up/"|while read nr
 do
 cpo
 [ "${nr##*.}" == "jpg" ]&&{
@@ -1239,15 +1270,15 @@ clj "m8=0" "Back"
 ;;
 m8x=*)
 int="${qus#*=}" 
-cfd="$hos/up"
+cfd="$m/up"
 eco "<img src=$j?m8d=$int />"
-while [ "${wbn##*.}" != "jpg" ]
+while [ "${w##*.}" != "jpg" ]
 do
 int=$(($int+1))
-cfd="$hos/up"
-wbn="`ls "$cfd"|pdg`"
-[ -z "$wbn" ]&&break 1
-[ "${wbn##*.}" == "jpg" ]&&{
+cfd="$m/up"
+w="`ls "$cfd"|pdg`"
+[ -z "$w" ]&&break 1
+[ "${w##*.}" == "jpg" ]&&{
 clj "m8x=$int" "Next Photo"
 break 1
 }
@@ -1256,7 +1287,7 @@ $hc
 clj "m8v" "Back"
 ;;
 cop)
-glp&&wblg||{
+l&&u||{
 fom post "cows" "$ent"
 echo Word:
 ipt wd
@@ -1264,20 +1295,27 @@ fmj
 }
 ;;
 cows)
-glp&&wblg||{
+l&&u||{
 read b
 read c
 read wd
 mt="User-$na"
 tgs="User space"
-mwt="$whk/$mt+$tgs"
+mwt="$s/$mt+$tgs"
 nwe
 rmk="$mwt"
 fid
 }
 ;;
 ntf)
-cat "$usv/noce"|hcs
+[ -e "$usv/noce" ]&&{
+cat "$usv/noce"|while read nr
+do
+nef
+clj "m2k=$iao&m2kk=$iob=0" "$yti"
+$hc
+done
+}
 bk
 ;;
 zc)
@@ -1300,7 +1338,7 @@ npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
 [ "$vv" == "$vs" ]&&{
-chk="`ls "$hos/user"|grp "$nep"`"
+chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 zcc
 echo OK
@@ -1309,8 +1347,8 @@ echo OK
 ;;
 esac
 $hc
-[ -n "`cat "$hos/ip"|grp "$rip"`" ]||echo "$rip">>$hos/ip
-eco "${thc}Counter:`cat "$hos/ip"|wcl`"
+[ -n "`cat "$m/ip"|grp "$rip"`" ]||echo "$rip">>$m/ip
+eco "${thc}Counter:`cat "$m/ip"|wcl`"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) `date +%Y` by Mayx</td>$tbo"
 }|gzip -c
