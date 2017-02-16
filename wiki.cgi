@@ -61,7 +61,7 @@ $ry
 cat "$r"|while read nc
 do
 ni="${nc#*r:}"
-echo "$inu $int-$na reply you on $w">>$m/user/${ni%% *}/noce
+echo "$inu $i-$na reply you on $w">>$m/user/${ni%% *}/noce
 break 1
 done
 }
@@ -120,7 +120,7 @@ co=0
 while read nr
 do
 cpo
-[ "$int" == "$co" ]&&echo "$nr"
+[ "$i" == "$co" ]&&echo "$nr"
 done
 }
 chse(){
@@ -168,7 +168,7 @@ read pa
 }
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
-usv="$m/user/$na"
+q="$m/user/$na"
 }||{
 echo Error!
 echo Join us?[Y/N]:
@@ -284,9 +284,9 @@ $fgx
 5.Novel Viewer"
 l&&echo 6.Login||{
 echo "6.Make a new entry
-7.Diary
+7.Diary (`ls "$q/diary/"|wcl`)
 8.Reset your password
-9.Chat Room"
+9.Chat Room (`cat "$q/chat"|wcl`)"
 }
 echo Input command:
 read cmd
@@ -324,7 +324,7 @@ echo Which one:
 read mtt
 case $mtt in
 a*)
-int="${mtt#a}"
+i="${mtt#a}"
 tkw="`ls "$s"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$s/$tkw"
@@ -332,7 +332,7 @@ fid
 }
 ;;
 b*)
-int="${mtt#b}"
+i="${mtt#b}"
 tkw="`ls "$m/up"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
 clear
@@ -355,7 +355,7 @@ co=0
 ls "$m/main"|while read bm
 do
 cpo
-echo $co.$bm \(`ls "$m/main/$bm/"|wcl`\)
+echo "$co.$bm (`ls "$m/main/$bm/"|wcl`)"
 done
 echo "$fgx
 a.Back to $t"
@@ -372,26 +372,26 @@ break 1
 ;;
 b)
 l&&u||{
-[ -e "$usv/noce" ]&&{
+[ -e "$q/noce" ]&&{
 clear
 co=0
-cat "$usv/noce"|while read nr
+cat "$q/noce"|while read nr
 do
 cpo
 echo "$co.${nr#*-}"
 done
 $inc
-read int
-[ -n "$int" ]&&{
-nr="`cat "$usv/noce"|pdg`"
+read i
+[ -n "$i" ]&&{
+nr="`cat "$q/noce"|pdg`"
 [ -n "$nr" ]&&{
 nef
 inu="$iao"
-int="$iao"
+i="$iao"
 pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
 pcz="$m/main/$pac"
-int="$iob"
+i="$iob"
 w="`ls "$pcz"|pdg`"
 [ -n "$w" ]&&{
 r="$pcz/$w"
@@ -421,7 +421,7 @@ echo "$bul">$m/bul
 ;;
 *)
 inu="$pac"
-int="$pac"
+i="$pac"
 pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
 pcz="$m/main/$pac"
@@ -439,8 +439,8 @@ bk
 fyx "$pcz"
 slp&&echo d.Delete the part
 $inc
-read int
-case $int in
+read i
+case $i in
 a)
 l&&u||{
 clear
@@ -544,8 +544,8 @@ You can Upload novel on Web"
 bk
 fyx "$cfd"
 $inc
-read int
-case $int in
+read i
+case $i in
 b)
 break 1
 ;;
@@ -586,14 +586,14 @@ jld="`ls "$s"|wcl`"
 echo Not found...
 sleep 1
 }||{
-int=$((`date +%s`%$jld+1))
+i=$((`date +%s`%$jld+1))
 rmk="$s/`ls "$s"|pdg`"
 fid
 }
 ;;
 7)
 l&&u||{
-cfd="$usv/diary"
+cfd="$q/diary"
 wjw "$cfd"
 while true
 do
@@ -607,8 +607,8 @@ a.Write diary"
 bk
 fyx "$cfd"
 $inc
-read int
-case $int in
+read i
+case $i in
 a)
 clear
 mt="`date +%y.%m.%d`"
@@ -644,12 +644,12 @@ l&&u||{
 clear
 echo Input your new password:
 read nrd
-[ -n "$nrd" ]&&echo $nrd>$usv/pwd
+[ -n "$nrd" ]&&echo $nrd>$q/pwd
 }
 ;;
 9)
 l&&u||{
-cfd="$usv/chat"
+cfd="$q/chat"
 while true
 do
 clear
@@ -666,8 +666,8 @@ echo $fgx
 echo a.Make chat room
 bk
 $inc
-read int
-case $int in
+read i
+case $i in
 a)
 clear
 echo Input Chat room name:
@@ -718,7 +718,7 @@ done
 qus="$QUERY_STRING"
 case $qus in
 m8d=*)
-int="${qus#*=}" 
+i="${qus#*=}" 
 cfd="$m/up"
 w="`ls "$cfd"|pdg`"
 [ -f "$cfd/$w" ]&&{
@@ -766,8 +766,8 @@ pa="${HTTP_COOKIE#*pw=}"
 }
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
-usv="$m/user/$na"
-cfd="$usv/diary"
+q="$m/user/$na"
+cfd="$q/diary"
 }||na="guest"
 fom(){
 echo "<form method=$1 action=$j?$2 $3>"
@@ -839,7 +839,7 @@ echo "$thc"
 cat "$r"|hcs
 [ "$cse" == "as" ]||{
 l&&clj "m4" "Login"||{
-hpd $1&&hyt="m7k=$int"||hyt="$qus"
+hpd $1&&hyt="m7k=$i"||hyt="$qus"
 fom post "$hyt" "$ent"
 echo Input reply:
 ipt ry
@@ -848,11 +848,11 @@ fmj
 $hc
 }
 hpd $1&&bkz="m7"||{
-int="$(($int+1))"
+i="$(($i+1))"
 w="`ls "$pcz"|pdg`"
 [ -n "$w" ]&&{
 qhn="${qus%=*}"
-clj "${qhn%=*}=$int=0" "Next Post $w"
+clj "${qhn%=*}=$i=0" "Next Post $w"
 $hc
 }
 wjw "$pcz"
@@ -944,7 +944,7 @@ eco "Total entry:`ls "$s"|wcl`"
 [ -e "$m/bul" ]&&eco "Bulletin:`cat "$m/bul"`"
 jld="`ls "$s"|wcl`"
 [ "$jld" == "0" ]||{
-int=$((`date +%s`%$jld+1))
+i=$((`date +%s`%$jld+1))
 sjs="`ls "$s"|pdg`"
 }
 fom post "m1j" "$ent"
@@ -958,14 +958,14 @@ l&&u||{
 clj "m4" "1.Make a new entry"
 $hc
 wjw "$cfd"
-clj "m5=$p" "2.Diary"
+clj "m5=$p" "2.Diary (`ls "$q/diary"|wcl`)"
 $hc
 clj "m6" "3.Reset your password"
 $hc
-clj "m7" "4.Chat Room"
+clj "m7" "4.Chat Room (`cat "$q/chat"|wcl`)"
 $hc
 wjw "$m/up"
-clj "m8=$p" "5.File Explorer"
+clj "m8=$p" "5.File Explorer(`ls "$m/up"|wcl`)"
 }
 echo "</td>$tbo"
 ;;
@@ -1020,7 +1020,7 @@ echo "</td>$tbo"
 }
 ;;
 m1g=*)
-int="${qus#*=}"
+i="${qus#*=}"
 tkw="`ls "$s"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$s/$tkw"
@@ -1030,8 +1030,8 @@ fid
 m2k=*)
 ind="${qus#m2k=*}"
 ine="${ind%=*}"
-int="${ine%&m2kk=*}"
-inu="$int"
+i="${ine%&m2kk=*}"
+inu="$i"
 pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
 p="0"
@@ -1042,8 +1042,8 @@ cse=${cze%&tpa}
 eco "`gaen`   Part:$pac"
 wjs=`ls "$pcz"|wcl`
 co=0
-ls "$pcz"|wpxc "m2k=$int&m2kk" "1"
-clj "m2k=$int&m2kk=a=0" "Make a new post"
+ls "$pcz"|wpxc "m2k=$i&m2kk" "1"
+clj "m2k=$i&m2kk=a=0" "Make a new post"
 $hc
 bk
 }
@@ -1052,7 +1052,7 @@ cse=${cse%=0}
 case $cse in
 a)
 l&&u||{
-fom post "m2k=$int&m2kk=as=0" "$ent"
+fom post "m2k=$i&m2kk=as=0" "$ent"
 echo Input the title:
 ipt tit
 echo Word:
@@ -1074,7 +1074,7 @@ pbz||plx
 *)
 [ "${qus##*&}" == "tpa" ]&&{
 l&&u||{
-int="${cse%&jg=*}"
+i="${cse%&jg=*}"
 w="`ls "$pcz"|pdg`"
 ry="${cse#*=}"
 [ -n "$w" ]&&{
@@ -1083,7 +1083,7 @@ r="$pcz/$w"
 }
 }
 }||{
-int="$cse"
+i="$cse"
 w="`ls "$pcz"|pdg`"
 [ -n "$w" ]&&{
 r="$pcz/$w"
@@ -1166,8 +1166,8 @@ echo $wd >>$rmk
 fid
 ;;
 m5d=*)
-int="${qus#*=}" 
-cfd="$usv/diary"
+i="${qus#*=}" 
+cfd="$q/diary"
 w="`ls "$cfd"|pdg`"
 [ -n "$w" ]&&{
 rmk="$cfd/$w"
@@ -1187,12 +1187,12 @@ fmj
 ;;
 m6e)
 nrd="${tl#*=}"
-[ -n "$nrd" ]&&echo $nrd>$usv/pwd
+[ -n "$nrd" ]&&echo $nrd>$q/pwd
 echo OK
 ;;
 m7)
 l&&u||{
-cfd="$usv/chat"
+cfd="$q/chat"
 p="0"
 eco "Chat Room"
 gaen
@@ -1210,8 +1210,8 @@ bk
 }
 ;;
 m7k=*)
-cfd="$usv/chat"
-int="${qus#*=}"
+cfd="$q/chat"
+i="${qus#*=}"
 wwn="`cat "$cfd"|pdg`"
 w="${wwn%%,*}"
 [ -n "$w" ]&&{
@@ -1268,17 +1268,17 @@ echo "$tbo"
 clj "m8=0" "Back"
 ;;
 m8x=*)
-int="${qus#*=}" 
+i="${qus#*=}" 
 cfd="$m/up"
-eco "<img src=$j?m8d=$int />"
+eco "<img src=$j?m8d=$i />"
 while [ "${w##*.}" != "jpg" ]
 do
-int=$(($int+1))
+i=$(($i+1))
 cfd="$m/up"
 w="`ls "$cfd"|pdg`"
 [ -z "$w" ]&&break 1
 [ "${w##*.}" == "jpg" ]&&{
-clj "m8x=$int" "Next Photo"
+clj "m8x=$i" "Next Photo"
 break 1
 }
 done
@@ -1307,8 +1307,8 @@ fid
 }
 ;;
 ntf)
-[ -e "$usv/noce" ]&&{
-cat "$usv/noce"|while read nr
+[ -e "$q/noce" ]&&{
+cat "$q/noce"|while read nr
 do
 nef
 clj "m2k=$iao&m2kk=$iob=0" "$yti"
