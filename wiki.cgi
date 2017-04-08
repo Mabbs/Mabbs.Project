@@ -104,6 +104,7 @@ zcc(){
 usk="$m/user/$nep"
 mkdir "$usk/diary"
 >"$usk/chat"
+>"$usk/noce"
 echo $npd>>$usk/pwd
 }
 wcl(){
@@ -259,7 +260,12 @@ pxcx(){
 while read nr
 do
 cpo
-ypd&&echo "$1$co.$nr"
+hpd $2&&{
+rg=""
+[ -f "$pcz/$nr" ]&&ift="$pcz/$nr"||ift="$pcz/$nr/talk"
+[ -e "$ift" ]&&rg="($((`cat "$ift"|wcl`/3)))"
+}
+ypd&&echo "$1$co.$nr$rg"
 done
 }
 cc(){
@@ -359,7 +365,7 @@ echo "$co.$bm (`ls "$m/main/$bm/"|wcl`)"
 done
 echo "$fgx
 a.Back to $t"
-l||echo "b.Notice"
+l||echo "b.Notice (`cat "$q/noce"|wcl`)"
 slp&&{
 echo c.Make a part
 echo d.Release bulletin
@@ -432,7 +438,7 @@ clear
 echo "`gaen`   Part:$pac
 $fgx"
 co=0
-ls "$pcz"|pxcx
+ls "$pcz"|pxcx "" 1
 echo "$fgx
 a.Make a new post"
 bk
@@ -714,19 +720,37 @@ clj "m2k=$co=$p" "$txc"
 $hc
 }||echo "<item><title>$txc</title><link>${wsf}?m2k=$co=$p</link></item>"
 done
-} 
+}
+ndt(){
+until [ "$a" == "$1" ]
+do
+b="${a##*-}"
+a="${a%-*}"
+o="$b $o"
+done
+for i in $o
+do
+nwi="`ls "$m/up/$out"|pdg`"
+[ -n "$nwi" ]||break
+out="$out/$nwi"
+done
+}
 qus="$QUERY_STRING"
 case $qus in
-m8d=*)
-i="${qus#*=}" 
-cfd="$m/up"
-w="`ls "$cfd"|pdg`"
-[ -f "$cfd/$w" ]&&{
+m8d-*)
+a="$qus"
+ndt "m8d-m8"
+cfd="$m/up$out"
+[ -f "$cfd" ]&&{
 ctj "application/octet-stream"
-echo "Content-length:$(fsc `ls -l "$cfd/$w"`)
-Content-Disposition:attachment;filename=\"$w\"
+echo "Content-length:$(fsc `ls -l "$cfd"`)
+Content-Disposition:attachment;filename=\"${cfd##*/}\"
 "
-[ -n "$w" ]&&cat "$cfd/$w"
+cat "$cfd"
+}||{
+wjw "$m/up$out"
+echo "HTTP/1.1 302 Found
+Location:$j?${qus#*-}=$p"
 }
 ;;
 rss)
@@ -888,7 +912,9 @@ hpd $1&&clj "cop" "Rewrite"
 else
 hpd $1&&clj "cop" "$na"||echo "$nr"
 fi
-l||clj "ntf" "Notice"
+hpd $1&&{
+l||clj "ntf" "Notice(`cat "$q/noce"|wcl`)"
+}
 $hc
 }
 wpxc(){
@@ -900,8 +926,8 @@ do
 cpo
 ypd&&{
 echo "<tr><td>"
-hpd "$2"&&a="=0"
-clj "$1=$co$a" "$co.$nr"
+hpd "$2"&&aw="=0"
+clj "$1$co$aw" "$co.$nr"
 echo "</td>"
 hpd "$2" &&{
 [ -f "$pcz/$nr" ]&&{
@@ -919,7 +945,9 @@ nl="${ni#* }"
 echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 done
-}||echo "<td>$(fsc `ls -l "$cfd/$nr"`)</td>"
+}||{
+[ -f "$cfd/$nr" ]&&echo "<td>$(fsc `ls -l "$cfd/$nr"`)</td>"||echo "<td>(`ls "$cfd/$nr"|wcl`)</td>"
+}
 echo "</tr>"
 }
 done
@@ -965,7 +993,7 @@ $hc
 clj "m7" "4.Chat Room (`cat "$q/chat"|wcl`)"
 $hc
 wjw "$m/up"
-clj "m8=$p" "5.File Explorer(`ls "$m/up"|wcl`)"
+clj "m8-=$p" "5.File Explorer(`ls "$m/up"|wcl`)"
 }
 echo "</td>$tbo"
 ;;
@@ -1012,7 +1040,7 @@ ls "$m/up"|while read mr
 do
 eo=$(($eo+1))
 pkc&&{
-clj "m8d=$eo" "$mr"
+clj "m8d-m8-$eo" "$mr"
 $hc
 }
 done
@@ -1042,7 +1070,7 @@ cse=${cze%&tpa}
 eco "`gaen`   Part:$pac"
 wjs=`ls "$pcz"|wcl`
 co=0
-ls "$pcz"|wpxc "m2k=$i&m2kk" "1"
+ls "$pcz"|wpxc "m2k=$i&m2kk=" "1"
 clj "m2k=$i&m2kk=a=0" "Make a new post"
 $hc
 bk
@@ -1143,7 +1171,7 @@ p="0"
 gaen
 $hc
 co=0
-ls "$cfd"|wpxc "m5d"
+ls "$cfd"|wpxc "m5d="
 clj "m5w" "Write diary"
 $hc
 bk
@@ -1219,31 +1247,52 @@ r="$m/room/$w"
 zxth 1
 }
 ;;
-m8=*)
-cfd="$m/up"
+m8-*)
+a="${qus%=*}"
+ndt "m8"
+cfd="$m/up$out"
 eco "File Explorer"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
 co=0
-ls "$cfd"|wpxc "m8d"
+ls "$cfd"|wpxc "m8d-${qus%=*}-"
 eco "Upload File:"
-fom post "m8u" "$ent" 
+fom post "m8u-${qus%=*}" "$ent"
 echo "<input type=file name=file>"
+fmj
+eco "Make new folder name:"
+fom post "m8n-${qus%=*}" "$ent"
+ipt nm
 fmj
 $hc
 bk
 ;;
-m8u)
+m8u-*)
+a="${qus%=*}"
+ndt "m8u-m8"
+cfd="$m/up$out"
 read meta
 read a
 read b
 fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
-st="$m/up/$mu"
-cat >$st
-echo "$mu saved."
+cat >"$cfd/$mu"
+echo "$out/$mu saved."
+;;
+m8n-*)
+a="${qus%=*}"
+ndt "m8n-m8"
+cfd="$m/up$out"
+read b
+read c
+read nm
+nm="${nm%?}"
+[ -e "$cfd/$nm" ]||{
+mkdir "$cfd/$nm"
+echo "OK,$out/$nm Created"
+}
 ;;
 m8v)
 p="0"
@@ -1256,7 +1305,7 @@ do
 cpo
 [ "${nr##*.}" == "jpg" ]&&{
 echo "<td>"
-clj "m8x=$co" "<img src=$j?m8d=$co width=80px height=60px />"
+clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px />"
 echo "</td>"
 [ "$((${co}%3))" == "0" ]&&{
 echo "</tr><tr>"
@@ -1270,7 +1319,7 @@ clj "m8=0" "Back"
 m8x=*)
 i="${qus#*=}" 
 cfd="$m/up"
-eco "<img src=$j?m8d=$i />"
+eco "<img src=$j?m8d-m8-$i />"
 while [ "${w##*.}" != "jpg" ]
 do
 i=$(($i+1))
