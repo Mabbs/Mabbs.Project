@@ -737,7 +737,7 @@ done
 }
 qus="$QUERY_STRING"
 case $qus in
-m8d-*)
+m8d-m8*)
 a="$qus"
 ndt "m8d-m8"
 cfd="$m/up$out"
@@ -1006,6 +1006,21 @@ kw=${kk%?}
 pkc(){
 [ -n "`echo "$mr"|grp "$kw"`" ]
 }
+fqc(){
+eo=0
+while read mr
+do
+eo=$(($eo+1))
+[ -f "$1/$mr" ]&&{
+pkc&&{
+clj "m8d-m8-$2-$eo" "$mr"
+$hc
+}
+}||{
+ls "$1/$mr"|fqc "$1/$mr" "$2-$eo"
+}
+done
+}
 echo "Result$thc$tb<td>Entry${thq}User${thq}Post${thq}File$thc"
 ls "$s"|while read mr
 do
@@ -1036,14 +1051,7 @@ $hc
 done
 done
 echo "$thq"
-ls "$m/up"|while read mr
-do
-eo=$(($eo+1))
-pkc&&{
-clj "m8d-m8-$eo" "$mr"
-$hc
-}
-done
+ls "$m/up"|fqc "$m/up"
 echo "</td>$tbo" 
 }
 ;;
@@ -1268,7 +1276,7 @@ fmj
 $hc
 bk
 ;;
-m8u-*)
+m8u-m8*)
 a="${qus%=*}"
 ndt "m8u-m8"
 cfd="$m/up$out"
@@ -1281,7 +1289,7 @@ mu="${nu%\"*}"
 cat >"$cfd/$mu"
 echo "$out/$mu saved."
 ;;
-m8n-*)
+m8n-m8*)
 a="${qus%=*}"
 ndt "m8n-m8"
 cfd="$m/up$out"
