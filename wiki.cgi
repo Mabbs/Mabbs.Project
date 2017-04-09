@@ -138,7 +138,7 @@ echo "selected it."
 inc="echo Input number or command:"
 [ -e "$m/" ]&&echo "$wcm"||{
 echo Installing...
-mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up"
+mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up" "$m/up/novel"
 >"$m/ip"
 nep="$gly"
 echo "Master name:$gly"
@@ -287,7 +287,7 @@ $fgx
 2.Exit
 3.Go to $n
 4.Random
-5.Novel Viewer"
+5.Novel Viewer (`ls "$m/up/novel"|wcl`)"
 l&&echo 6.Login||{
 echo "6.Make a new entry
 7.Diary (`ls "$q/diary/"|wcl`)
@@ -325,7 +325,7 @@ done
 echo "Novel
 $fgx"
 p="0"
-ls "$m/up"|grp ".txt"|grp "$kw"|pxcx "b"
+ls "$m/up/novel"|grp "$kw"|pxcx "b"
 echo Which one:
 read mtt
 case $mtt in
@@ -339,10 +339,10 @@ fid
 ;;
 b*)
 i="${mtt#b}"
-tkw="`ls "$m/up"|grp "$kw"|pdg`"
+tkw="`ls "$m/up/novel"|pdg`"
 [ -n "$tkw" ]&&{
 clear
-more "$m/up/$tkw"
+more "$m/up/novel/$tkw"
 read nul
 }
 ;;
@@ -536,7 +536,7 @@ esac
 done
 ;;
 5)
-cfd="$m/up"
+cfd="$m/up/novel"
 wjw "$cfd"
 while true
 do
@@ -544,7 +544,7 @@ clear
 echo "Novel Viewer
 $fgx"
 co=0
-ls "$cfd"|grp ".txt"|pxcx
+ls "$cfd"|pxcx
 echo "$fgx
 You can Upload novel on Web"
 bk
@@ -559,7 +559,7 @@ c)
 fy "$cfd"
 ;;
 *)
-w="`ls "$cfd"|grp ".txt"|pdg`"
+w="`ls "$cfd"|pdg`"
 [ -n "$w" ]&&{
 clear
 more "$cfd/$w"
@@ -1013,7 +1013,7 @@ do
 eo=$(($eo+1))
 [ -f "$1/$mr" ]&&{
 pkc&&{
-clj "m8d-m8-$2-$eo" "$mr"
+clj "m8d-m8-$2-$eo" "${1#$m/up}/$mr"
 $hc
 }
 }||{
@@ -1260,6 +1260,7 @@ a="${qus%=*}"
 ndt "m8"
 cfd="$m/up$out"
 eco "File Explorer"
+eco "Path:/${out#/}"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
