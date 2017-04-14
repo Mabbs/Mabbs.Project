@@ -33,6 +33,9 @@ hpd(){
 cpd(){
 [ "$p" -gt "1" ]
 }
+opd(){
+[ "$p" -lt "$((`ls "$cfd"|wcl`-9))" ]
+}
 rck(){
 [ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o -z "$nep" ]
 }
@@ -156,7 +159,13 @@ fy(){
 cpd&&p="$(($p-10))" 
 }
 fyx(){
-cpd&&echo c.Next page
+cpd&&echo r.Next page
+}
+oy(){
+opd&&p="$(($p+10))" 
+}
+oyx(){
+opd&&echo l.Prev page
 }
 u(){
 clear
@@ -431,6 +440,7 @@ i="$pac"
 pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
 pcz="$m/main/$pac"
+cfd="$pcz"
 wjw "$pcz"
 while true
 do
@@ -439,11 +449,12 @@ echo "`gaen`   Part:$pac
 $fgx"
 co=0
 ls "$pcz"|pxcx "" 1
-echo "$fgx
-a.Make a new post"
+echo "$fgx"
+oyx
+fyx
+echo "a.Make a new post"
 bk
-fyx "$pcz"
-slp&&echo d.Delete the part
+slp&&echo c.Delete the part
 $inc
 read i
 case $i in
@@ -495,10 +506,13 @@ esac
 b)
 break 1
 ;;
-c)
-fy "$pcz"
+l)
+oy
 ;;
-d)
+r)
+fy
+;;
+c)
 slp&&rm -rf "$pcz"&break 1
 ;;
 *)
@@ -545,18 +559,22 @@ echo "Novel Viewer
 $fgx"
 co=0
 ls "$cfd"|pxcx
-echo "$fgx
-You can Upload novel on Web"
+echo "$fgx"
+oyx
+fyx
+echo "You can Upload novel on Web"
 bk
-fyx "$cfd"
 $inc
 read i
 case $i in
 b)
 break 1
 ;;
-c)
-fy "$cfd"
+l)
+oy
+;;
+r)
+fy
 ;;
 *)
 w="`ls "$cfd"|pdg`"
@@ -608,10 +626,11 @@ gaen
 echo $fgx
 co=0
 ls "$cfd"|pxcx
-echo "$fgx
-a.Write diary"
+echo "$fgx"
+oyx
+fyx
+echo "a.Write diary"
 bk
-fyx "$cfd"
 $inc
 read i
 case $i in
@@ -631,8 +650,11 @@ fid
 b)
 break 1
 ;;
-c)
-fy "$cfd"
+l)
+oy
+;;
+r)
+fy
 ;;
 *)
 w="`ls "$cfd"|pdg`"
@@ -946,13 +968,14 @@ echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 done
 }||{
-[ -f "$cfd/$nr" ]&&echo "<td>$(fsc `ls -l "$cfd/$nr"`)</td>"||echo "<td>(`ls "$cfd/$nr"|wcl`)</td>"
+[ -f "$cfd/$nr" ]&&echo "<td>$(fsc `ls -l "$cfd/$nr"`) B</td>"||echo "<td>`ls "$cfd/$nr"|wcl` item</td>"
 }
 echo "</tr>"
 }
 done
 echo "$tbo"
-cpd&&clj "${qus%=*}=$(($p-10))" "Next page"
+opd&&clj "${qus%=*}=$(($p+10))" "<--"
+cpd&&clj "${qus%=*}=$(($p-10))" "-->"
 $hc
 }
 echo "$tb<td>"
@@ -1072,6 +1095,7 @@ pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
 p="0"
 pcz="$m/main/$pac"
+cfd="$pcz"
 cze="${qus#*&m2kk=}"
 cse=${cze%&tpa}
 [ "$cse" == "$qus" ]&&{
@@ -1265,17 +1289,19 @@ gaen
 clj "m8v" "Photo Viewer"
 $hc
 co=0
-ls "$cfd"|wpxc "m8d-${qus%=*}-"
+a="${qus%=*}"
+ls "$cfd"|wpxc "m8d-$a-"
 eco "Upload File:"
-fom post "m8u-${qus%=*}" "$ent"
+fom post "m8u-$a" "$ent"
 echo "<input type=file name=file>"
 fmj
 eco "Make new folder name:"
-fom post "m8n-${qus%=*}" "$ent"
+fom post "m8n-$a" "$ent"
 ipt nm
 fmj
 $hc
-bk
+wjw "$m/up${out%/*}"
+[ "$a" == "m8-" ]&&bk||clj "${a%-*}=$p" "Back"
 ;;
 m8u-m8*)
 a="${qus%=*}"
@@ -1299,8 +1325,7 @@ read c
 read nm
 nm="${nm%?}"
 [ -e "$cfd/$nm" ]||{
-mkdir "$cfd/$nm"
-echo "OK,$out/$nm Created"
+mkdir "$cfd/$nm"&&echo "OK,$out/$nm Created"||echo "Fail"
 }
 ;;
 m8v)
