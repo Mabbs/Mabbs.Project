@@ -61,6 +61,12 @@ l&&u||{
 echo "$na  `date` #$((`cat "$r"|wcl`/3+1))
 $ry
 ">>$r
+[ -n "`echo "$ry"|grp @`" ]&&{
+for snr in ${ry##*@}
+do
+[ -e "$m/user/$snr" ]&&echo "$inu $i-$na notify you on $w">>$m/user/$snr/noce
+done
+}
 cat "$r"|while read nc
 do
 ni="${nc#*r:}"
@@ -796,7 +802,7 @@ ctj "text/html"
 }
 echo ""
 {
-echo "<title>$zsn</title><link rel="alternate" type="application/rss+xml" title="$n" href="$j?rss" >"
+echo "<link rel="alternate" type="application/rss+xml" title="$n" href="$j?rss" >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -988,6 +994,7 @@ echo "Please run it on shell"
 echo "$thc"
 case $qus in
 main)
+gtn="(`gaen`)"
 echo "$t User:"
 nr="$na"
 usg 1
@@ -1026,6 +1033,7 @@ read c
 read kk
 kw=${kk%?}
 [ -n "$kw" ]&&{
+gtn="Result for $kw"
 pkc(){
 [ -n "`echo "$mr"|grp "$kw"`" ]
 }
@@ -1083,6 +1091,7 @@ i="${qus#*=}"
 tkw="`ls "$s"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$s/$tkw"
+gtn="Entry:${tkw%%+*}"
 fid
 }
 ;;
@@ -1100,6 +1109,7 @@ cze="${qus#*&m2kk=}"
 cse=${cze%&tpa}
 [ "$cse" == "$qus" ]&&{
 eco "`gaen`   Part:$pac"
+gtn="Part:$pac"
 wjs=`ls "$pcz"|wcl`
 co=0
 ls "$pcz"|wpxc "m2k=$i&m2kk=" "1"
@@ -1146,6 +1156,7 @@ r="$pcz/$w"
 i="$cse"
 w="`ls "$pcz"|pdg`"
 [ -n "$w" ]&&{
+gtn="Post:$w"
 r="$pcz/$w"
 [ -f "$r" ]&&zxth||{
 cat "$r/main"|hcs
@@ -1195,6 +1206,7 @@ fid
 ;;
 m5*)
 l&&u||{
+gtn="Diary"
 mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
 case $qus in
@@ -1255,6 +1267,7 @@ l&&u||{
 cfd="$q/chat"
 p="0"
 eco "Chat Room"
+gtn="Chat Room"
 gaen
 $hc
 echo $thc
@@ -1275,6 +1288,7 @@ i="${qus#*=}"
 wwn="`cat "$cfd"|pdg`"
 w="${wwn%%,*}"
 [ -n "$w" ]&&{
+gtn="Room:No.$w"
 r="$m/room/$w"
 zxth 1
 }
@@ -1284,6 +1298,7 @@ a="${qus%=*}"
 ndt "m8"
 cfd="$m/up$out"
 eco "File Explorer"
+gtn="Path:/${out#/}"
 eco "Path:/${out#/}"
 gaen
 clj "m8v" "Photo Viewer"
@@ -1304,6 +1319,7 @@ wjw "$m/up${out%/*}"
 [ "$a" == "m8-" ]&&bk||clj "${a%-*}=$p" "Back"
 ;;
 m8u-m8*)
+l&&u||{
 a="${qus%=*}"
 ndt "m8u-m8"
 cfd="$m/up$out"
@@ -1315,8 +1331,10 @@ nu="${fnm#\"*}"
 mu="${nu%\"*}"
 cat >"$cfd/$mu"
 echo "$out/$mu saved."
+}
 ;;
 m8n-m8*)
+l&&u||{
 a="${qus%=*}"
 ndt "m8n-m8"
 cfd="$m/up$out"
@@ -1327,9 +1345,11 @@ nm="${nm%?}"
 [ -e "$cfd/$nm" ]||{
 mkdir "$cfd/$nm"&&echo "OK,$out/$nm Created"||echo "Fail"
 }
+}
 ;;
 m8v)
 p="0"
+gtn="Photo Viewer"
 eco "Photo Viewer"
 echo "$tb"
 co=0
@@ -1338,12 +1358,12 @@ ls "$m/up/"|while read nr
 do
 cpo
 [ "${nr##*.}" == "jpg" ]&&{
+mo="$(($mo+1))"
 echo "<td>"
-clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px />"
+clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px /><br>$nr"
 echo "</td>"
-[ "$((${co}%3))" == "0" ]&&{
+[ "$((${mo}%3))" == "0" ]&&{
 echo "</tr><tr>"
-mo="0"
 }
 }
 done
@@ -1430,9 +1450,9 @@ echo OK
 esac
 $hc
 [ -n "`cat "$m/ip"|grp "$rip"`" ]||echo "$rip">>$m/ip
-eco "${thc}Counter:`cat "$m/ip"|wcl`"
+eco "${thc}`cat "$m/ip"|wcl` people visited the website"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
-echo "Copyright (C) `date +%Y` by Mayx</td>$tbo"
+echo "Copyright (C) `date +%Y` by Mayx</td>$tbo <title>$zsn $gtn</title>"
 }|gzip -c
 ;;
 esac
