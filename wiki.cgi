@@ -111,7 +111,7 @@ done
 }
 zcc(){
 usk="$m/user/$nep"
-mkdir "$usk/diary"
+mkdir -p "$usk/diary"
 >"$usk/chat"
 >"$usk/noce"
 echo $npd>>$usk/pwd
@@ -147,7 +147,7 @@ echo "selected it."
 inc="echo Input number or command:"
 [ -e "$m/" ]&&echo "$wcm"||{
 echo Installing...
-mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up" "$m/up/novel"
+mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up/novel"
 >"$m/ip"
 nep="$gly"
 echo "Master name:$gly"
