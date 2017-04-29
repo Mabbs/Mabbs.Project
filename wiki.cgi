@@ -765,7 +765,7 @@ done
 }
 qus="$QUERY_STRING"
 case $qus in
-m8d-m8*)
+m8d-m8-*)
 a="$qus"
 ndt "m8d-m8"
 cfd="$m/up$out"
@@ -1318,7 +1318,7 @@ $hc
 wjw "$m/up${out%/*}"
 [ "$a" == "m8-" ]&&bk||clj "${a%-*}=$p" "Back"
 ;;
-m8u-m8*)
+m8u-m8-*)
 l&&u||{
 a="${qus%=*}"
 ndt "m8u-m8"
@@ -1333,7 +1333,7 @@ cat >"$cfd/$mu"
 echo "$out/$mu saved."
 }
 ;;
-m8n-m8*)
+m8n-m8-*)
 l&&u||{
 a="${qus%=*}"
 ndt "m8n-m8"
