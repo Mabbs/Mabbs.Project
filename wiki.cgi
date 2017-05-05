@@ -114,6 +114,7 @@ usk="$m/user/$nep"
 mkdir -p "$usk/diary"
 >"$usk/chat"
 >"$usk/noce"
+echo "0">"$usk/noct"
 echo $npd>>$usk/pwd
 }
 wcl(){
@@ -380,7 +381,7 @@ echo "$co.$bm (`ls "$m/main/$bm/"|wcl`)"
 done
 echo "$fgx
 a.Back to $t"
-l||echo "b.Notice (`cat "$q/noce"|wcl`)"
+l||echo "b.Notice ($((`cat "$q/noce"|wcl`-`cat "$q/noct"`)))"
 slp&&{
 echo c.Make a part
 echo d.Release bulletin
@@ -395,16 +396,22 @@ b)
 l&&u||{
 [ -e "$q/noce" ]&&{
 clear
+echo "`cat "$q/noce"|wcl`">"$q/noct"
 co=0
 cat "$q/noce"|while read nr
 do
 cpo
 echo "$co.${nr#*-}"
 done
+echo c.Clear
 $inc
 read i
 [ -n "$i" ]&&{
 nr="`cat "$q/noce"|pdg`"
+[ "$i" == "c" ]&&{
+>"$q/noce"
+echo "0">"$q/noct"
+}||{
 [ -n "$nr" ]&&{
 nef
 inu="$iao"
@@ -417,6 +424,7 @@ w="`ls "$pcz"|pdg`"
 [ -n "$w" ]&&{
 r="$pcz/$w"
 [ -f "$r" ]&&zxth
+}
 }
 }
 }
@@ -926,7 +934,7 @@ read b
 read c
 }
 usg(){
-fne="User-$nr+User space"
+fne="User-$nr+User_space"
 if [ -e "$s/$fne" ]
 then
 ls "$s"|while read mr
@@ -936,12 +944,12 @@ eo=$(($eo+1))
 clj "m1g=$eo" "$nr"
 }
 done
-hpd $1&&clj "cop" "Rewrite"
+hpd $1
 else
-hpd $1&&clj "cop" "$na"||echo "$nr"
+hpd $1&&clj "m4-u" "$na"||echo "$nr"
 fi
 hpd $1&&{
-l||clj "ntf" "Notice(`cat "$q/noce"|wcl`)"
+l||clj "ntf" "Notice($((`cat "$q/noce"|wcl`-`cat "$q/noct"`)))"
 }
 $hc
 }
@@ -1173,19 +1181,10 @@ zxth
 ;;
 esac
 ;;
-m4)
+m4*)
 l&&u||{
 fom post "m4ws" "$ent"
-echo Input Main title:
-ipt tit
-echo Tags:
-ipt tag
-echo Word:
-ipt wd
-fmj
-}
-;;
-m4ws)
+[ "$qus" == "m4ws" ]&&{
 l&&u||{
 read b
 read c
@@ -1201,6 +1200,20 @@ mwt="$s/$mt+$tgs"
 nwe
 rmk="$mwt"
 fid
+}
+}
+}||{
+[ "$qus" == "m4-u" ]&&{
+echo "<input type=hidden name=tit value=User-$na ><input type=hidden name=tag value=User_space > "
+}||{
+echo Input Main title:
+ipt tit
+echo Tags:
+ipt tag
+}
+echo Word:
+ipt wd
+fmj
 }
 }
 ;;
@@ -1388,29 +1401,13 @@ done
 $hc
 clj "m8v" "Back"
 ;;
-cop)
-l&&u||{
-fom post "cows" "$ent"
-echo Word:
-ipt wd
-fmj
+ntf*)
+[ "$qus" == "ntf-c" ]&&{
+>"$q/noce"
+echo "0">"$q/noct"
 }
-;;
-cows)
-l&&u||{
-read b
-read c
-read wd
-mt="User-$na"
-tgs="User space"
-mwt="$s/$mt+$tgs"
-nwe
-rmk="$mwt"
-fid
-}
-;;
-ntf)
 [ -e "$q/noce" ]&&{
+echo "`cat "$q/noce"|wcl`">"$q/noct"
 cat "$q/noce"|while read nr
 do
 nef
@@ -1418,6 +1415,7 @@ clj "m2k=$iao&m2kk=$iob=0" "$yti"
 $hc
 done
 }
+clj "ntf-c" "Clear"
 bk
 ;;
 zc)
