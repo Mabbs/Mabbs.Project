@@ -61,11 +61,15 @@ l&&u||{
 echo "$na  `date` #$((`cat "$r"|wcl`/3+1))
 $ry
 ">>$r
-[ -n "`echo "$ry"|grp @`" ]&&{
+[ -n "`echo "$ry"|grp @`" -a -z $ckn ]&&{
 for snr in ${ry##*@}
 do
 [ -e "$m/user/$snr" ]&&echo "$inu $i-$na notify you on $w">>$m/user/$snr/noce
 done
+}
+[ -n $ckn -a -n "`echo "$ry"|grp "add friend"`" ]&&{
+fnm="${ry##*add friend }"
+[ -n "$fnm" -a -e "$m/user/$fnm" ]&&echo "$w,$qmz">>"$m/user/$fnm/chat"
 }
 cat "$r"|while read nc
 do
@@ -116,6 +120,7 @@ mkdir -p "$usk/diary"
 >"$usk/noce"
 echo "0">"$usk/noct"
 echo $npd>>$usk/pwd
+echo "`date`|$rip|$nep joined">>$m/log
 }
 wcl(){
 nb="0"
@@ -230,6 +235,7 @@ c)
 echo Word:
 read nw 
 echo $nw >>$rmk
+[ -n "$ckn" ]&&echo "`date`|$na edited $tkw">>$m/log
 ;;
 *)
 break 1
@@ -249,7 +255,7 @@ $fgx"
 cat "$r"
 echo 'Input reply(Input e go back):'
 slp&&echo Input d delete the post
-hpd $1&&echo "Input a to add friend:"
+hpd $1&&ckn=1
 read ry
 case $ry in
 e)
@@ -257,14 +263,6 @@ break 1
 ;;
 d)
 slp&&rm -rf "$r"&break 1
-;;
-a)
-hpd $1&&{
-clear
-echo Input friend name:
-read fnm
-[ -n "$fnm" -a -e "$m/user/$fnm" ]&&echo "$w,$qmz">>"$m/user/$fnm/chat"
-}
 ;;
 *)
 bfx
@@ -350,6 +348,7 @@ i="${mtt#a}"
 tkw="`ls "$s"|grp "$kw"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$s/$tkw"
+ckn=1
 fid
 }
 ;;
@@ -869,6 +868,7 @@ read b
 read c
 read ry
 echo "$ry" >>$rmk
+[ -n "$ckn" ]&&echo "`date`|$rip|$na edited $tkw">>$m/log
 }
 }
 cat "$rmk"|hcs
@@ -890,6 +890,7 @@ read b
 read c
 read ry
 ry="${ry%?}"
+hpd $1&&ckn=1
 bfx
 }
 hpd $1||{
@@ -899,11 +900,12 @@ echo "$thc"
 cat "$r"|hcs
 [ "$cse" == "as" ]||{
 l&&clj "m4" "Login"||{
-hpd $1&&hyt="m7k=$i"||hyt="$qus"
-fom post "$hyt" "$ent"
+[ -z $cnk ]&&{
+fom post "$qus" "$ent"
 echo Input reply:
 ipt ry
 fmj
+}
 }
 $hc
 }
@@ -1100,6 +1102,7 @@ tkw="`ls "$s"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$s/$tkw"
 gtn="Entry:${tkw%%+*}"
+ckn="1"
 fid
 }
 ;;
@@ -1121,23 +1124,20 @@ gtn="Part:$pac"
 wjs=`ls "$pcz"|wcl`
 co=0
 ls "$pcz"|wpxc "m2k=$i&m2kk=" "1"
-clj "m2k=$i&m2kk=a=0" "Make a new post"
+l||{
+fom post "m2k=$i&m2kk=as=0" "$ent"
+echo Input new post title:
+ipt tit
+echo Word:
+ipt wd
+fmj
+}
 $hc
 bk
 }
 cse=${cse%=0}
 }
 case $cse in
-a)
-l&&u||{
-fom post "m2k=$i&m2kk=as=0" "$ent"
-echo Input the title:
-ipt tit
-echo Word:
-ipt wd
-fmj
-}
-;;
 as)
 l&&u||{
 read b
@@ -1292,7 +1292,27 @@ clj "m7k=$co" "$co.${nr#*,}"
 $hc
 done
 echo $thc
+fom post "m7a" "$ent"
+echo Input new room name:
+ipt qmz
+fmj
 bk
+}
+;;
+m7a)
+l&&u||{
+read b
+read c
+read qmz
+w="$((`ls "$m/room"|wcl`+1))"
+r="$m/room/$w"
+echo "Chat Room #$w">$r
+echo "$fgx">>$r
+echo "$w,$qmz">>$m/user/$na/chat
+gtn="Room:No.$w"
+r="$m/room/$w"
+cnk=1
+zxth "1"
 }
 ;;
 m7k=*)
@@ -1300,6 +1320,7 @@ cfd="$q/chat"
 i="${qus#*=}"
 wwn="`cat "$cfd"|pdg`"
 w="${wwn%%,*}"
+qmz="${wwn#*,}"
 [ -n "$w" ]&&{
 gtn="Room:No.$w"
 r="$m/room/$w"
@@ -1343,6 +1364,7 @@ fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
 cat >"$cfd/$mu"
+echo "`date`|$rip|$na Uploaded $mu">>$m/log
 echo "$out/$mu saved."
 }
 ;;
