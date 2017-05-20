@@ -71,6 +71,26 @@ done
 fnm="${ry##*add friend }"
 [ -n "$fnm" -a -e "$m/user/$fnm" ]&&echo "$w,$qmz">>"$m/user/$fnm/chat"
 }
+[ -n "`echo "$ry"|grp "@ai"`" ]&&{
+swd="${ry%@ai}"
+[ -n "`echo "$swd"|grp "study"`" ]&&{
+echo "${swd##*study }" >>$m/ai
+echo "`date`|$rip|$na add AI command">>$m/log
+ais="OKay"
+}||{
+ais="`cat "$m/ai"|while read nr
+do
+[ "${nr%%-*}" == "$swd" ]&&{
+echo "${nr#*-}"
+break 1
+}
+done`"
+}
+[ -z "$swd" -o -z "$ais" ]&&ais="Sorry,I dont know what do you say"
+echo "AI  `date` #$((`cat "$r"|wcl`/3+1))
+$ais
+">>$r
+}
 cat "$r"|while read nc
 do
 ni="${nc#*r:}"
@@ -155,6 +175,7 @@ inc="echo Input number or command:"
 echo Installing...
 mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up/novel"
 >"$m/ip"
+>$m/ai
 nep="$gly"
 echo "Master name:$gly"
 echo "New password:"
