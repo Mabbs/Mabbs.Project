@@ -1384,8 +1384,8 @@ read b
 fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
-cat >"$cfd/$mu"
 echo "`date`|$rip|$na Uploaded $mu">>$m/log
+cat >"$cfd/$mu"
 echo "$out/$mu saved."
 }
 ;;
@@ -1424,7 +1424,8 @@ echo "</tr><tr>"
 }
 done
 echo "$tbo"
-clj "m8=0" "Back"
+wjw "$m/up"
+clj "m8-=$p" "Back"
 ;;
 m8x=*)
 i="${qus#*=}" 
