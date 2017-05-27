@@ -1225,7 +1225,7 @@ fid
 }
 }||{
 [ "$qus" == "m4-u" ]&&{
-echo "<input type=hidden name=tit value=User-$na ><input type=hidden name=tag value=User_space > "
+echo "<input type=hidden name=tit value=User-$na ><input type=hidden name=tag value=User_space >"
 }||{
 echo Input Main title:
 ipt tit
@@ -1484,8 +1484,11 @@ vv="${tl##*=}"
 [ "$vv" == "$vs" ]&&{
 chk="`ls "$m/user"|grp "$nep"`"
 rck||{
-zcc
-echo OK
+zcc&&{
+fom post
+echo "OK<br>Onekey Login:<input type=hidden name=lon value=$nep ><input type=hidden name=pw value=$npd >"
+fmj
+}
 }
 }
 ;;
