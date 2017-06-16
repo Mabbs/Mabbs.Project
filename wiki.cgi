@@ -22,7 +22,7 @@ cpo(){
 co=$(($co+1))
 }
 clj(){
-echo "<a href=$j?$1>$2</a>"
+echo "<a href=$j?${yzh}$1>$2</a>"
 }
 l(){
 [ "$na" == "guest" ]
@@ -791,7 +791,7 @@ nwi="`ls "$m/up/$out"|pdg`"
 out="$out/$nwi"
 done
 }
-qus="$QUERY_STRING"
+qus="${QUERY_STRING##*_}"
 case $qus in
 m8d-m8-*)
 a="$qus"
@@ -805,8 +805,12 @@ Content-Disposition:attachment;filename=\"${cfd##*/}\"
 cat "$cfd"
 }||{
 wjw "$m/up$out"
+[ "${QUERY_STRING%_*}" == "$qus" ]||{
+yzz="${QUERY_STRING%_*}"
+yzh="${yzz}_"
+}
 echo "HTTP/1.1 302 Found
-Location:$j?${qus#*-}=$p"
+Location:$j?${yzh}${qus#*-}=$p"
 }
 ;;
 rss)
@@ -821,9 +825,15 @@ echo "</channel></rss>"
 *)
 read tl
 [ "${tl%%=*}" == "lon" ]&&{
+[ "$tl" == "${tl%&noc=on}" ]&&{
 echo "HTTP/1.1 302 Found
 Location:$j?main
 Set-Cookie:$tl;PATH=/"
+}||{
+tl="${tl%&noc=on}"
+echo "HTTP/1.1 302 Found
+Location:$j?${tl}_main"
+}
 }||{
 echo "Content-Encoding:gzip"
 ctj "text/html"
@@ -838,9 +848,13 @@ tbo="</tr></table>"
 thq="</td><td>"
 spa="echo <input type=password name=pw><br>"
 ent="enctype=multipart/form-data"
-uma="${HTTP_COOKIE%&pw*}"
+[ "${QUERY_STRING%_*}" == "$qus" ]&&yzz="$HTTP_COOKIE"||{
+yzz="${QUERY_STRING%_*}"
+yzh="${yzz}_"
+}
+uma="${yzz%&pw*}"
 ua="${uma#*=}"
-pa="${HTTP_COOKIE#*pw=}"
+pa="${yzz#*pw=}"
 [ -z "$ua" ]&&np=0||{
 [ -e "$m/user/$ua" ]&&np="`cat "$m/user/$ua/pwd"`ck"
 }
@@ -850,7 +864,7 @@ q="$m/user/$na"
 cfd="$q/diary"
 }||na="guest"
 fom(){
-echo "<form method=$1 action=$j?$2 $3>"
+echo "<form method=$1 action=$j?$yzh$2 $3>"
 }
 hcs(){
 while read pd
@@ -873,7 +887,7 @@ fom post
 echo Login:
 ipt lon
 echo Password:
-eco "<input type=password name=pw>"
+eco "<input type=password name=pw><br> <input name="noc" type="checkbox">Dont Use Cookie"
 fmj
 $hc
 $hc
@@ -1073,6 +1087,7 @@ eo=0
 while read mr
 do
 eo=$(($eo+1))
+[ -e "$1/$mr" ]&&{
 [ -f "$1/$mr" ]&&{
 pkc&&{
 clj "m8d-m8-$2-$eo" "${1#$m/up}/$mr"
@@ -1080,6 +1095,7 @@ $hc
 }
 }||{
 ls "$1/$mr"|fqc "$1/$mr" "$2-$eo"
+}
 }
 done
 }
