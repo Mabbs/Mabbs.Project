@@ -22,7 +22,7 @@ cpo(){
 co=$(($co+1))
 }
 clj(){
-echo "<a href=$j?${yzh}$1>$2</a>"
+echo "<a href=$j?${yzh}${toa}$1>$2</a>"
 }
 l(){
 [ "$na" == "guest" ]
@@ -791,7 +791,10 @@ nwi="`ls "$m/up/$out"|pdg`"
 out="$out/$nwi"
 done
 }
-qus="${QUERY_STRING##*_}"
+qua="${QUERY_STRING##*_}"
+tok="${qua%token*}"
+[ "$tok" == "$qua" ]||toa="${tok}token"
+qus="${qua##*token}"
 case $qus in
 m8d-m8-*)
 a="$qus"
@@ -805,12 +808,12 @@ Content-Disposition:attachment;filename=\"${cfd##*/}\"
 cat "$cfd"
 }||{
 wjw "$m/up$out"
-[ "${QUERY_STRING%_*}" == "$qus" ]||{
+[ "${QUERY_STRING%_*}" == "$qua" ]||{
 yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
 echo "HTTP/1.1 302 Found
-Location:$j?${yzh}${qus#*-}=$p"
+Location:$j?${yzh}${toa}${qus#*-}=$p"
 }
 ;;
 rss)
@@ -826,9 +829,10 @@ echo "</channel></rss>"
 read tl
 [ "${tl%%=*}" == "lon" ]&&{
 [ "$tl" == "${tl%&noc=on}" ]&&{
+uck
 echo "HTTP/1.1 302 Found
-Location:$j?main
-Set-Cookie:$tl;PATH=/"
+Location: $j?${vv}tokenmain
+Set-Cookie: ${tl}token${vv};PATH=/;HttpOnly"
 }||{
 tl="${tl%&noc=on}"
 echo "HTTP/1.1 302 Found
@@ -840,7 +844,7 @@ ctj "text/html"
 }
 echo ""
 {
-echo "<link rel="alternate" type="application/rss+xml" title="$n" href="$j?rss" >"
+echo "<link rel=alternate type=application/rss+xml title=$n href=$j?rss >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -848,7 +852,8 @@ tbo="</tr></table>"
 thq="</td><td>"
 spa="echo <input type=password name=pw><br>"
 ent="enctype=multipart/form-data"
-[ "${QUERY_STRING%_*}" == "$qus" ]&&yzz="$HTTP_COOKIE"||{
+[ -z "$HTTP_COOKIE" -o "$tok" == "${HTTP_COOKIE##*token}" ]&&{
+[ "${QUERY_STRING%_*}" == "$qua" ]&&yzz="${HTTP_COOKIE%token*}"||{
 yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
@@ -858,13 +863,14 @@ pa="${yzz#*pw=}"
 [ -z "$ua" ]&&np=0||{
 [ -e "$m/user/$ua" ]&&np="`cat "$m/user/$ua/pwd"`ck"
 }
+}
 [ "${pa}ck" == "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 cfd="$q/diary"
 }||na="guest"
 fom(){
-echo "<form method=$1 action=$j?$yzh$2 $3>"
+echo "<form method=$1 action=$j?${yzh}${toa}$2 $3>"
 }
 hcs(){
 while read pd
