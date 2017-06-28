@@ -852,8 +852,19 @@ tbo="</tr></table>"
 thq="</td><td>"
 spa="echo <input type=password name=pw><br>"
 ent="enctype=multipart/form-data"
-[ -z "$HTTP_COOKIE" -o "$tok" == "${HTTP_COOKIE##*token}" ]&&{
-[ "${QUERY_STRING%_*}" == "$qua" ]&&yzz="${HTTP_COOKIE%token*}"||{
+a="$HTTP_COOKIE"
+until [ "$a" == "$b" ]
+do
+b="${a##*;}"
+a="${a%;*}"
+o="$b $o"
+done
+for i in $o
+do
+[ "${i%%=*}" == "lon" ]&&coke="$i"
+done
+[ -z "$coke" -o "$tok" == "${coke##*token}" ]&&{
+[ "${QUERY_STRING%_*}" == "$qua" ]&&yzz="${coke%token*}"||{
 yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
