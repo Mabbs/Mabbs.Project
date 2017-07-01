@@ -1531,10 +1531,7 @@ $hc
 eco "${thc}`cat "$m/ip"|wcl` people visited the website"
 eco "You can use more thing on <a href=telnet://$HTTP_HOST>Telnet Version</a>"
 echo "Copyright (C) `date +%Y` by Mayx</td>$tbo <title>$zsn $gtn</title>"
-}|while read rot
-do
-echo "${rot##*<script>*}"
-done|gzip -c
+}|gzip -c
 ;;
 esac
 }
