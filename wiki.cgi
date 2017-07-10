@@ -61,9 +61,21 @@ l&&u||{
 echo "$na  `date` #$((`cat "$r"|wcl`/3+1))
 $ry
 ">>$r
-[ -n "`echo "$ry"|grp @`" -a -z $ckn ]&&{
+[ -n "`echo "$ry"|grp @`" -a -n 1 ]&&{
 for snr in ${ry##*@}
 do
+[ -n $ckn ]&&{
+i="$(
+co=0
+cat "$m/user/$snr/chat"|while read uu
+do
+co="$(($co+1))"
+[ "$wwn" == "$uu" ]&&echo "$co"
+done
+)"
+w="$qmz"
+inu=0
+}
 [ -e "$m/user/$snr" ]&&echo "$inu $i-$na notify you on $w">>$m/user/$snr/noce
 done
 }
@@ -94,7 +106,7 @@ $ais
 cat "$r"|while read nc
 do
 ni="${nc#*r:}"
-echo "$inu $i-$na reply you on $w">>$m/user/${ni%% *}/noce
+[ "${ni%% *}" == "$na" ]||echo "$inu $i-$na reply you on $w">>$m/user/${ni%% *}/noce
 break 1
 done
 }
@@ -1449,7 +1461,7 @@ cpo
 [ "${nr##*.}" == "jpg" ]&&{
 mo="$(($mo+1))"
 echo "<td>"
-clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px /><br>$nr"
+clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px /><br>"
 echo "</td>"
 [ "$((${mo}%3))" == "0" ]&&{
 echo "</tr><tr>"
@@ -1464,14 +1476,14 @@ m8x=*)
 i="${qus#*=}" 
 cfd="$m/up"
 eco "<img src=$j?m8d-m8-$i />"
+gtn=" File:`ls "$cfd"|pdg`"
 while [ "${w##*.}" != "jpg" ]
 do
 i=$(($i+1))
-cfd="$m/up"
 w="`ls "$cfd"|pdg`"
 [ -z "$w" ]&&break 1
 [ "${w##*.}" == "jpg" ]&&{
-clj "m8x=$i" "Next Photo"
+clj "m8x=$i" "Next Photo:$w"
 break 1
 }
 done
@@ -1488,7 +1500,7 @@ echo "`cat "$q/noce"|wcl`">"$q/noct"
 cat "$q/noce"|while read nr
 do
 nef
-clj "m2k=$iao&m2kk=$iob=0" "$yti"
+[ "$iao" == "0" ]&&clj "m7k=$iob" "$yti"||clj "m2k=$iao&m2kk=$iob=0" "$yti"
 $hc
 done
 }
