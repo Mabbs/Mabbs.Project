@@ -61,10 +61,10 @@ l&&u||{
 echo "$na  `date` #$((`cat "$r"|wcl`/3+1))
 $ry
 ">>$r
-[ -n "`echo "$ry"|grp @`" -a -n 1 ]&&{
+[ -n "`echo "$ry"|grp "@"`" ]&&{
 for snr in ${ry##*@}
 do
-[ -n $ckn ]&&{
+[ -n "$ckn" ]&&{
 i="$(
 co=0
 cat "$m/user/$snr/chat"|while read uu
@@ -79,7 +79,7 @@ inu=0
 [ -e "$m/user/$snr" ]&&echo "$inu $i-$na notify you on $w">>$m/user/$snr/noce
 done
 }
-[ -n $ckn -a -n "`echo "$ry"|grp "add friend"`" ]&&{
+[ -n "$ckn" -a -n "`echo "$ry"|grp "add friend"`" ]&&{
 fnm="${ry##*add friend }"
 [ -n "$fnm" -a -e "$m/user/$fnm" ]&&echo "$w,$qmz">>"$m/user/$fnm/chat"
 }
@@ -825,7 +825,7 @@ yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
 echo "HTTP/1.1 302 Found
-Location:$j?${yzh}${toa}${qus#*-}=$p"
+Location:${j}?${yzh}${toa}${qus#*-}=$p"
 }
 ;;
 rss)
@@ -848,7 +848,7 @@ Set-Cookie: ${tl}token${vv};PATH=/;HttpOnly"
 }||{
 tl="${tl%&noc=on}"
 echo "HTTP/1.1 302 Found
-Location:$j?${tl}_main"
+Location:${j}?${tl}_main"
 }
 }||{
 echo "Content-Encoding:gzip"
@@ -856,7 +856,7 @@ ctj "text/html"
 }
 echo ""
 {
-echo "<link rel=alternate type=application/rss+xml title=$n href=$j?rss >"
+echo "<link rel=alternate type=application/rss+xml title=$n href=${j}?rss >"
 hc='echo <br>'
 tb="<table border=1><tr>"
 thc="</td></tr><tr><td>"
@@ -893,7 +893,7 @@ q="$m/user/$na"
 cfd="$q/diary"
 }||na="guest"
 fom(){
-echo "<form method=$1 action=$j?${yzh}${toa}$2 $3>"
+echo "<form method=$1 action=${j}?${yzh}${toa}$2 $3>"
 }
 hcs(){
 while read pd
@@ -908,19 +908,19 @@ ipt(){
 echo "<input type=text name=$1><br>"
 }
 fmj(){
-echo "<input type=submit value=Submit>"
-echo "</form>"
+echo "<input type=submit value=Submit></form>"
 }
 u(){
 fom post
 echo Login:
 ipt lon
 echo Password:
-eco "<input type=password name=pw><br> <input name="noc" type="checkbox">Dont Use Cookie"
+eco "<input type=password name=pw><br> <input name=noc type=checkbox>Dont Use Cookie"
 fmj
 $hc
 $hc
-echo "Dont have?`clj "zc" "Join us"`"
+echo "Dont have?"
+clj "zc" "Join us"
 }
 bk(){
 clj "main" "Back"
@@ -964,7 +964,7 @@ echo "$thc"
 cat "$r"|hcs
 [ "$cse" == "as" ]||{
 l&&clj "m4" "Login"||{
-[ -z $cnk ]&&{
+[ -z "$cnk" ]&&{
 fom post "$qus" "$ent"
 echo Input reply:
 ipt ry
@@ -1048,7 +1048,7 @@ echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 done
 }||{
-[ -f "$cfd/$nr" ]&&echo "<td>$(fsc `ls -l "$cfd/$nr"`) B</td>"||echo "<td>`ls "$cfd/$nr"|wcl` item</td>"
+[ -f "$cfd/$nr" ]&&echo "<td>`fsc $(ls -l "$cfd/$nr")`B</td>"||echo "<td>`ls "$cfd/$nr"|wcl` item</td>"
 }
 echo "</tr>"
 }
@@ -1185,8 +1185,8 @@ cfd="$pcz"
 cze="${qus#*&m2kk=}"
 cse=${cze%&tpa}
 [ "$cse" == "$qus" ]&&{
-eco "`gaen`   Part:$pac"
 gtn="Part:$pac"
+eco "`gaen`   $gtn"
 wjs=`ls "$pcz"|wcl`
 co=0
 ls "$pcz"|wpxc "m2k=$i&m2kk=" "1"
@@ -1201,7 +1201,7 @@ fmj
 $hc
 bk
 }
-cse=${cse%=0}
+cse="${cse%=0}"
 }
 case $cse in
 as)
@@ -1235,7 +1235,7 @@ r="$pcz/$w"
 [ -f "$r" ]&&zxth||{
 cat "$r/main"|hcs
 echo $thc
-cc `cat "$r/data"`
+cc "`cat "$r/data"`"
 echo $thc
 [ -e "$r/talk" ]&&{
 r="$r/talk"
@@ -1313,7 +1313,7 @@ read b
 read c
 read wd
 echo Diary:$mt>>$rmk
-echo $wd >>$rmk
+echo "$wd" >>$rmk
 fid
 ;;
 m5d=*)
@@ -1334,6 +1334,7 @@ fom post "m6e"
 echo Input your new password:
 $spa
 fmj
+bk
 }
 ;;
 m6e)
@@ -1345,8 +1346,8 @@ m7)
 l&&u||{
 cfd="$q/chat"
 p="0"
-eco "Chat Room"
 gtn="Chat Room"
+eco "$gtn"
 gaen
 $hc
 echo $thc
@@ -1399,7 +1400,7 @@ ndt "m8"
 cfd="$m/up$out"
 eco "File Explorer"
 gtn="Path:/${out#/}"
-eco "Path:/${out#/}"
+eco "$gtn"
 gaen
 clj "m8v" "Photo Viewer"
 $hc
@@ -1461,7 +1462,7 @@ cpo
 [ "${nr##*.}" == "jpg" ]&&{
 mo="$(($mo+1))"
 echo "<td>"
-clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px /><br>"
+clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px />"
 echo "</td>"
 [ "$((${mo}%3))" == "0" ]&&{
 echo "</tr><tr>"
