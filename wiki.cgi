@@ -186,6 +186,7 @@ inc="echo Input number or command:"
 [ -e "$m/" ]&&echo "$wcm"||{
 echo Installing...
 mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up/novel"
+mkdir "$m/main/Discuss"
 >"$m/ip"
 >$m/ai
 nep="$gly"
@@ -925,7 +926,11 @@ clj "zc" "Join us"
 bk(){
 clj "main" "Back"
 }
+fip(){
+[ "${qus%ry}" == "$qus" -a -n "$1" ]
+}
 fid(){
+fip "$1"||{
 [ "$REQUEST_METHOD" == "POST" ]&&{
 l&&u||{
 read b
@@ -935,13 +940,41 @@ echo "$ry" >>$rmk
 [ -n "$ckn" ]&&echo "`date`|$rip|$na edited $tkw">>$m/log
 }
 }
+}
 cat "$rmk"|hcs
 [ "${qus##*w}" == "s" ]||{
 l&&clj "m4" "Login"||{
-fom post "$qus" "$ent"
+fip "$1"&&dtm="ry"
+fom post "$qus$dtm" "$ent"
 echo Word:
 ipt ry
 fmj
+}
+fip "$1"&&{
+r="$m/main/Discuss/R-${rmk##*/}"
+cmm="1"
+if [ -e "$r" ]
+then
+zxth
+else
+l||{
+echo "${thc}No discuss"
+$hc
+co="0"
+co="$(
+ls "${m}/main"|while read nr
+do
+cpo
+[ "$nr" == "Discuss" ]&&echo "$co"
+done
+)"
+fom post "m2k=${co}&m2kk=as=0" "$ent"
+echo "<input type=hidden name=tit value=R-${rmk##*/} >"
+echo Word:
+ipt wd
+fmj
+}
+fi
 }
 $hc
 }
@@ -984,7 +1017,7 @@ $hc
 wjw "$pcz"
 bkz="${qus%&m2kk=*}=$p"
 }
-clj "$bkz" "Back"
+[ -z "$cmm" ]&&clj "$bkz" "Back"
 }
 cc(){
 for lop in `ls "$r/opt/"`
@@ -1164,12 +1197,13 @@ echo "</td>$tbo"
 ;;
 m1g=*)
 i="${qus#*=}"
+i="${i%ry}"
 tkw="`ls "$s"|pdg`"
 [ -n "$tkw" ]&&{
 rmk="$s/$tkw"
 gtn="Entry:${tkw%%+*}"
 ckn="1"
-fid
+fid "1"
 }
 ;;
 m2k=*)
