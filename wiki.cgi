@@ -1,13 +1,14 @@
 #!/system/bin/ash
+{
 m="/sdcard/ba"
 n="MaBBS"
 t="MaWiki"
 zsn="$n&Wiki"
 wcm="Welecome to use $zsn"
 s="$m/wiki"
-wna="Please input your name:"
-wnb="Please input new password:"
-wnc="Please input verifcation code:"
+wna="Input your name:"
+wnb="Input new password:"
+wnc="Input verifcation code:"
 gly="SYSOP"
 j="${0##*/}"
 fgx="============"
@@ -128,11 +129,11 @@ $fgx
 $wd">$mwt
 }
 gaen(){
-tho=`date +%H`
-ztg=night
-[ $tho -ge 6 -a $tho -lt 12 ]&&ztg=morning
-[ $tho -ge 12 -a $tho -lt 18 ]&&ztg=afternoon
-[ $tho -ge 18 -a $tho -lt 21 ]&&ztg=evening
+tho="`date +%H`"
+ztg="night"
+[ "$tho" -ge "6" -a "$tho" -lt "12" ]&&ztg="morning"
+[ "$tho" -ge "12" -a "$tho" -lt "18" ]&&ztg="afternoon"
+[ "$tho" -ge "18" -a "$tho" -lt "21" ]&&ztg="evening"
 echo "Good ${ztg},$na"
 }
 grp(){
@@ -184,9 +185,8 @@ echo "selected it."
 [ -z "$rip" ]&&{
 inc="echo Input number or command:"
 [ -e "$m/" ]&&echo "$wcm"||{
-echo Installing...
-mkdir -p "$m/main" "$m/user" "$s" "$m/room" "$m/up/novel"
-mkdir "$m/main/Discuss"
+echo "Installing..."
+mkdir -p "$m/main/Discuss" "$m/user" "$s" "$m/room" "$m/up/novel"
 >"$m/ip"
 >$m/ai
 nep="$gly"
@@ -196,7 +196,7 @@ read npd
 zcc
 }
 bk(){
-echo b.Back
+echo "b.Back"
 }
 slp(){
 [ "$na" == "$gly" ]
@@ -205,29 +205,27 @@ fy(){
 cpd&&p="$(($p-10))" 
 }
 fyx(){
-cpd&&echo r.Next page
+cpd&&echo "r.Next page"
 }
 oy(){
 opd&&p="$(($p+10))" 
 }
 oyx(){
-opd&&echo l.Prev page
+opd&&echo "l.Prev page"
 }
 u(){
 clear
-echo Login:
+echo "Login:"
 read ua
-echo Password:
+echo "Password:"
 read pa
-[ -z "$ua" ]&&np=0||{
-[ -e "$m/user/$ua" ]&&np="`cat "$m/user/$ua/pwd"`ck"
-}
-[ "${pa}ck" == "$np" ]&&{
+np="`cat "$m/user/$ua/pwd"`"
+[ -n "$np" -a "$pa" == "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 }||{
-echo Error!
-echo Join us?[Y/N]:
+echo "Error!
+Join us?[Y/N]:"
 read ju
 case $ju in
 Y|y)
@@ -266,7 +264,7 @@ echo Input c to continue write
 read pd
 case $pd in
 c)
-echo Word:
+echo "Word:"
 read nw 
 echo $nw >>$rmk
 [ -n "$ckn" ]&&echo "`date`|$na edited $tkw">>$m/log
@@ -654,7 +652,7 @@ fid
 4)
 jld="`ls "$s"|wcl`"
 [ "$jld" == "0" ]&&{
-echo Not found...
+echo "Not found..."
 sleep 1
 }||{
 i=$((`date +%s`%$jld+1))
@@ -717,7 +715,7 @@ done
 8)
 l&&u||{
 clear
-echo Input your new password:
+echo "Input new password:"
 read nrd
 [ -n "$nrd" ]&&echo $nrd>$q/pwd
 }
@@ -735,10 +733,10 @@ co=0
 cat "$cfd"|while read nr
 do
 cpo
-echo $co.${nr#*,}
+echo "$co.${nr#*,}"
 done
-echo $fgx
-echo a.Make chat room
+echo "$fgx
+a.Make chat room"
 bk
 $inc
 read i
@@ -747,12 +745,14 @@ a)
 clear
 echo Input Chat room name:
 read qmz
+[ -n "$qmz" ]&&{
 w="$((`ls "$m/room"|wcl`+1))"
 r="$m/room/$w"
 echo "Chat Room #$w">$r
 echo "$fgx">>$r
 echo "$w,$qmz">>$cfd
 zxth "1"
+}
 ;;
 b)
 break 1
@@ -884,11 +884,9 @@ yzh="${yzz}_"
 uma="${yzz%&pw*}"
 ua="${uma#*=}"
 pa="${yzz#*pw=}"
-[ -z "$ua" ]&&np=0||{
-[ -e "$m/user/$ua" ]&&np="`cat "$m/user/$ua/pwd"`ck"
+np="`cat "$m/user/$ua/pwd"`"
 }
-}
-[ "${pa}ck" == "$np" ]&&{
+[ -n "$np" -a "$pa" == "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 cfd="$q/diary"
@@ -1306,12 +1304,12 @@ fid
 [ "$qus" == "m4-u" ]&&{
 echo "<input type=hidden name=tit value=User-$na ><input type=hidden name=tag value=User_space >"
 }||{
-echo Input Main title:
+echo "Input Main title:"
 ipt tit
-echo Tags:
+echo "Tags:"
 ipt tag
 }
-echo Word:
+echo "Word:"
 ipt wd
 fmj
 }
@@ -1405,6 +1403,7 @@ l&&u||{
 read b
 read c
 read qmz
+[ -n $qmz ]&&{
 w="$((`ls "$m/room"|wcl`+1))"
 r="$m/room/$w"
 echo "Chat Room #$w">$r
@@ -1414,6 +1413,7 @@ gtn="Room:No.$w"
 r="$m/room/$w"
 cnk=1
 zxth "1"
+}
 }
 ;;
 m7k=*)
@@ -1582,3 +1582,4 @@ echo "Copyright (C) `date +%Y` by Mayx</td>$tbo <title>$zsn $gtn</title>"
 ;;
 esac
 }
+} 2>/dev/null
