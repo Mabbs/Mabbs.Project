@@ -21,7 +21,9 @@ dol="$2"
 }
 echo "Content-type:text/html;charset=utf-8"
 echo ""
-echo '<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" /><h1>Server Status</h1><hr><br><title>Server Status</title><table border=1><tr><td>OS</td><td>'
+echo '<meta name="viewport" content="width=device-width,minimum-scale=1.2,maximum-scale=1.2,user-scalable=no" /><h1>Server Status</h1><hr>'
+date
+echo '<br><title>Server Status</title><table border=1><tr><td>OS</td><td>'
 uname
 uname -r
 echo "</td><td>Memory</td></tr><tr><td>Disk</td><td>"
