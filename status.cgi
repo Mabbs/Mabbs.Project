@@ -33,7 +33,11 @@ dsk `df|grep "/storage/emulated/0"`
 jcg Battery
 cat "/sys/class/power_supply/dollar_cove_battery/capacity"
 echo "% "
-[ `cat "/sys/class/power_supply/dollar_cove_charger/online"` == "1" ]&&echo Charging
+cat /sys/class/power_supply/dollar_cove_battery/status
+echo "<br>Voltage:"
+ft="`cat /sys/class/power_supply/dollar_cove_battery/voltage_now`"
+cft="$(($ft/1000000))"
+echo "${cft}.$(($ft/10000-$cft*100))V"
 jcg CPU
 cpc $(
 cat "/proc/stat"|while read ni
@@ -56,8 +60,7 @@ tto="$(($tot-$tut))"
 ito="$(($idt-$idu))"
 echo "$((100*($tto-$ito)/$tto))%"
 jcg Temperature
-taa="`cat /sys/class/power_supply/dollar_cove_battery/temp`"
-echo "$(($taa/10))℃"
+echo "$((`cat /sys/class/hwmon/hwmon0/temp1_input`/1000))℃"
 jcg Network
 ncc `cat /proc/net/dev|grep wlan0`
 upw="$upl"
