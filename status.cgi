@@ -21,14 +21,16 @@ dol="$2"
 }
 echo "Content-type:text/html;charset=utf-8"
 echo ""
-echo '<meta name="viewport" content="width=device-width,minimum-scale=1.2,maximum-scale=1.2,user-scalable=no" /><h1>Server Status</h1><hr>'
+echo '<meta name="viewport" content="width=device-width,minimum-scale=1.2,maximum-scale=1.2,user-scalable=no" /><h1>Server Status</h1><hr><br><title>Server Status</title><table border=1><tr><td>Time</td><td>'
 date
-echo '<br><title>Server Status</title><table border=1><tr><td>OS</td><td>'
+echo "</td><td>Memory"
+jcg OS
 uname
 uname -r
-echo "</td><td>Memory</td></tr><tr><td>Disk</td><td>"
+echo "</td><td rowspan=6>`cat "/proc/meminfo"|zhc`"
+jcg Disk
 dsk `df|grep "/storage/emulated/0"`
-echo "</td><td rowspan=4>`cat "/proc/meminfo"|zhc`</td></tr><tr><td>Battery</td><td>"
+jcg Battery
 cat "/sys/class/power_supply/dollar_cove_battery/capacity"
 echo "% "
 [ `cat "/sys/class/power_supply/dollar_cove_charger/online"` == "1" ]&&echo Charging
@@ -53,6 +55,9 @@ done
 tto="$(($tot-$tut))"
 ito="$(($idt-$idu))"
 echo "$((100*($tto-$ito)/$tto))%"
+jcg Temperature
+taa="`cat /sys/class/power_supply/dollar_cove_battery/temp`"
+echo "$(($taa/10))℃"
 jcg Network
 ncc `cat /proc/net/dev|grep wlan0`
 upw="$upl"
