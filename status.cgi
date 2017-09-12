@@ -37,7 +37,9 @@ cat /sys/class/power_supply/dollar_cove_battery/status
 echo "<br>Voltage:"
 ft="`cat /sys/class/power_supply/dollar_cove_battery/voltage_now`"
 cft="$(($ft/1000000))"
-echo "${cft}.$(($ft/10000-$cft*100))V"
+cff="$(($ft/10000-$cft*100))"
+[ $cff -lt 10 ]&&cff="0${cff}"
+echo "${cft}.${cff}V"
 jcg CPU
 cpc $(
 cat "/proc/stat"|while read ni
