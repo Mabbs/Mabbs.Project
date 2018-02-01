@@ -13,6 +13,13 @@ gly="SYSOP"
 j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
+danw(){
+for s in '\' '/' '"' '<' '>' '*' '&' '?'
+do
+[ -n "`echo "$1"|grp "$s"`" ]&&i="0"
+done
+[ "$i" == "0" ]||echo "$1"
+}
 fsc(){
 echo "$4"
 }
@@ -147,6 +154,7 @@ esac
 done
 }
 zcc(){
+[ -n "`danw "$nep"`" ]&&{
 usk="$m/user/$nep"
 mkdir -p "$usk/diary"
 >"$usk/chat"
@@ -154,6 +162,7 @@ mkdir -p "$usk/diary"
 echo "0">"$usk/noct"
 echo $npd>>$usk/pwd
 echo "`date`|$rip|$nep joined">>$m/log
+}
 }
 wcl(){
 nb="0"
@@ -220,7 +229,7 @@ read ua
 echo "Password:"
 read pa
 np="`cat "$m/user/$ua/pwd"`"
-[ -n "$np" -a "$pa" == "$np" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" == "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 }||{
@@ -637,7 +646,7 @@ l&&u||{
 clear
 echo Input Main title:
 read mt
-[ -z "`ls "$s"|grp "$mt"`" ]&&{
+[ -n "`danw "$mt"`" -a -z "`ls "$s"|grp "$mt"`" ]&&{
 echo Tags:
 read tgs
 echo Word:
@@ -886,7 +895,7 @@ ua="${uma#*=}"
 pa="${yzz#*pw=}"
 np="`cat "$m/user/$ua/pwd"`"
 }
-[ -n "$np" -a "$pa" == "$np" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" == "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 cfd="$q/diary"
@@ -1294,7 +1303,7 @@ read wd
 mt="${mt%?}"
 tgs="${tgs%?}"
 mwt="$s/$mt+$tgs"
-[ -z "`ls "$s"|grp "$mt"`" ]&&{ 
+[ -n "`danw "$mt"`" -a -z "`ls "$s"|grp "$mt"`" ]&&{ 
 nwe
 rmk="$mwt"
 fid
@@ -1464,9 +1473,12 @@ read b
 fnm="${meta#*filename=}"
 nu="${fnm#\"*}"
 mu="${nu%\"*}"
+mu="`danw "$mu"`"
+[ -n "$mu" ]&&{
 echo "`date`|$rip|$na Uploaded $mu">>$m/log
 cat >"$cfd/$mu"
 echo "$out/$mu saved."
+}
 }
 ;;
 m8n-m8-*)
@@ -1478,6 +1490,7 @@ read b
 read c
 read nm
 nm="${nm%?}"
+nm="`danw "$nw"`"
 [ -e "$cfd/$nm" ]||{
 mkdir "$cfd/$nm"&&echo "OK,$out/$nm Created"||echo "Fail"
 }
@@ -1582,4 +1595,4 @@ echo "Copyright (C) `date +%Y` by Mayx</td>$tbo <title>$zsn $gtn</title>"
 ;;
 esac
 }
-} 2>/dev/null
+} 2>>$m/log
