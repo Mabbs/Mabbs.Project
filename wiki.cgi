@@ -159,7 +159,7 @@ mkdir -p "$usk/diary"
 >"$usk/chat"
 >"$usk/noce"
 echo "0">"$usk/noct"
-echo $npd>>$usk/pwd
+echo "$npd">>$usk/pwd
 echo "`date`|$rip|$nep joined">>$m/log
 }
 }
@@ -663,7 +663,7 @@ jld="`ls "$s"|wcl`"
 echo "Not found..."
 sleep 1
 }||{
-i=$((`date +%s`%$jld+1))
+i="$((`date +%s`%$jld+1))"
 rmk="$s/`ls "$s"|pdg`"
 fid
 }
@@ -1112,7 +1112,7 @@ eco "Total entry:`ls "$s"|wcl`"
 [ -e "$m/bul" ]&&eco "Bulletin:`cat "$m/bul"`"
 jld="`ls "$s"|wcl`"
 [ "$jld" == "0" ]||{
-i=$((`date +%s`%$jld+1))
+i="$((`date +%s`%$jld+1))"
 sjs="`ls "$s"|pdg`"
 }
 fom post "m1j" "$ent"
@@ -1141,7 +1141,7 @@ m1j)
 read b
 read c
 read kk
-kw=${kk%?}
+kw="${kk%?}"
 [ -n "$kw" ]&&{
 gtn="Result for $kw"
 pkc(){
@@ -1220,11 +1220,11 @@ p="0"
 pcz="$m/main/$pac"
 cfd="$pcz"
 cze="${qus#*&m2kk=}"
-cse=${cze%&tpa}
+cse="${cze%&tpa}"
 [ "$cse" == "$qus" ]&&{
 gtn="Part:$pac"
 eco "$gtn"
-wjs=`ls "$pcz"|wcl`
+wjs="`ls "$pcz"|wcl`"
 co=0
 ls "$pcz"|wpxc "m2k=$i&m2kk=" "1"
 l||{
@@ -1405,7 +1405,8 @@ l&&u||{
 read b
 read c
 read qmz
-[ -n $qmz ]&&{
+qmz="${qmz%?}"
+[ -n "$qmz" ]&&{
 w="$((`ls "$m/room"|wcl`+1))"
 r="$m/room/$w"
 echo "Chat Room #$w">$r
@@ -1519,7 +1520,7 @@ eco "<img src=$j?m8d-m8-$i />"
 gtn=" File:`ls "$cfd"|pdg`"
 while [ "${w##*.}" != "jpg" ]
 do
-i=$(($i+1))
+i="$(($i+1))"
 w="`ls "$cfd"|pdg`"
 [ -z "$w" ]&&break 1
 [ "${w##*.}" == "jpg" ]&&{
