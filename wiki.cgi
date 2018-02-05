@@ -1,6 +1,6 @@
 #!/system/bin/ash
-{
 m="/sdcard/ba"
+{
 n="MaBBS"
 t="MaWiki"
 zsn="$n&Wiki"
@@ -734,9 +734,9 @@ cfd="$q/chat"
 while true
 do
 clear
-echo "Chat Room"
-echo "Good `gaen`,$na"
-echo "$fgx"
+echo "Chat Room
+Good $(gaen),$na
+$fgx"
 co=0
 cat "$cfd"|while read nr
 do
@@ -1384,7 +1384,6 @@ cfd="$q/chat"
 p="0"
 gtn="Chat Room"
 eco "$gtn"
-$hc
 echo "$thc"
 co=0
 cat "$cfd"|while read nr
