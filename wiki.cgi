@@ -1,5 +1,6 @@
 #!/system/bin/ash
 m="/sdcard/ba"
+[ -e "$m/log" ]&&pat="$m/log"||pat="/dev/null"
 {
 n="MaBBS"
 t="MaWiki"
@@ -1594,4 +1595,4 @@ echo "Please run it on shell"
 ;;
 esac
 }
-} 2>>$m/log
+} 2>>$pat
