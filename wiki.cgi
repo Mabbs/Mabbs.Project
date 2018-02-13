@@ -17,7 +17,7 @@ for s in '\' '/' '"' '<' '>' '*' '&' '?'
 do
 [ -n "`echo "$1"|grp "$s"`" ]&&i="0"
 done
-[ "$i" == "0" ]||echo "$1"
+[ "$i" = "0" ]||echo "$1"
 }
 fsc(){
 echo "$4"
@@ -32,10 +32,10 @@ clj(){
 echo "<a href=$j?${yzh}${toa}$1>$2</a>"
 }
 l(){
-[ "$na" == "guest" ]
+[ "$na" = "guest" ]
 }
 hpd(){
-[ "$1" == "1" ]
+[ "$1" = "1" ]
 }
 cpd(){
 [ "$p" -gt "1" ]
@@ -44,7 +44,7 @@ opd(){
 [ "$p" -lt "$((`ls "$cfd"|wcl`-9))" ]
 }
 rck(){
-[ -n "`echo $nep|grp " "`" -o "$chk" == "$nep" -o -z "$nep" ]
+[ -n "`echo $nep|grp " "`" -o "$chk" = "$nep" -o -z "$nep" ]
 }
 uck(){
 vv="`cat /proc/sys/kernel/random/uuid`"
@@ -77,7 +77,7 @@ co=0
 cat "$m/user/$snr/chat"|while read uu
 do
 co="$(($co+1))"
-[ "$wwn" == "$uu" ]&&echo "$co"
+[ "$wwn" = "$uu" ]&&echo "$co"
 done
 )"
 w="$qmz"
@@ -99,7 +99,7 @@ ais="OKay"
 }||{
 ais="`cat "$m/ai"|while read nr
 do
-[ "${nr%%-*}" == "$swd" ]&&{
+[ "${nr%%-*}" = "$swd" ]&&{
 echo "${nr#*-}"
 break 1
 }
@@ -113,7 +113,7 @@ $ais
 cat "$r"|while read nc
 do
 ni="${nc#*r:}"
-[ "${ni%% *}" == "$na" ]||echo "$inu $i-$na reply you on $w">>$m/user/${ni%% *}/noce
+[ "${ni%% *}" = "$na" ]||echo "$inu $i-$na reply you on $w">>$m/user/${ni%% *}/noce
 break 1
 done
 }
@@ -177,13 +177,13 @@ co=0
 while read nr
 do
 cpo
-[ "$i" == "$co" ]&&echo "$nr"
+[ "$i" = "$co" ]&&echo "$nr"
 done
 }
 chse(){
 l&&u||{
 vck="`cat "$r/opt/$1"|grp "$na"`"
-[ "$na" == "$vck" ]||{
+[ "$na" = "$vck" ]||{
 echo "$na" >> "$r/opt/$1"
 }
 cat "$r/opt/$1"
@@ -207,7 +207,7 @@ bk(){
 echo "b.Back"
 }
 slp(){
-[ "$na" == "$gly" ]
+[ "$na" = "$gly" ]
 }
 fy(){
 cpd&&p="$(($p-10))" 
@@ -228,7 +228,7 @@ read ua
 echo "Password:"
 read pa
 np="`cat "$m/user/$ua/pwd"`"
-[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" == "$np" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" = "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 }||{
@@ -247,7 +247,7 @@ echo "$wnc"
 uck
 echo "$vv"
 read vc
-[ "$vc" == "$vv" ]&&{
+[ "$vc" = "$vv" ]&&{
 zcc
 echo "OK!"
 sleep 1
@@ -331,7 +331,7 @@ done
 }
 na="guest"
 sleep 1
-until [ "$cmd" == "2" ]
+until [ "$cmd" = "2" ]
 do
 clear
 echo "$t User:$na
@@ -447,7 +447,7 @@ $inc
 read i
 [ -n "$i" ]&&{
 nr="`cat "$q/noce"|pdg`"
-[ "$i" == "c" ]&&{
+[ "$i" = "c" ]&&{
 >"$q/noce"
 echo "0">"$q/noct"
 }||{
@@ -550,7 +550,7 @@ for sle in $oph
 do
 >"$tsm/opt/$sle"
 done
-[ "$utk" == "y" ]&&>"$tsm/talk"
+[ "$utk" = "y" ]&&>"$tsm/talk"
 }
 ;; 
 esac
@@ -581,7 +581,7 @@ cc `cat "$r/data"`
 echo 'Choose one:'
 read ry
 [ -n "$ry" ]&&{
-[ "$ry" == "t" ]&&{
+[ "$ry" = "t" ]&&{
 [ -e "$r/talk" ]&&{
 r="$r/talk"
 zxth
@@ -659,7 +659,7 @@ fid
 ;;
 4)
 jld="`ls "$s"|wcl`"
-[ "$jld" == "0" ]&&{
+[ "$jld" = "0" ]&&{
 echo "Not found..."
 sleep 1
 }||{
@@ -799,7 +799,7 @@ $hc
 done
 }
 ndt(){
-until [ "$a" == "$1" ]
+until [ "$a" = "$1" ]
 do
 b="${a##*-}"
 a="${a%-*}"
@@ -814,7 +814,7 @@ done
 }
 qua="${QUERY_STRING##*_}"
 tok="${qua%token*}"
-[ "$tok" == "$qua" ]||toa="${tok}token"
+[ "$tok" = "$qua" ]||toa="${tok}token"
 qus="${qua##*token}"
 case $qus in
 m8d-m8-*)
@@ -829,7 +829,7 @@ Content-Disposition:attachment;filename=\"${cfd##*/}\"
 cat "$cfd"
 }||{
 wjw "$m/up$out"
-[ "${QUERY_STRING%_*}" == "$qua" ]||{
+[ "${QUERY_STRING%_*}" = "$qua" ]||{
 yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
@@ -848,8 +848,8 @@ echo "</channel></rss>"
 ;;
 *)
 read tl
-[ "${tl%%=*}" == "lon" ]&&{
-[ "$tl" == "${tl%&noc=on}" ]&&{
+[ "${tl%%=*}" = "lon" ]&&{
+[ "$tl" = "${tl%&noc=on}" ]&&{
 uck
 echo "HTTP/1.1 302 Found
 Location: $j?${vv}token
@@ -875,7 +875,7 @@ thq="</td><td>"
 spa="echo <input type=password name=pw><br>"
 ent="enctype=multipart/form-data"
 a="$HTTP_COOKIE"
-until [ "$a" == "$b" ]
+until [ "$a" = "$b" ]
 do
 b="${a##*;}"
 a="${a%;*}"
@@ -883,10 +883,10 @@ o="$b $o"
 done
 for i in $o
 do
-[ "${i%%=*}" == "lon" ]&&coke="$i"
+[ "${i%%=*}" = "lon" ]&&coke="$i"
 done
-[ -z "$coke" -o "$tok" == "${coke##*token}" ]&&{
-[ "${QUERY_STRING%_*}" == "$qua" ]&&yzz="${coke%token*}"||{
+[ -z "$coke" -o "$tok" = "${coke##*token}" ]&&{
+[ "${QUERY_STRING%_*}" = "$qua" ]&&yzz="${coke%token*}"||{
 yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
@@ -895,7 +895,7 @@ ua="${uma#*=}"
 pa="${yzz#*pw=}"
 np="`cat "$m/user/$ua/pwd"`"
 }
-[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" == "$np" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" = "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 cfd="$q/diary"
@@ -934,11 +934,11 @@ bk(){
 clj "" "Back"
 }
 fip(){
-[ "${qus%ry}" == "$qus" -a -n "$1" ]
+[ "${qus%ry}" = "$qus" -a -n "$1" ]
 }
 fid(){
 fip "$1"||{
-[ "$REQUEST_METHOD" == "POST" ]&&{
+[ "$REQUEST_METHOD" = "POST" ]&&{
 l&&u||{
 read b
 read c
@@ -949,7 +949,7 @@ echo "$ry" >>$rmk
 }
 }
 cat "$rmk"|hcs
-[ "${qus##*w}" == "s" ]||{
+[ "${qus##*w}" = "s" ]||{
 l&&clj "m4" "Login"||{
 fip "$1"&&dtm="ry"
 fom post "$qus$dtm" "$ent"
@@ -972,7 +972,7 @@ co="$(
 ls "${m}/main"|while read nr
 do
 cpo
-[ "$nr" == "Discuss" ]&&echo "$co"
+[ "$nr" = "Discuss" ]&&echo "$co"
 done
 )"
 fom post "m2k=${co}&m2kk=as=0" "$ent"
@@ -988,7 +988,7 @@ $hc
 bk
 }
 zxth(){
-[ "$REQUEST_METHOD" == "POST" ]&&{
+[ "$REQUEST_METHOD" = "POST" ]&&{
 [ -f "$r" ]||r="$pcz/$w/talk"
 read b
 read c
@@ -1002,7 +1002,7 @@ eco "$w"
 echo "$thc"
 }
 cat "$r"|hcs
-[ "$cse" == "as" ]||{
+[ "$cse" = "as" ]||{
 l&&clj "m4" "Login"||{
 [ -z "$cnk" ]&&{
 fom post "$qus" "$ent"
@@ -1046,7 +1046,7 @@ then
 ls "$s"|while read mr
 do
 eo=$(($eo+1))
-[ "$mr" == "$fne" ]&&{
+[ "$mr" = "$fne" ]&&{
 clj "m1g=$eo" "$nr"
 }
 done
@@ -1111,7 +1111,7 @@ gtn="(Good `gaen`,$na)"
 eco "Total entry:`ls "$s"|wcl`"
 [ -e "$m/bul" ]&&eco "Bulletin:`cat "$m/bul"`"
 jld="`ls "$s"|wcl`"
-[ "$jld" == "0" ]||{
+[ "$jld" = "0" ]||{
 i="$((`date +%s`%$jld+1))"
 sjs="`ls "$s"|pdg`"
 }
@@ -1221,7 +1221,7 @@ pcz="$m/main/$pac"
 cfd="$pcz"
 cze="${qus#*&m2kk=}"
 cse="${cze%&tpa}"
-[ "$cse" == "$qus" ]&&{
+[ "$cse" = "$qus" ]&&{
 gtn="Part:$pac"
 eco "$gtn"
 wjs="`ls "$pcz"|wcl`"
@@ -1253,7 +1253,7 @@ pbz||plx
 }
 ;;
 *)
-[ "${qus##*&}" == "tpa" ]&&{
+[ "${qus##*&}" = "tpa" ]&&{
 l&&u||{
 i="${cse%&jg=*}"
 w="`ls "$pcz"|pdg`"
@@ -1287,7 +1287,7 @@ esac
 m4*)
 l&&u||{
 fom post "m4ws" "$ent"
-[ "$qus" == "m4ws" ]&&{
+[ "$qus" = "m4ws" ]&&{
 l&&u||{
 read b
 read c
@@ -1306,7 +1306,7 @@ fid
 }
 }
 }||{
-[ "$qus" == "m4-u" ]&&{
+[ "$qus" = "m4-u" ]&&{
 echo "<input type=hidden name=tit value=User-$na ><input type=hidden name=tag value=User_space >"
 }||{
 echo "Input Main title:"
@@ -1453,7 +1453,7 @@ ipt nm
 fmj
 $hc
 wjw "$m/up${out%/*}"
-[ "$a" == "m8-" ]&&bk||clj "${a%-*}=$p" "Back"
+[ "$a" = "m8-" ]&&bk||clj "${a%-*}=$p" "Back"
 ;;
 m8u-m8-*)
 l&&u||{
@@ -1499,12 +1499,12 @@ mo="0"
 ls "$m/up/"|while read nr
 do
 cpo
-[ "${nr##*.}" == "jpg" ]&&{
+[ "${nr##*.}" = "jpg" ]&&{
 mo="$(($mo+1))"
 echo "<td>"
 clj "m8x=$co" "<img src=$j?m8d-m8-$co width=80px height=60px />"
 echo "</td>"
-[ "$((${mo}%3))" == "0" ]&&{
+[ "$((${mo}%3))" = "0" ]&&{
 echo "</tr><tr>"
 }
 }
@@ -1523,7 +1523,7 @@ do
 i="$(($i+1))"
 w="`ls "$cfd"|pdg`"
 [ -z "$w" ]&&break 1
-[ "${w##*.}" == "jpg" ]&&{
+[ "${w##*.}" = "jpg" ]&&{
 clj "m8x=$i" "Next Photo:$w"
 break 1
 }
@@ -1532,7 +1532,7 @@ $hc
 clj "m8v" "Back"
 ;;
 ntf*)
-[ "$qus" == "ntf-c" ]&&{
+[ "$qus" = "ntf-c" ]&&{
 >"$q/noce"
 echo "0">"$q/noct"
 }
@@ -1541,7 +1541,7 @@ echo "`cat "$q/noce"|wcl`">"$q/noct"
 cat "$q/noce"|while read nr
 do
 nef
-[ "$iao" == "0" ]&&clj "m7k=$iob" "$yti"||clj "m2k=$iao&m2kk=$iob=0" "$yti"
+[ "$iao" = "0" ]&&clj "m7k=$iob" "$yti"||clj "m2k=$iao&m2kk=$iob=0" "$yti"
 $hc
 done
 }
@@ -1567,7 +1567,7 @@ npe="${tl#*pw=}"
 npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
-[ "$vv" == "$vs" ]&&{
+[ "$vv" = "$vs" ]&&{
 chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 zcc&&{
