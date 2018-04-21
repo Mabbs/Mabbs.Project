@@ -13,6 +13,30 @@ gly="SYSOP"
 j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
+ptl(){
+cat "$m/meta"|while read n
+do
+[ "${n%% *}" = "POST" ]&&{
+ne="${n#* }"
+[ "${ne%% *}" = "$1" ]&&{
+nen="${ne#* }"
+echo "${nen#*/}"
+break
+}
+}
+[ "${n%% *}" = "FILE" ]&&{
+ne="${n#* }"
+[ "${ne%% *}" = "$1" ]&&{
+nen="${ne#* }"
+[ "$2" = "s" ]&&echo "${nen%% *}"||{
+nen="${nen#* }"
+echo "${nen##*/}"
+}
+break
+}
+}
+done
+}
 danw(){
 for s in '\' '/' '"' '<' '>' '*' '&' '?'
 do
@@ -48,8 +72,8 @@ rck(){
 [ -n "`echo $nep|grp " "`" -o "$chk" = "$nep" -o -z "$nep" ]
 }
 uck(){
-vv="`cat /proc/sys/kernel/random/uuid`"
-vv="${vv%%-*}"
+vv="$((($(date +%s)$ran*27+31*$$)%101))"
+[ "$vv" -le "0" ]&&vv="$((-($ran)))"
 }
 ypd(){
 [ "$p" -le "$co" -a "$(($p+10))" -gt "$co" ]
@@ -196,6 +220,8 @@ inc="echo Input number or command:"
 [ -e "$m/" ]&&echo "Welecome to use $zsn"||{
 echo "Installing..."
 mkdir -p "$m/main/Discuss" "$m/user" "$s" "$m/room" "$m/up/novel"
+echo "0">"$m/num"
+>"$m/meta"
 >"$m/ip"
 >$m/ai
 nep="$gly"
@@ -246,9 +272,9 @@ chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 echo "$wnc"
 uck
-echo "$vv"
+echo "$vv+$((($(date +%d)*7+3)%99))="
 read vc
-[ "$vc" = "$vv" ]&&{
+[ "$vc" = "$(($vv+(($(date +%d)*7+3)%99)))" ]&&{
 zcc
 echo "OK!"
 sleep 1
@@ -1557,7 +1583,7 @@ ipt name
 echo "$wnb"
 $spa
 eco "$wnc"
-eco "$vv"
+echo "$vv+$((($(date +%d)*7+3)%99))="
 ipt vv
 fmj
 ;;
@@ -1568,7 +1594,7 @@ npe="${tl#*pw=}"
 npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
-[ "$vv" = "$vs" ]&&{
+[ "$vv" = "$(($vs+(($(date +%d)*7+3)%99)))" ]&&{
 chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 zcc&&{
