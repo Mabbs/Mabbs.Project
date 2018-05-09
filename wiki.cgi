@@ -13,6 +13,7 @@ gly="SYSOP"
 j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
+gst="$(date +%d)"
 ptl(){
 cat "$m/meta"|while read n
 do
@@ -72,7 +73,8 @@ rck(){
 [ -n "`echo $nep|grp " "`" -o "$chk" = "$nep" -o -z "$nep" ]
 }
 uck(){
-vv="$((($(date +%s)*17+31*$$)%101))"
+glt="$(date +%s)"
+vv="$(((${glt#0}*17+31*$$)%101))"
 [ "$vv" -le "0" ]&&vv="$((-($vv)))"
 }
 ypd(){
@@ -272,9 +274,9 @@ chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 echo "$wnc"
 uck
-echo "$vv+$((($(date +%d)*7+3)%99))="
+echo "$vv+$(((${gst#0}*7+3)%99))="
 read vc
-[ "$vc" = "$(($vv+(($(date +%d)*7+3)%99)))" ]&&{
+[ "$vc" = "$(($vv+((${gst#0}*7+3)%99)))" ]&&{
 zcc
 echo "OK!"
 sleep 1
@@ -1583,7 +1585,7 @@ ipt name
 echo "$wnb"
 $spa
 eco "$wnc"
-echo "$vv+$((($(date +%d)*7+3)%99))="
+echo "$vv+$(((${gst#0}*7+3)%99))="
 ipt vv
 fmj
 ;;
@@ -1594,7 +1596,7 @@ npe="${tl#*pw=}"
 npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
-[ "$vv" = "$(($vs+(($(date +%d)*7+3)%99)))" ]&&{
+[ "$vv" = "$(($vs+((${gst#0}*7+3)%99)))" ]&&{
 chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 zcc&&{
