@@ -13,6 +13,7 @@ gly="SYSOP"
 j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
+gst="$(date +%d)"
 ptl(){
 cat "$m/meta"|while read n
 do
@@ -272,9 +273,9 @@ chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 echo "$wnc"
 uck
-echo "$vv+$((($(date +%d)*7+3)%99))="
+echo "$vv+$(((${gst#0}*7+3)%99))="
 read vc
-[ "$vc" = "$(($vv+(($(date +%d)*7+3)%99)))" ]&&{
+[ "$vc" = "$(($vv+((${gst#0}*7+3)%99)))" ]&&{
 zcc
 echo "OK!"
 sleep 1
@@ -850,8 +851,8 @@ ndt "m8d-m8"
 cfd="$m/up$out"
 [ -f "$cfd" ]&&{
 ctj "application/octet-stream"
-echo "Content-length:$(fsc `ls -l "$cfd"`)
-Content-Disposition:attachment;filename=\"${cfd##*/}\"
+echo "Content-length: $(fsc `ls -l "$cfd"`)
+Content-Disposition: attachment;filename=\"${cfd##*/}\"
 "
 cat "$cfd"
 }||{
@@ -861,7 +862,7 @@ yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
 echo "Status: 302 Found
-Location:${j}?${yzh}${toa}${qus#*-}=$p"
+Location: ${j}?${yzh}${toa}${qus#*-}=$p"
 }
 ;;
 rss)
@@ -1583,7 +1584,7 @@ ipt name
 echo "$wnb"
 $spa
 eco "$wnc"
-echo "$vv+$((($(date +%d)*7+3)%99))="
+echo "$vv+$(((${gst#0}*7+3)%99))="
 ipt vv
 fmj
 ;;
@@ -1594,7 +1595,7 @@ npe="${tl#*pw=}"
 npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
-[ "$vv" = "$(($vs+(($(date +%d)*7+3)%99)))" ]&&{
+[ "$vv" = "$(($vs+((${gst#0}*7+3)%99)))" ]&&{
 chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 zcc&&{
