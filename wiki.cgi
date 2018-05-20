@@ -13,7 +13,6 @@ gly="SYSOP"
 j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
-gst="$(date +%d)"
 ptl(){
 cat "$m/meta"|while read n
 do
@@ -273,9 +272,9 @@ chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 echo "$wnc"
 uck
-echo "$vv+$(((${gst#0}*7+3)%99))="
+echo "$vv+$((($(date +%d)*7+3)%99))="
 read vc
-[ "$vc" = "$(($vv+((${gst#0}*7+3)%99)))" ]&&{
+[ "$vc" = "$(($vv+(($(date +%d)*7+3)%99)))" ]&&{
 zcc
 echo "OK!"
 sleep 1
@@ -861,7 +860,7 @@ wjw "$m/up$out"
 yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
-echo "HTTP/1.1 302 Found
+echo "Status: 302 Found
 Location:${j}?${yzh}${toa}${qus#*-}=$p"
 }
 ;;
@@ -879,16 +878,16 @@ read tl
 [ "${tl%%=*}" = "lon" ]&&{
 [ "$tl" = "${tl%&noc=on}" ]&&{
 uck
-echo "HTTP/1.1 302 Found
+echo "Status: 302 Found
 Location: $j?${vv}token
 Set-Cookie: ${tl}token${vv};PATH=/;HttpOnly"
 }||{
 tl="${tl%&noc=on}"
-echo "HTTP/1.1 302 Found
-Location:${j}?${tl}_"
+echo "Status: 302 Found
+Location: ${j}?${tl}_"
 }
 }||{
-echo "Content-Encoding:gzip"
+echo "Content-Encoding: gzip"
 ctj "text/html"
 }
 echo ""
@@ -1584,7 +1583,7 @@ ipt name
 echo "$wnb"
 $spa
 eco "$wnc"
-echo "$vv+$(((${gst#0}*7+3)%99))="
+echo "$vv+$((($(date +%d)*7+3)%99))="
 ipt vv
 fmj
 ;;
@@ -1595,7 +1594,7 @@ npe="${tl#*pw=}"
 npd="${npe%&vv*}"
 nep="${tid#*=}"
 vv="${tl##*=}"
-[ "$vv" = "$(($vs+((${gst#0}*7+3)%99)))" ]&&{
+[ "$vv" = "$(($vs+(($(date +%d)*7+3)%99)))" ]&&{
 chk="`ls "$m/user"|grp "$nep"`"
 rck||{
 zcc&&{
