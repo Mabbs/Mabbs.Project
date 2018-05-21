@@ -862,7 +862,8 @@ yzz="${QUERY_STRING%_*}"
 yzh="${yzz}_"
 }
 echo "Status: 302 Found
-Location: ${j}?${yzh}${toa}${qus#*-}=$p"
+Location: ${j}?${yzh}${toa}${qus#*-}=$p
+"
 }
 ;;
 rss)
@@ -1511,7 +1512,7 @@ read b
 read c
 read nm
 nm="${nm%?}"
-nm="`danw "$nw"`"
+nm="`danw "$nm"`"
 [ -e "$cfd/$nm" ]||{
 mkdir "$cfd/$nm"&&echo "OK,$out/$nm Created"||echo "Fail"
 }
