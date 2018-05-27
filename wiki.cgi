@@ -14,6 +14,14 @@ j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
 gst="$(date +%d)"
+dys(){
+siz=0
+while read nr
+do
+siz="$((${#nr}+$siz))"
+done
+echo "$siz"
+}
 ptl(){
 cat "$m/meta"|while read n
 do
@@ -41,7 +49,7 @@ done
 danw(){
 for s in '\' '/' '"' '<' '>' '*' '&' '?'
 do
-[ -n "`echo "$1"|grp "$s"`" ]&&i="0"
+[ -n "`echo "$1"|grp "$s"`" ]&&i=0
 done
 [ "$i" = "0" ]||echo "$1"
 }
@@ -190,7 +198,7 @@ echo "`date`|$rip|$nep joined">>$m/log
 }
 }
 wcl(){
-nb="0"
+nb=0
 while read nul
 do
 nb="$(($nb+1))"
@@ -406,7 +414,7 @@ ls "$m/main/$nr"|grp "$kw"
 done
 echo "Novel
 $fgx"
-p="0"
+p=0
 ls "$m/up/novel"|grp "$kw"|pxcx "b"
 echo "Which one:"
 read mtt
@@ -996,7 +1004,7 @@ else
 l||{
 echo "${thc}No discuss"
 $hc
-co="0"
+co=0
 co="$(
 ls "${m}/main"|while read nr
 do
@@ -1117,7 +1125,9 @@ echo "<td>${ni%% *}$thq${nl%%#*}</td>"
 break 1
 done
 }||{
-[ -f "$cfd/$nr" ]&&echo "<td>`fsc $(ls -l "$cfd/$nr")`B</td>"||echo "<td>`ls "$cfd/$nr"|wcl` item</td>"
+[ -f "$cfd/$nr" ]&&{
+[ "$cfd" = "$q/diary" ]&&echo "<td>`cat "$cfd/$nr"|dys`</td>"||echo "<td>`fsc $(ls -l "$cfd/$nr")`B</td>"
+}||echo "<td>`ls "$cfd/$nr"|wcl` item</td>"
 }
 echo "</tr>"
 }
@@ -1245,7 +1255,7 @@ i="${ine%&m2kk=*}"
 inu="$i"
 pac="`ls "$m/main"|pdg`"
 [ -n "$pac" ]&&{
-p="0"
+p=0
 pcz="$m/main/$pac"
 cfd="$pcz"
 cze="${qus#*&m2kk=}"
@@ -1356,7 +1366,7 @@ mt="`date +%y.%m.%d`"
 rmk="$cfd/$mt"
 case $qus in
 m5=*)
-p="0"
+p=0
 $hc
 co=0
 ls "$cfd"|wpxc "m5d="
@@ -1410,7 +1420,7 @@ echo "OK"
 m7)
 l&&u||{
 cfd="$q/chat"
-p="0"
+p=0
 gtn="Chat Room"
 eco "$gtn"
 echo "$thc"
@@ -1519,12 +1529,12 @@ mkdir "$cfd/$nm"&&echo "OK,$out/$nm Created"||echo "Fail"
 }
 ;;
 m8v)
-p="0"
+p=0
 gtn="Photo Viewer"
 eco "Photo Viewer"
 echo "$tb"
 co=0
-mo="0"
+mo=0
 ls "$m/up/"|while read nr
 do
 cpo
