@@ -14,6 +14,28 @@ j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
 gst="$(date +%d)"
+mhf(){
+num=0
+i=0
+rat=""
+ori="$1"
+until [ "$ori" = "" ]
+do
+oib="${ori%?}"
+oic="${ori#$oib}"
+ori="$oib"
+case $oic in
+[0-9])
+num="$((($num+$oic)*5+${#ori}))"
+;;
+*)
+rat="$rat$oic"
+num="$((($num+$i)*8+${#ori}))"
+;;
+esac
+done
+echo "$num$rat"
+}
 dys(){
 siz=0
 while read nr
@@ -128,7 +150,7 @@ fnm="${ry##*add friend }"
 swd="${ry%@ai}"
 [ -n "`echo "$swd"|grp "study"`" ]&&{
 echo "${swd##*study }" >>$m/ai
-echo "`date`|$rip|$na add AI command">>$m/log
+echo "`date`|$rip|$na add AI command">&2
 ais="OKay"
 }||{
 ais="`cat "$m/ai"|while read nr
@@ -187,14 +209,16 @@ esac
 done
 }
 zcc(){
-[ -n "`danw "$nep"`" ]&&{
+[ -n "`danw "$nep"`" -a "${#npd}" -ge "8" -a "${#npd}" -le "40" ]&&{
 usk="$m/user/$nep"
 mkdir -p "$usk/diary"
 >"$usk/chat"
 >"$usk/noce"
+uck
+echo "$(mhf $(($vv*($vv+1)*150000)))">"$usk/session"
 echo "0">"$usk/noct"
-echo "$npd">>$usk/pwd
-echo "`date`|$rip|$nep joined">>$m/log
+echo "$(mhf "$npd")">>$usk/pwd
+echo "`date`|$rip|$nep joined">&2
 }
 }
 wcl(){
@@ -230,8 +254,9 @@ inc="echo Input number or command:"
 echo "Installing..."
 mkdir -p "$m/main/Discuss" "$m/user" "$s" "$m/room" "$m/up/novel"
 echo "0">"$m/num"
->"$m/meta"
->"$m/ip"
+>$m/log
+>$m/meta
+>$m/ip
 >$m/ai
 nep="$gly"
 echo "Master name:$gly"
@@ -264,7 +289,7 @@ read ua
 echo "Password:"
 read pa
 np="`cat "$m/user/$ua/pwd"`"
-[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" = "$np" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$(mhf "$pa")" = "$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 }||{
@@ -311,7 +336,7 @@ c)
 echo "Word:"
 read nw 
 echo "$nw" >>$rmk
-[ -n "$ckn" ]&&echo "`date`|$na edited $tkw">>$m/log
+[ -n "$ckn" ]&&echo "`date`|$na edited $tkw">&2
 ;;
 *)
 break 1
@@ -761,7 +786,7 @@ l&&u||{
 clear
 echo "Input new password:"
 read nrd
-[ -n "$nrd" ]&&echo "$nrd">$q/pwd
+[ -n "$nrd" -a "${#npd}" -ge "8" -a "${#npd}" -le "40" ]&&echo "$(mhf "$nrd")">$q/pwd
 }
 ;;
 9)
@@ -886,15 +911,28 @@ echo "</channel></rss>"
 *)
 read tl
 [ "${tl%%=*}" = "lon" ]&&{
-[ "$tl" = "${tl%&noc=on}" ]&&{
+itl="${tl%&noc=on}"
+uma="${itl%&pw*}"
+nua="${uma#*=}"
+npa="${itl#*pw=}"
+np="`cat "$m/user/$nua/pwd"`"
+[ -n "`danw "$nua"`" -a -n "$np" -a "$(mhf "$npa")" = "$np" ]&&{
+uck
+tkn="$(mhf $(($vv*($vv+1)*150000)))"
+echo "$tkn">$m/user/$nua/session
+ntl="lon=${nua}&pw=$(($tkn+$(date +%d)))"
+[ "$tl" = "$itl" ]&&{
 uck
 echo "Status: 302 Found
 Location: $j?${vv}token
-Set-Cookie: ${tl}token${vv};PATH=/;HttpOnly"
+Set-Cookie: ${ntl}token${vv};PATH=/;HttpOnly"
 }||{
-tl="${tl%&noc=on}"
 echo "Status: 302 Found
-Location: ${j}?${tl}_"
+Location: ${j}?${ntl}_"
+}
+}||{
+echo "Status: 302 Found
+Location: $j"
 }
 }||{
 echo "Content-Encoding: gzip"
@@ -929,10 +967,10 @@ yzh="${yzz}_"
 }
 uma="${yzz%&pw*}"
 ua="${uma#*=}"
-pa="${yzz#*pw=}"
-np="`cat "$m/user/$ua/pwd"`"
+pa="${yzz#*&pw=}"
+np="`cat "$m/user/$ua/session"`"
 }
-[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" = "$np" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" = "$(($np+$(date +%d)))" ]&&{
 na="$ua"
 q="$m/user/$na"
 cfd="$q/diary"
@@ -981,7 +1019,7 @@ read b
 read c
 read ry
 echo "$ry" >>$rmk
-[ -n "$ckn" ]&&echo "`date`|$rip|$na edited $tkw">>$m/log
+[ -n "$ckn" ]&&echo "`date`|$rip|$na edited $tkw">&2
 }
 }
 }
@@ -1414,7 +1452,7 @@ bk
 ;;
 m6e)
 nrd="${tl#*=}"
-[ -n "$nrd" ]&&echo "$nrd">$q/pwd
+[ -n "$nrd" -a "${#npd}" -ge "8" -a "${#npd}" -le "40" ]&&echo "$(mhf "$nrd")">$q/pwd
 echo "OK"
 ;;
 m7)
@@ -1507,7 +1545,7 @@ nu="${fnm#\"*}"
 mu="${nu%\"*}"
 mu="`danw "$mu"`"
 [ -n "$mu" ]&&{
-echo "`date`|$rip|$na Uploaded $mu">>$m/log
+echo "`date`|$rip|$na Uploaded $mu">&2
 cat >"$cfd/$mu"
 echo "$out/$mu saved."
 }
