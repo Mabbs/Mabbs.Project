@@ -14,6 +14,26 @@ j="${0##*/}"
 fgx="============"
 rip="$REMOTE_ADDR"
 gst="$(date +%d)"
+irm=0
+rdm(){
+i=0
+while [ "$i" -le "8" ]
+do
+i="$(($i+1))"
+uck
+j=0
+vv="$(($vv%63))"
+for rs in 1 2 3 4 5 6 7 8 9 0 a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+do
+j="$(($j+1))"
+[ "$j" = "$vv" ]&&{
+rdr="$rs$rdr"
+break 1
+}
+done
+done
+echo "$rdr"
+}
 mhf(){
 num=0
 i=0
@@ -103,7 +123,8 @@ rck(){
 [ -n "`echo $nep|grp " "`" -o "$chk" = "$nep" -o -z "$nep" ]
 }
 uck(){
-vv="$((($(date +%s)*17+31*$$)%101))"
+irm="$(($irm+1))"
+vv="$((($(date +%s)*17+(31+$irm)*$$)%101))"
 [ "$vv" -le "0" ]&&vv="$((-($vv)))"
 }
 ypd(){
@@ -214,8 +235,7 @@ usk="$m/user/$nep"
 mkdir -p "$usk/diary"
 >"$usk/chat"
 >"$usk/noce"
-uck
-echo "$(mhf $(($vv*($vv+1)*150000)))">"$usk/session"
+echo "$(rdm)">"$usk/session"
 echo "0">"$usk/noct"
 echo "$(mhf "$npd")">>$usk/pwd
 echo "`date`|$rip|$nep joined">&2
@@ -917,12 +937,12 @@ nua="${uma#*=}"
 npa="${itl#*pw=}"
 np="`cat "$m/user/$nua/pwd"`"
 [ -n "`danw "$nua"`" -a -n "$np" -a "$(mhf "$npa")" = "$np" ]&&{
-uck
-tkn="$(mhf $(($vv*($vv+1)*150000)))"
-echo "$tkn">$m/user/$nua/session
-ntl="lon=${nua}&pw=$(($tkn+$(date +%d)))"
+tkn="$(rdm)"
+echo "$tkn$rip">$m/user/$nua/session
+ntl="lon=${nua}&pw=$(date +%d)$tkn"
 [ "$tl" = "$itl" ]&&{
-uck
+irm="$(($irm+9))"
+vv="$(rdm)"
 echo "Status: 302 Found
 Location: $j?${vv}token
 Set-Cookie: ${ntl}token${vv};PATH=/;HttpOnly"
@@ -970,7 +990,7 @@ ua="${uma#*=}"
 pa="${yzz#*&pw=}"
 np="`cat "$m/user/$ua/session"`"
 }
-[ -n "`danw "$ua"`" -a -n "$np" -a "$pa" = "$(($np+$(date +%d)))" ]&&{
+[ -n "`danw "$ua"`" -a -n "$np" -a "$pa$rip" = "$(date +%d)$np" ]&&{
 na="$ua"
 q="$m/user/$na"
 cfd="$q/diary"
