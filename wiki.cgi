@@ -272,17 +272,18 @@ echo "selected it."
 inc="echo Input number or command:"
 [ -e "$m/" ]&&echo "Welecome to use $zsn"||{
 echo "Installing..."
+nep="$gly"
+echo "Master name:$gly"
+echo "New password:"
+read npd
+zcc&&{
 mkdir -p "$m/main/Discuss" "$m/user" "$s" "$m/room" "$m/up/novel"
 echo "0">"$m/num"
 >$m/log
 >$m/meta
 >$m/ip
 >$m/ai
-nep="$gly"
-echo "Master name:$gly"
-echo "New password:"
-read npd
-zcc
+}||exit
 }
 bk(){
 echo "b.Back"
@@ -941,7 +942,8 @@ tkn="$(rdm)"
 echo "$tkn$rip">$m/user/$nua/session
 ntl="lon=${nua}&pw=$(date +%d)$tkn"
 [ "$tl" = "$itl" ]&&{
-irm="$(($irm+9))"
+uck
+irm="$vv"
 vv="$(rdm)"
 echo "Status: 302 Found
 Location: $j?${vv}token
