@@ -1,3 +1,9 @@
+# 本版本正式废弃，等我有时间将会对此项目重构
+以前我和上帝能看懂这段代码，而现在，只有上帝能看懂了……   
+这个版本的代码有严重BUG，请不要把它放在生产环境
+# This version is officially discarded, and I will refactor this project when I have time.   
+In the past, God and I could understand this code, but now, only God can understand it...   
+This version of the code has a serious BUG, please do not put it in the production environment.   
 # Mabbs (The Project May No longer Update)
 bbs and wiki
 
